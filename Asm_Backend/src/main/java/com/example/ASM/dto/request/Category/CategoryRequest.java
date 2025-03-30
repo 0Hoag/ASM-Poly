@@ -1,4 +1,4 @@
-package com.example.ASM.dto.request;
+package com.example.ASM.dto.request.Category;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductTypeUpdateRequest {
-    String nameType;
+public class CategoryRequest {
+    String categoryName;
+    int parentCategory;
 }

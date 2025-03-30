@@ -1,8 +1,8 @@
 package com.example.ASM.service;
 
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.SpecificationTypeRequest;
-import com.example.ASM.dto.request.SpecificationTypeUpdateRequest;
+import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
+import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
 import com.example.ASM.dto.response.SpecificationTypeResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
@@ -33,10 +33,8 @@ public class SpecificationTypeService {
     public boolean Create(SpecificationTypeRequest request) {
         builder.processRequest(request);
 
-        var spec = mapper.toSpecificationType(request);
-
         try {
-            repo.save(spec);
+            repo.save(mapper.toSpecificationType(request));
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }

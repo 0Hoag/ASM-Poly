@@ -2,8 +2,8 @@ package com.example.ASM.controller;
 
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.ProductRequest;
-import com.example.ASM.dto.request.ProductUpdateRequest;
+import com.example.ASM.dto.request.Product.ProductRequest;
+import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.dto.response.ProductResponse;
 import com.example.ASM.service.ProductService;
 import jakarta.validation.Valid;

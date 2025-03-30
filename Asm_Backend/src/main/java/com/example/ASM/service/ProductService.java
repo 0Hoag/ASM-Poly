@@ -1,8 +1,8 @@
 package com.example.ASM.service;
 
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.ProductRequest;
-import com.example.ASM.dto.request.ProductUpdateRequest;
+import com.example.ASM.dto.request.Product.ProductRequest;
+import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.dto.response.ProductResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
@@ -37,10 +37,8 @@ public class ProductService {
             throw new AppException(ErrorCode.PRODUCT_NAME_EXISTED);
         }
 
-        var product = productBuild.buildProduct(request);
-
         try {
-            repo.save(product);
+            repo.save(productBuild.buildProduct(request));
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }

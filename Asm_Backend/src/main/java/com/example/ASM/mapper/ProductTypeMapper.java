@@ -1,15 +1,12 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.ProductTypeRequest;
-import com.example.ASM.dto.request.ProductTypeUpdateRequest;
-import com.example.ASM.dto.request.ProductUpdateRequest;
+import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
 import com.example.ASM.dto.response.ProductTypeResponse;
 import com.example.ASM.entity.Product;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import java.util.Collections;

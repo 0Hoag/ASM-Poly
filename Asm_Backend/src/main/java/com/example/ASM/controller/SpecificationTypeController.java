@@ -2,12 +2,9 @@ package com.example.ASM.controller;
 
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.ProductTypeRequest;
-import com.example.ASM.dto.request.SpecificationTypeRequest;
-import com.example.ASM.dto.request.SpecificationTypeUpdateRequest;
-import com.example.ASM.dto.response.ProductTypeResponse;
+import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
+import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
 import com.example.ASM.dto.response.SpecificationTypeResponse;
-import com.example.ASM.service.ProductTypeService;
 import com.example.ASM.service.SpecificationTypeService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

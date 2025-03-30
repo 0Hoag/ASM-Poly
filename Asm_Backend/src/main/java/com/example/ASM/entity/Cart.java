@@ -13,15 +13,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-	public class Cart{
-
+public class Cart{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name = "Id")
     private int id;
-
-    @Column(name = "CreatedAt", nullable = false, updatable = false)
-    private Timestamp createdAt;
 
     // Liên kết nhiều-đến-một với User
     @ManyToOne
@@ -32,4 +28,6 @@ import java.util.List;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails;
 
+    @Column(name = "CreatedAt", nullable = false, updatable = false)
+    private Timestamp createdAt;
 }

@@ -39,9 +39,17 @@ public enum ErrorCode {
     PRODUCT_TYPE_EXISTED(1024, "Product type existed", HttpStatus.BAD_REQUEST),
     PRODUCT_TYPE_NAME_EXISTED(1025, "Product type name existed", HttpStatus.CONFLICT),
 
-    SPECIFICATION_TYPE_NOT_EXISTED(1023, "Specification type not existed", HttpStatus.BAD_REQUEST),
-    SPECIFICATION_TYPE_EXISTED(1024, "Specification type existed", HttpStatus.BAD_REQUEST),
-    SPECIFICATION_TYPE_NAME_EXISTED(1025, "Specification type name existed", HttpStatus.CONFLICT)
+    SPECIFICATION_TYPE_NOT_EXISTED(1026, "Specification type not existed", HttpStatus.BAD_REQUEST),
+    SPECIFICATION_TYPE_EXISTED(1027, "Specification type existed", HttpStatus.BAD_REQUEST),
+    SPECIFICATION_TYPE_NAME_EXISTED(1028, "Specification type name existed", HttpStatus.CONFLICT),
+
+    CART_NOT_EXISTED(1029, "Cart not existed", HttpStatus.BAD_REQUEST),
+    CART_EXISTED(1030, "Cart existed", HttpStatus.BAD_REQUEST),
+    CART_NAME_EXISTED(1031, "Cart name existed", HttpStatus.CONFLICT),
+
+    CART_DETAIL_NOT_EXISTED(1029, "Cart detail not existed", HttpStatus.BAD_REQUEST),
+    CART_DETAIL_EXISTED(1030, "Cart detail existed", HttpStatus.BAD_REQUEST),
+    CART_DETAIL_NAME_EXISTED(1031, "Cart detail name existed", HttpStatus.CONFLICT),
     ;
 
     private int code;

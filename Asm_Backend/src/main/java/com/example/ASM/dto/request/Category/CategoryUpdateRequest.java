@@ -1,4 +1,4 @@
-package com.example.ASM.dto.request;
+package com.example.ASM.dto.request.Category;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

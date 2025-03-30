@@ -1,7 +1,7 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.CategoryRequest;
-import com.example.ASM.dto.request.CategoryUpdateRequest;
+import com.example.ASM.dto.request.Category.CategoryRequest;
+import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.CategoryResponse;
 import com.example.ASM.entity.Category;
 import com.example.ASM.entity.Product;

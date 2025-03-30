@@ -1,4 +1,4 @@
-package com.example.ASM.dto.request;
+package com.example.ASM.dto.request.Product;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductUpdateRequest {
+public class ProductRequest {
     String productName;
     String description;
     double price;

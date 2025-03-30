@@ -2,8 +2,8 @@ package com.example.ASM.controller;
 
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.CategoryRequest;
-import com.example.ASM.dto.request.CategoryUpdateRequest;
+import com.example.ASM.dto.request.Category.CategoryRequest;
+import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.CategoryResponse;
 import com.example.ASM.service.CategoryService;
 import jakarta.validation.Valid;

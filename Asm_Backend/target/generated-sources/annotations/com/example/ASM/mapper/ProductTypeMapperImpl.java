@@ -1,6 +1,6 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.ProductTypeRequest;
+import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
 import com.example.ASM.dto.response.ProductTypeResponse;
 import com.example.ASM.entity.ProductType;
 import javax.annotation.processing.Generated;

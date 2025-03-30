@@ -1,4 +1,4 @@
-package com.example.ASM.dto.request;
+package com.example.ASM.dto.request.SpecificationType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SpecificationTypeUpdateRequest {
+public class SpecificationTypeRequest {
     @NotBlank(message = "Tên thông số không được để trống")
     String specName;
 

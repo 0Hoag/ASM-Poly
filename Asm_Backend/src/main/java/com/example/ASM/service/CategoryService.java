@@ -1,10 +1,9 @@
 package com.example.ASM.service;
 
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.CategoryRequest;
-import com.example.ASM.dto.request.CategoryUpdateRequest;
+import com.example.ASM.dto.request.Category.CategoryRequest;
+import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.CategoryResponse;
-import com.example.ASM.entity.Category;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CategoryMapper;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,9 +43,8 @@ public class CategoryService {
                     .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
         }
 
-        var cate = mapper.toCategory(request);
         try {
-            repo.save(cate);
+            repo.save(mapper.toCategory(request));
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
