@@ -1,4 +1,4 @@
-package com.example.ASM;
+package com.poly.asm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
