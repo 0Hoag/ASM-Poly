@@ -20,8 +20,8 @@ public class ProductResponse {
     int soldQuantity;
     int stockQuantity;
     Timestamp createdAt;
-    int category;
-    int productType;
+    String category;
+    String productType;
     List<String> images;
     List<String> cartDetails;
     List<String> favoriteProducts;

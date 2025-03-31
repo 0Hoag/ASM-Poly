@@ -3,7 +3,9 @@ package com.example.ASM.mapper;
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.dto.response.ProductResponse;
+import com.example.ASM.entity.Category;
 import com.example.ASM.entity.Product;
+import com.example.ASM.entity.ProductType;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -46,6 +48,11 @@ public class ProductMapperImpl implements ProductMapper {
 
         ProductResponse.ProductResponseBuilder productResponse = ProductResponse.builder();
 
+        productResponse.category( entityCategoryCategoryName( entity ) );
+        productResponse.productType( entityProductTypeNameType( entity ) );
+        productResponse.cartDetails( mapCartDetailsToIds( entity.getCartDetails() ) );
+        productResponse.favoriteProducts( mapFavoriteProductsToIds( entity.getFavoriteProducts() ) );
+        productResponse.orderDetails( mapOrderDetailsToIds( entity.getOrderDetails() ) );
         productResponse.id( entity.getId() );
         productResponse.productName( entity.getProductName() );
         productResponse.description( entity.getDescription() );
@@ -54,12 +61,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.soldQuantity( entity.getSoldQuantity() );
         productResponse.stockQuantity( entity.getStockQuantity() );
         productResponse.createdAt( entity.getCreatedAt() );
-        productResponse.category( map( entity.getCategory() ) );
-        productResponse.productType( mapProductType( entity.getProductType() ) );
         productResponse.images( map( entity.getImages() ) );
-        productResponse.cartDetails( mapCartDetailsToIds( entity.getCartDetails() ) );
-        productResponse.favoriteProducts( mapFavoriteProductsToIds( entity.getFavoriteProducts() ) );
-        productResponse.orderDetails( mapOrderDetailsToIds( entity.getOrderDetails() ) );
 
         return productResponse.build();
     }
@@ -78,5 +80,35 @@ public class ProductMapperImpl implements ProductMapper {
         entity.setStockQuantity( request.getStockQuantity() );
         entity.setCategory( map( request.getCategory() ) );
         entity.setProductType( mapProductType( request.getProductType() ) );
+    }
+
+    private String entityCategoryCategoryName(Product product) {
+        if ( product == null ) {
+            return null;
+        }
+        Category category = product.getCategory();
+        if ( category == null ) {
+            return null;
+        }
+        String categoryName = category.getCategoryName();
+        if ( categoryName == null ) {
+            return null;
+        }
+        return categoryName;
+    }
+
+    private String entityProductTypeNameType(Product product) {
+        if ( product == null ) {
+            return null;
+        }
+        ProductType productType = product.getProductType();
+        if ( productType == null ) {
+            return null;
+        }
+        String nameType = productType.getNameType();
+        if ( nameType == null ) {
+            return null;
+        }
+        return nameType;
     }
 }

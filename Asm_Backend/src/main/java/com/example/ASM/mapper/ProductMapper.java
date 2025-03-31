@@ -22,6 +22,11 @@ public interface ProductMapper {
     @Mapping(target = "orderDetails", source = "orderDetails", qualifiedByName = "mapOrderDetails")
     Product toProduct(ProductRequest request);
 
+    @Mapping(target = "category", source = "category.categoryName")
+    @Mapping(target = "productType", source = "productType.nameType")
+    @Mapping(target = "cartDetails", source = "cartDetails", qualifiedByName = "mapCartDetailsToIds")
+    @Mapping(target = "favoriteProducts", source = "favoriteProducts", qualifiedByName = "mapFavoriteProductsToIds")
+    @Mapping(target = "orderDetails", source = "orderDetails", qualifiedByName = "mapOrderDetailsToIds")
     ProductResponse toProductResponse(Product entity);
 
     void updateProduct(@MappingTarget Product entity, ProductUpdateRequest request);
@@ -46,13 +51,15 @@ public interface ProductMapper {
         return productType != null ? productType.getId() : 0;
     }
 
+    // Phương thức map chuyển List<Image> sang List<String> lấy URL
     default List<String> map(List<Image> images) {
         if (images == null) return Collections.emptyList();
         return images.stream()
-                .map(image -> image.getUrl())
+                .map(image -> image.getUrl())  // Lấy URL của image
                 .collect(Collectors.toList());
     }
 
+    @Named("mapCartDetailsToIds")
     default List<String> mapCartDetailsToIds(List<CartDetail> cartDetails) {
         if (cartDetails == null) return Collections.emptyList();
         return cartDetails.stream()
@@ -60,6 +67,7 @@ public interface ProductMapper {
                 .collect(Collectors.toList());
     }
 
+    @Named("mapFavoriteProductsToIds")
     default List<String> mapFavoriteProductsToIds(List<FavoriteProduct> favoriteProducts) {
         if (favoriteProducts == null) return Collections.emptyList();
         return favoriteProducts.stream()
@@ -67,6 +75,7 @@ public interface ProductMapper {
                 .collect(Collectors.toList());
     }
 
+    @Named("mapOrderDetailsToIds")
     default List<String> mapOrderDetailsToIds(List<OrderDetail> orderDetails) {
         if (orderDetails == null) return Collections.emptyList();
         return orderDetails.stream()
@@ -79,7 +88,7 @@ public interface ProductMapper {
         if (cartDetailIds == null) return Collections.emptyList();
         return cartDetailIds.stream().map(id -> {
             CartDetail cartDetail = new CartDetail();
-            cartDetail.setId(Integer.parseInt(id));
+            cartDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
             return cartDetail;
         }).collect(Collectors.toList());
     }
@@ -89,7 +98,7 @@ public interface ProductMapper {
         if (favoriteProductIds == null) return Collections.emptyList();
         return favoriteProductIds.stream().map(id -> {
             FavoriteProduct favoriteProduct = new FavoriteProduct();
-            favoriteProduct.setId(Integer.parseInt(id));
+            favoriteProduct.setId(Integer.parseInt(id)); // Chuyển String thành Integer
             return favoriteProduct;
         }).collect(Collectors.toList());
     }
@@ -99,7 +108,7 @@ public interface ProductMapper {
         if (imageIds == null) return Collections.emptyList();
         return imageIds.stream().map(id -> {
             Image image = new Image();
-            image.setId(Integer.parseInt(id));
+            image.setId(Integer.parseInt(id)); // Chuyển String thành Integer
             return image;
         }).collect(Collectors.toList());
     }
@@ -109,7 +118,7 @@ public interface ProductMapper {
         if (orderDetailIds == null) return Collections.emptyList();
         return orderDetailIds.stream().map(id -> {
             OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setId(Integer.parseInt(id));
+            orderDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
             return orderDetail;
         }).collect(Collectors.toList());
     }
