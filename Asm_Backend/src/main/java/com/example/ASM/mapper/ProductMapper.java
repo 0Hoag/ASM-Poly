@@ -47,6 +47,34 @@ public interface ProductMapper {
         return productType != null ? productType.getId() : 0;
     }
 
+    default List<String> map(List<Image> images) {
+        if (images == null) return Collections.emptyList();
+        return images.stream()
+                .map(image -> image.getUrl()) // Lấy URL của image
+                .collect(Collectors.toList());
+    }
+
+    default List<String> mapCartDetailsToIds(List<CartDetail> cartDetails) {
+        if (cartDetails == null) return Collections.emptyList();
+        return cartDetails.stream()
+                .map(cartDetail -> String.valueOf(cartDetail.getId()))
+                .collect(Collectors.toList());
+    }
+
+    default List<String> mapFavoriteProductsToIds(List<FavoriteProduct> favoriteProducts) {
+        if (favoriteProducts == null) return Collections.emptyList();
+        return favoriteProducts.stream()
+                .map(favoriteProduct -> String.valueOf(favoriteProduct.getId()))
+                .collect(Collectors.toList());
+    }
+
+    default List<String> mapOrderDetailsToIds(List<OrderDetail> orderDetails) {
+        if (orderDetails == null) return Collections.emptyList();
+        return orderDetails.stream()
+                .map(orderDetail -> String.valueOf(orderDetail.getId()))
+                .collect(Collectors.toList());
+    }
+
     @Named("mapCartDetails")
     default List<CartDetail> mapCartDetails(List<String> cartDetailIds) {
         if (cartDetailIds == null) return Collections.emptyList();

@@ -67,4 +67,23 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "ProductTypeId", nullable = false)
     private ProductType productType;
+
+    @Override
+    public String toString() {
+        return "Product{" + "id="
+                + id + ", createdAt='"
+                + createdAt + '\'' + ", description='"
+                + description + '\'' + ", price="
+                + price + ", productName='"
+                + productName + '\'' + ", salePrice="
+                + salePrice + ", soldQuantity="
+                + soldQuantity + ", stockQuantity="
+                + stockQuantity + ", cartDetailsCount="
+                + (cartDetails != null ? cartDetails.size() : 0) + ", favoriteProductsCount="
+                + (favoriteProducts != null ? favoriteProducts.size() : 0) + ", imagesCount="
+                + (images != null ? images.size() : 0) + ", orderDetailsCount="
+                + (orderDetails != null ? orderDetails.size() : 0) + ", category="
+                + (category != null ? category.getId() : null) + ", productType="
+                + (productType != null ? productType.getId() : null) + '}';
+    }
 }

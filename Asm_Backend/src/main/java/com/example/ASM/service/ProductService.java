@@ -55,9 +55,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> List() {
-        List<ProductResponse> list = repo.findAll().stream().map(mapper::toProductResponse).collect(Collectors.toList());
-        System.out.println(list.toString());
-        return list;
+        return repo.findAll().stream().map(mapper::toProductResponse).collect(Collectors.toList());
     }
 
     public PageResponse<ProductResponse> Get(int page, int size) {

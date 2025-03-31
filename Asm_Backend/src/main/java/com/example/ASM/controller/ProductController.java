@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
