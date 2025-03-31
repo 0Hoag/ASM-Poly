@@ -52,9 +52,15 @@ const adminRouter = [
         component: ProductManagement,
       },
       {
-        path: "products/create",
+        path: "products/form",
         name: "create-product",
         component: CreateProduct,
+      },
+      {
+        path: "products/form/:id",
+        name: "edit-product",
+        component: CreateProduct,
+        props: true,
       },
       {
         path: "users",
