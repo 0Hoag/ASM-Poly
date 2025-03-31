@@ -5,7 +5,7 @@
             "name": "Spring Boot-AsmApplication<asm>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.poly.asm.AsmApplication",
+            "mainClass": "com.example.ASM.AsmApplication",
             "projectName": "asm",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
