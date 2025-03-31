@@ -12,15 +12,18 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductResponse {
-    private int id;
-    private String productName;
-    private String description;
-    private double price;
-    private double salePrice;
-    private int soldQuantity;
-    private int stockQuantity;
-    private Timestamp createdAt;
-    private int category;
-    private int productType;
-    private List<String> imageUrls;
+    int id;
+    String productName;
+    String description;
+    double price;
+    double salePrice;
+    int soldQuantity;
+    int stockQuantity;
+    Timestamp createdAt;
+    int category;
+    int productType;
+    List<String> images;
+    List<String> cartDetails;
+    List<String> favoriteProducts;
+    List<String> orderDetails;
 }

@@ -56,6 +56,10 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.createdAt( entity.getCreatedAt() );
         productResponse.category( map( entity.getCategory() ) );
         productResponse.productType( mapProductType( entity.getProductType() ) );
+        productResponse.images( map( entity.getImages() ) );
+        productResponse.cartDetails( mapCartDetailsToIds( entity.getCartDetails() ) );
+        productResponse.favoriteProducts( mapFavoriteProductsToIds( entity.getFavoriteProducts() ) );
+        productResponse.orderDetails( mapOrderDetailsToIds( entity.getOrderDetails() ) );
 
         return productResponse.build();
     }
