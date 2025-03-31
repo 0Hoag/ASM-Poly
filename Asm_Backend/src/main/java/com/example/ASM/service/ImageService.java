@@ -108,7 +108,6 @@ public class ImageService {
 
                 if ("ok".equals(result.get("result"))) {
                     log.info("Successfully delete media from Cloudinary");
-//                    product.getImages().remove(url.getUrl());
 
                 }else {
                     log.error("Failed to delete media from Cloudinary");
@@ -138,7 +137,6 @@ public class ImageService {
 
                 if ("ok".equals(result.get("result"))) {
                     log.info("Successfully delete image from Cloudinary: {}", publicId);
-//                    product.getImages().remove(url.getUrl());
                 } else {
                     log.error("Failed to delete image from Cloudinary: {}", publicId);
                     throw new AppException(ErrorCode.REMOVE_FILE_FAIL);
