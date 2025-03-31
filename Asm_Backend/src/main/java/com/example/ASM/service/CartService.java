@@ -44,6 +44,28 @@ public class CartService {
         }
         return true;
     }
+    public boolean Update(int id, CartRequest request) {
+        var cart = repo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_EXISTED));
+
+        if (request.getUser() == 0) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
+
+        userRepository.findById(request.getUser())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        try {
+            var updatedCart = mapper.toCart(request);
+            updatedCart.setId(id); // Giữ nguyên ID của giỏ hàng cũ
+            repo.save(updatedCart);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        }
+
+        return true;
+    }
+
 
     public CartResponse Detail(int id) {
         var cart = repo.findById(id)

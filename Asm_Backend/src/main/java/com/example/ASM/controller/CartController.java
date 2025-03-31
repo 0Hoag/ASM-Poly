@@ -65,4 +65,13 @@ public class CartController {
                 .message("Delete success!")
                 .build();
     }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Boolean> update(@PathVariable("id") int id, @RequestBody @Valid CartRequest request) {
+        return ApiResponse.<Boolean>builder()
+                .code(1000)
+                .result(cartService.Update(id, request))
+                .build();
+    }
+
 }

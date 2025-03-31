@@ -1,17 +1,20 @@
-spring:
-  application:
-    name: asm
-  datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}
-    driverClassName: "com.mysql.cj.jdbc.Driver"
-    username: root
-    password: 601748
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
 server:
   port: 8080
   servlet:
     context-path: /asm
+
+spring:
+  application:
+    name: asm
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=db;encrypt=false
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: sa
+    password: 123456
+
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
