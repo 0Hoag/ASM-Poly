@@ -69,7 +69,7 @@
               </td>
               <td>{{ (currentPage - 1) * limit + index + 1 }}</td>
               <td>
-                <img :src="product.images[1]" class="product-image" :alt="product.title" width="100" />
+                <img :src="Array.isArray(product.images) ? product.images[0] : product.images" class="product-image" :alt="product.title" width="100" />
               </td>
               <td>{{ product.title }}</td>
               <td>{{ product.category.name }}</td>
