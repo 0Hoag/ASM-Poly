@@ -7,6 +7,7 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CartDetailMapper;
 import com.example.ASM.repository.CartDetailRepository;
+import com.example.ASM.repository.CartRepository;
 import com.example.ASM.repository.ProductRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,12 +28,16 @@ import java.util.stream.Collectors;
 public class CartDetailService {
     ProductRepository productRepository;
     CartDetailRepository repo;
+    CartRepository cartRepository;
     CartDetailMapper mapper;
 
-    // Tạo chi tiết giỏ hàng
     public boolean Create(CartDetailRequest request) {
-        if (request.getProduct() == null) {
-            throw new AppException(ErrorCode.MISSING_INPUT);
+        if (!cartRepository.existsById(request.getCart())) {
+            throw new AppException(ErrorCode.CART_NOT_EXISTED);
+        }
+
+        if (!productRepository.existsById(request.getProduct())) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
 
         productRepository.findById(request.getProduct())

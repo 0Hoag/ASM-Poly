@@ -47,6 +47,7 @@ public class Product {
 
     // Liên kết một-đến-nhiều với FavoriteProduct
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+
     private List<FavoriteProduct> favoriteProducts;
 
     // Liên kết một-đến-nhiều với Image

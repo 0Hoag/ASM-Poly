@@ -15,3 +15,9 @@ server:
   port: 8080
   servlet:
     context-path: /asm
+
+cloudinary:
+  cloud-name: "ddclol9ih"
+  api-key: "484769914577293"
+  api-secret: "41IJGj5NP901wP-74TR-fmIj0OQ"
+

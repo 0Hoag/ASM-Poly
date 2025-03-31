@@ -3,6 +3,8 @@ package com.example.ASM.dto.request.Product;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +19,9 @@ public class ProductRequest {
     int stockQuantity;
     int category;
     int productType;
+    // default null
+    List<String> cartDetails;
+    List<String> favoriteProducts;
+    List<String> images;
+    List<String> orderDetails;
 }

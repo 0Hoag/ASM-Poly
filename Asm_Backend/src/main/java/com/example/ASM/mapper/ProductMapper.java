@@ -3,15 +3,23 @@ package com.example.ASM.mapper;
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.dto.response.ProductResponse;
-import com.example.ASM.entity.Category;
-import com.example.ASM.entity.Product;
-import com.example.ASM.entity.ProductType;
+import com.example.ASM.entity.*;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
+    @Mapping(target = "cartDetails", source = "cartDetails", qualifiedByName = "mapCartDetails")
+    @Mapping(target = "favoriteProducts", source = "favoriteProducts", qualifiedByName = "mapFavoriteProducts")
+    @Mapping(target = "images", source = "images", qualifiedByName = "mapImages")
+    @Mapping(target = "orderDetails", source = "orderDetails", qualifiedByName = "mapOrderDetails")
     Product toProduct(ProductRequest request);
 
     ProductResponse toProductResponse(Product entity);
@@ -36,5 +44,45 @@ public interface ProductMapper {
 
     default int mapProductType(ProductType productType) {
         return productType != null ? productType.getId() : 0;
+    }
+
+    @Named("mapCartDetails")
+    default List<CartDetail> mapCartDetails(List<String> cartDetailIds) {
+        if (cartDetailIds == null) return Collections.emptyList();
+        return cartDetailIds.stream().map(id -> {
+            CartDetail cartDetail = new CartDetail();
+            cartDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+            return cartDetail;
+        }).collect(Collectors.toList());
+    }
+
+    @Named("mapFavoriteProducts")
+    default List<FavoriteProduct> mapFavoriteProducts(List<String> favoriteProductIds) {
+        if (favoriteProductIds == null) return Collections.emptyList();
+        return favoriteProductIds.stream().map(id -> {
+            FavoriteProduct favoriteProduct = new FavoriteProduct();
+            favoriteProduct.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+            return favoriteProduct;
+        }).collect(Collectors.toList());
+    }
+
+    @Named("mapImages")
+    default List<Image> mapImages(List<String> imageIds) {
+        if (imageIds == null) return Collections.emptyList();
+        return imageIds.stream().map(id -> {
+            Image image = new Image();
+            image.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+            return image;
+        }).collect(Collectors.toList());
+    }
+
+    @Named("mapOrderDetails")
+    default List<OrderDetail> mapOrderDetails(List<String> orderDetailIds) {
+        if (orderDetailIds == null) return Collections.emptyList();
+        return orderDetailIds.stream().map(id -> {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+            return orderDetail;
+        }).collect(Collectors.toList());
     }
 }

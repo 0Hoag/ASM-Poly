@@ -22,6 +22,7 @@ public class CartDetailMapperImpl implements CartDetailMapper {
         CartDetail cartDetail = new CartDetail();
 
         cartDetail.setProduct( mapProduct( request.getProduct() ) );
+        cartDetail.setCart( mapCart( request.getCart() ) );
         cartDetail.setQuantity( request.getQuantity() );
 
         return cartDetail;
@@ -36,6 +37,7 @@ public class CartDetailMapperImpl implements CartDetailMapper {
         CartDetailResponse.CartDetailResponseBuilder cartDetailResponse = CartDetailResponse.builder();
 
         cartDetailResponse.productName( mapProductName( entity.getProduct() ) );
+        cartDetailResponse.cart( mapCartId( entity.getCart() ) );
         cartDetailResponse.id( entity.getId() );
         cartDetailResponse.quantity( entity.getQuantity() );
 

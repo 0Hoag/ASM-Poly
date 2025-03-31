@@ -29,6 +29,7 @@ public class ProductService {
     ProductRepository repo;
     ProductMapper mapper;
     ProductBuild productBuild;
+    ImageService imageService;
 
     public boolean Create(ProductRequest request) {
         productBuild.processRequest(request);
@@ -90,6 +91,11 @@ public class ProductService {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
 
-        repo.deleteById(id);
+        try {
+            imageService.removeImageProduct(id);
+            repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        }
     }
 }

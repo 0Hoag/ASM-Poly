@@ -14,4 +14,5 @@ public class CartDetailResponse {
     int id;
     int quantity;
     String productName; // Lấy tên sản phẩm từ Product
+    Integer cart;
 }

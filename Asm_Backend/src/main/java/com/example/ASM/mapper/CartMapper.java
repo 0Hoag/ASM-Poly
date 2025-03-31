@@ -1,12 +1,17 @@
 package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.Cart.CartRequest;
+import com.example.ASM.dto.response.CartDetailResponse;
 import com.example.ASM.dto.response.CartResponse;
 import com.example.ASM.entity.Cart;
+import com.example.ASM.entity.CartDetail;
 import com.example.ASM.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CartMapper {
@@ -14,6 +19,7 @@ public interface CartMapper {
     Cart toCart(CartRequest request);
 
     @Mapping(target = "userName", source = "user", qualifiedByName = "mapUserName")
+    @Mapping(target = "cartDetails", source = "cartDetails", qualifiedByName = "mapCartDetails")
     CartResponse toCartResponse(Cart entity);
 
     @Named("mapUser")
@@ -27,6 +33,24 @@ public interface CartMapper {
     @Named("mapUserName")
     default String mapUserName(User user) {
         return (user != null) ? user.getFullName() : null;
+    }
+
+    @Named("mapCartDetails")
+    default List<CartDetailResponse> mapCartDetails(List<CartDetail> cartDetails) {
+        if (cartDetails == null) {
+            return null;
+        }
+        return cartDetails.stream()
+                .map(this::mapCartDetail)
+                .collect(Collectors.toList());
+    }
+
+    @Mapping(target = "cart", source = "cart", qualifiedByName = "mapCartId")
+    CartDetailResponse mapCartDetail(CartDetail cartDetail);
+
+    @Named("mapCartId")
+    default Integer mapCartId(Cart cart) {
+        return cart != null ? cart.getId() : null;
     }
 }
 

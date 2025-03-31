@@ -22,6 +22,10 @@ public class ProductMapperImpl implements ProductMapper {
 
         Product product = new Product();
 
+        product.setCartDetails( mapCartDetails( request.getCartDetails() ) );
+        product.setFavoriteProducts( mapFavoriteProducts( request.getFavoriteProducts() ) );
+        product.setImages( mapImages( request.getImages() ) );
+        product.setOrderDetails( mapOrderDetails( request.getOrderDetails() ) );
         product.setDescription( request.getDescription() );
         product.setPrice( request.getPrice() );
         product.setProductName( request.getProductName() );

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Data
@@ -77,6 +78,7 @@ public class ProductBuild {
     public Product buildProduct(ProductRequest request) {
         Product product = mapper.toProduct(request);
         product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        product.setImages(List.of());
         return product;
     }
 }
