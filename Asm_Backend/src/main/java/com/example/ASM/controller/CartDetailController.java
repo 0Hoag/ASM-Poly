@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CartDetailController { // chua test duoc tai vi can userID
+public class CartDetailController { // chua test duoc tai vi can cartID
     CartDetailService cartDetailService;
 
     @PostMapping("/")

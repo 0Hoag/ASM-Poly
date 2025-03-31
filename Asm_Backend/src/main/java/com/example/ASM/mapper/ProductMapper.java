@@ -23,6 +23,11 @@ public interface ProductMapper {
     @Mapping(target = "orderDetails", source = "orderDetails", qualifiedByName = "mapOrderDetails")
     Product toProduct(ProductRequest request);
 
+    @Mapping(target = "category", source = "category.categoryName")
+    @Mapping(target = "productType", source = "productType.nameType")
+    @Mapping(target = "cartDetails", source = "cartDetails", qualifiedByName = "mapCartDetailsToIds")
+    @Mapping(target = "favoriteProducts", source = "favoriteProducts", qualifiedByName = "mapFavoriteProductsToIds")
+    @Mapping(target = "orderDetails", source = "orderDetails", qualifiedByName = "mapOrderDetailsToIds")
     ProductResponse toProductResponse(Product entity);
 
     void updateProduct(@MappingTarget Product entity, ProductUpdateRequest request);
@@ -47,6 +52,7 @@ public interface ProductMapper {
         return productType != null ? productType.getId() : 0;
     }
 
+    // Phương thức map chuyển List<Image> sang List<String> lấy URL
     default List<String> map(List<Image> images) {
         if (images == null) return Collections.emptyList();
         return images.stream()
@@ -54,6 +60,7 @@ public interface ProductMapper {
                 .collect(Collectors.toList());
     }
 
+    @Named("mapCartDetailsToIds")
     default List<String> mapCartDetailsToIds(List<CartDetail> cartDetails) {
         if (cartDetails == null) return Collections.emptyList();
         return cartDetails.stream()
@@ -61,6 +68,7 @@ public interface ProductMapper {
                 .collect(Collectors.toList());
     }
 
+    @Named("mapFavoriteProductsToIds")
     default List<String> mapFavoriteProductsToIds(List<FavoriteProduct> favoriteProducts) {
         if (favoriteProducts == null) return Collections.emptyList();
         return favoriteProducts.stream()
@@ -68,6 +76,7 @@ public interface ProductMapper {
                 .collect(Collectors.toList());
     }
 
+    @Named("mapOrderDetailsToIds")
     default List<String> mapOrderDetailsToIds(List<OrderDetail> orderDetails) {
         if (orderDetails == null) return Collections.emptyList();
         return orderDetails.stream()
