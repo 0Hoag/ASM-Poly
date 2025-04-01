@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.42.0.v20250325-2231, environment: Java 21.0.6 (Eclipse Adoptium)"
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class OrderMapperImpl implements OrderMapper {
@@ -45,8 +45,8 @@ public class OrderMapperImpl implements OrderMapper {
         orderResponse.orderStatus( entityOrderStatusStatusName( entity ) );
         orderResponse.user( entityUserId( entity ) );
         orderResponse.orderDetails( mapOrderDetails( entity.getOrderDetails() ) );
-        orderResponse.createdAt( entity.getCreatedAt() );
         orderResponse.id( entity.getId() );
+        orderResponse.createdAt( entity.getCreatedAt() );
         orderResponse.totalAmount( entity.getTotalAmount() );
 
         return orderResponse.build();
