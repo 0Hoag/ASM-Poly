@@ -2,11 +2,13 @@ spring:
   application:
     name: asm
   datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}
-    driverClassName: "com.mysql.cj.jdbc.Driver"
-    username: root
-    password: 601748
+    url: jdbc:sqlserver://localhost:1433;databaseName=db;encrypt=false
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: sa
+    password: 135999
+
   jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -14,7 +16,7 @@ spring:
 server:
   port: 8080
   servlet:
-    context-path: /asm/api/v1
+    context-path: /asm
 
 cloudinary:
   cloud-name: "ddclol9ih"
