@@ -21,7 +21,7 @@ public interface SpecificationTypeMapper {
     @Mapping(target = "productType", source = "productType", qualifiedByName = "mapProductType")
     SpecificationType toSpecificationType(SpecificationTypeRequest request);
 
-    @Mapping(target = "productTypeName", source = "productType.nameType") // Lấy tên của ProductType
+    @Mapping(target = "productTypeName", source = "productType.nameType")
     @Mapping(target = "productSpecifications", source = "productSpecifications", qualifiedByName = "mapProductSpecifications")
     SpecificationTypeResponse toSpecificationTypeResponse(SpecificationType entity);
 
