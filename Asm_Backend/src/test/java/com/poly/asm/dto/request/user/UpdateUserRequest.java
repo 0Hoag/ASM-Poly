@@ -1,7 +1,7 @@
-package com.poly.asm.dto.response.address;
+package com.poly.asm.dto.request.user;
 
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,17 +11,19 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddressResponse {
-	@NotBlank(message = "Address cannot be empty")
-	String address;
-	
-	@NotBlank(message = "Phone number cannot be empty")
+public class UpdateUserRequest {
+	@NotEmpty(message = "Full name cannot be empty")
+    String fullName;
+
+    @Email(message = "Invalid email format")
+    String email;
+
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number format")
-	String phoneNumber;
-	String userName;
-	boolean defaultAddress;
+    String phoneNumber;
+
+
 }

@@ -11,10 +11,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "productName", target = "productName")
-    @Mapping(source = "price", target = "price")
-    @Mapping(source = "salePrice", target = "salePrice")
     @Mapping(source = "images", target = "images", qualifiedByName = "mapImages")
     ProductResponse toProductResponse(Product product);
 

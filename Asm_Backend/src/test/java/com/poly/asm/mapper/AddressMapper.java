@@ -13,9 +13,6 @@ public interface AddressMapper {
 	@Mapping(source = "defaultAddress", target = "defaultAddress")
     AddressResponse toAddressResponse(Address address);
     
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "user", ignore = true)
-    @Mapping(target = "orders", ignore = true)
 	@Mapping(target = "defaultAddress", ignore = true)
     Address toAddress(AddressRequest request);
 }

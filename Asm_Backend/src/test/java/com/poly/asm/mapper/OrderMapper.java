@@ -3,7 +3,6 @@ package com.poly.asm.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import com.poly.asm.dto.response.order.OrderResponse;
 import com.poly.asm.entity.Image;
@@ -12,9 +11,6 @@ import com.poly.asm.entity.Order;
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
-    @Mapping(source = "orderDetails", target = "orderDetails")
-    @Mapping(source = "orderStatus", target = "orderStatus")
-    @Mapping(source = "address", target = "address")
     OrderResponse toOrderResponse(Order order);
     
     default List<String> map(List<Image> images) {

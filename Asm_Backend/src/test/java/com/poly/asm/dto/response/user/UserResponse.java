@@ -1,8 +1,6 @@
 package com.poly.asm.dto.response.user;
 
-import java.util.List;
 
-import com.poly.asm.dto.response.favorite.FavoriteResponse;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,12 +15,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-	int id;
 	String fullName;
-	String password;
 	String phoneNumber;
 	String email;
-	boolean role;
-	List<FavoriteResponse> favorites;
 	
 }

@@ -17,10 +17,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
-    int id;
+	int id;
     long totalAmount;
     String createdAt;
     List<OrderDetailResponse> orderDetails;
     OrderStatusResponse orderStatus; 
-    AddressResponse address; 
 }

@@ -13,35 +13,37 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.poly.asm.dto.request.address.AddressRequest;
+import com.poly.asm.dto.request.user.UpdateUserRequest;
 import com.poly.asm.dto.request.user.UserRequest;
 import com.poly.asm.dto.response.address.AddressResponse;
 import com.poly.asm.dto.response.order.OrderResponse;
 import com.poly.asm.dto.response.product.ProductResponse;
 import com.poly.asm.dto.response.user.UserResponse;
-import com.poly.asm.entity.User;
-import com.poly.asm.service.Impl.AddressServiceImpl;
-import com.poly.asm.service.Impl.FavoriteServiceImpl;
-import com.poly.asm.service.Impl.OrderServiceImpl;
-import com.poly.asm.service.Impl.UserServiceImpl;
+import com.poly.asm.service.AddressService;
+import com.poly.asm.service.FavoriteService;
+import com.poly.asm.service.OrderService;
+import com.poly.asm.service.UserService;
+
 
 @RestController
 @RequestMapping("/User")
+
 public class HelloWorld {
 	@Autowired
-	UserServiceImpl userService;
+	UserService userService;
 	@Autowired
-	FavoriteServiceImpl favoriteService;
+	FavoriteService favoriteService;
 	@Autowired
-	OrderServiceImpl orderService;
+	OrderService orderService;
 	@Autowired
-	AddressServiceImpl addressService;
+	AddressService addressService;
     @PostMapping("/Create")
-    public User create(@RequestBody UserRequest request) {
+    public Boolean create(@RequestBody UserRequest request) {
         return userService.createUser(request);
     }
     @PostMapping("/Update/{userId}")
-    public User update(@PathVariable int userId,@RequestBody UserRequest request) {
-    	return userService.updateUser(userId, request);
+    public UserResponse update(@PathVariable int userId,@RequestBody UpdateUserRequest request) {
+    	return userService.updateProfile(userId, request);
     }
     @GetMapping("/Search")
     public List<UserResponse> search(@RequestParam String keyword) {
