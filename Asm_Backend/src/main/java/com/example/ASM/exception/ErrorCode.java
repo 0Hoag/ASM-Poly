@@ -47,9 +47,24 @@ public enum ErrorCode {
     CART_EXISTED(1030, "Cart existed", HttpStatus.BAD_REQUEST),
     CART_NAME_EXISTED(1031, "Cart name existed", HttpStatus.CONFLICT),
 
-    CART_DETAIL_NOT_EXISTED(1029, "Cart detail not existed", HttpStatus.BAD_REQUEST),
-    CART_DETAIL_EXISTED(1030, "Cart detail existed", HttpStatus.BAD_REQUEST),
-    CART_DETAIL_NAME_EXISTED(1031, "Cart detail name existed", HttpStatus.CONFLICT),
+    CART_DETAIL_NOT_EXISTED(1032, "Cart detail not existed", HttpStatus.BAD_REQUEST),
+    CART_DETAIL_EXISTED(1033, "Cart detail existed", HttpStatus.BAD_REQUEST),
+    CART_DETAIL_NAME_EXISTED(1034, "Cart detail name existed", HttpStatus.CONFLICT),
+
+    ORDERS_STATUS_NOT_EXISTED(1035, "Order status not existed", HttpStatus.BAD_REQUEST),
+    ORDERS_STATUS_EXISTED(1036, "Order status existed", HttpStatus.BAD_REQUEST),
+    ORDERS_STATUS_NAME_EXISTED(1037, "Order status name existed", HttpStatus.CONFLICT),
+
+    ADDRESS_NOT_EXISTED(1038, "Address not existed", HttpStatus.BAD_REQUEST),
+    ADDRESS_EXISTED(1039, "Address existed", HttpStatus.BAD_REQUEST),
+    ADDRESS_NAME_EXISTED(1040, "Address name existed", HttpStatus.CONFLICT),
+
+    CIRCULAR_REFERENCE_NOT_ALLOWED(7777, "Circular reference not allow", HttpStatus.BAD_REQUEST),
+    ENTITY_HASH_MANY_CHILDREN(6666, "Entity hash many children", HttpStatus.BAD_REQUEST),
+
+    SPECIFICATION_NOT_FOUND(1032, "Specification not found", HttpStatus.NOT_FOUND),
+    SPECIFICATION_EXISTED(1033, "Specification existed", HttpStatus.BAD_REQUEST),
+    SPECIFICATION_NAME_EXISTED(1034, "Specification name existed", HttpStatus.CONFLICT),
     ;
 
     private int code;
