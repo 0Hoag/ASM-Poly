@@ -108,10 +108,13 @@ public class CategoryService {
     }
 
     public void Delete(int id) {
-        if (!repo.existsById(id)) {
-            throw new AppException(ErrorCode.CATEGORIES_NOT_EXISTED);
-        }
+        var cate = repo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
 
-        repo.deleteById(id);
+        if (cate.getProducts().size() <= 0) {
+            repo.deleteById(id);
+        } else {
+            throw new AppException(ErrorCode.ENTITY_HASH_MANY_CHILDREN);
+        }
     }
 }
