@@ -61,7 +61,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="pageinatedProducts.length" v-for="(product, index) in pageinatedProducts" :key="product.id">
+            <tr v-if="products.length" v-for="(product, index) in products" :key="product.id">
               <td>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" />
@@ -72,16 +72,16 @@
                 <img :src="product.images[0]" class="product-image" :alt="product.title" width="100" />
               </td>
               <td>{{ product.productName }}</td>
-              <td>{{ product.category.categoryName }}</td>
+              <td>{{ product.category }}</td>
               <td>{{ product.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) }}</td>
               <td>45</td>
               <td>
                 <span :class="['badge', product.stockQuantity > 0 ? 'bg-success' : 'bg-danger']">{{ product.stockQuantity > 0 ? "Còn hàng" : "Hết hàng" }}</span>
               </td>
               <td class="action-buttons">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewProductModal">
+                <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewProductModal">
                   <i class="bi bi-eye"></i>
-                </button>
+                </button> -->
                 <router-link :to="{ name: 'edit-product', params: { id: product.id } }" class="btn btn-warning btn-sm">
                   <i class="bi bi-pencil"></i>
                 </router-link>
@@ -90,7 +90,7 @@
                 </button>
               </td>
             </tr>
-            <tr v-if="!pageinatedProducts.length">
+            <tr v-if="!products.length">
               <td colspan="9" class="text-center">Khong co du lieu</td>
             </tr>
           </tbody>
@@ -132,6 +132,7 @@
       </div>
     </div>
   </div>
+
   <!-- <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -274,20 +275,30 @@ const deleteProduct = async (id) => {
   }
 };
 
-const pageinatedProducts = computed(() => {
-  const start = (currentPage.value - 1) * limit.value;
-  return filteredProducts.value.slice(start, start + limit.value);
+const pageinatedProducts = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/prduct/Get", {
+      params: {
+        size: limit.value,
+        page: currentPage.value,
+      },
+    });
+    products.value = resp.data.result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+watch([currentPage, limit], () => {
+  pageinatedProducts();
 });
 
 const totalPage = computed(() => Math.ceil(filteredProducts.value.length / limit.value));
-console.log(totalPage.value);
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
   }
 };
 const nextPage = () => {
-  console.log(totalPage.value);
   if (currentPage.value < totalPage.value) {
     currentPage.value++;
     console.log(currentPage.value);

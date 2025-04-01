@@ -1,5 +1,16 @@
 package com.example.ASM.service;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
@@ -10,23 +21,12 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.repository.ImageRepository;
 import com.example.ASM.repository.ProductRepository;
-import com.example.ASM.service.config.Cloud;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +60,8 @@ public class ImageService {
     }
 
     public void uploadImageProduct(int productID, MultipartFile file) throws IOException, SQLException {
-        var product = productRepository.findById(productID)
+        var product = productRepository
+                .findById(productID)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         if (!FileUtils.validateFile(file)) {
@@ -71,17 +72,17 @@ public class ImageService {
 
         try {
             Map<String, Object> uploadOptions = new HashMap<>();
-            Map<String, Object> uploadResult = cloudinaryConfig()
-                    .uploader()
-                    .upload(file.getBytes(), uploadOptions);
+            Map<String, Object> uploadResult = cloudinaryConfig().uploader().upload(file.getBytes(), uploadOptions);
 
             String publicId = (String) uploadResult.get("public_id");
 
-            String image1080pUrl = cloudinaryConfig().url()
+            String image1080pUrl = cloudinaryConfig()
+                    .url()
                     .transformation(new Transformation().width(1080).crop("scale"))
                     .generate(publicId);
 
-            var image = imageRepository.save(Image.builder().product(product).url(image1080pUrl).build());
+            var image = imageRepository.save(
+                    Image.builder().product(product).url(image1080pUrl).build());
             product.getImages().add(image);
 
             productRepository.save(product);
@@ -91,11 +92,12 @@ public class ImageService {
     }
 
     public void removeImageProduct(int productID) {
-        var product = productRepository.findById(productID)
+        var product = productRepository
+                .findById(productID)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         ArrayList<Image> productImages = new ArrayList<>(product.getImages());
-        for (Image url: productImages) {
+        for (Image url : productImages) {
             try {
                 String publicId = extractPublicIdFromUrl(url.getUrl());
                 log.info("publicId: {}", publicId);
@@ -109,7 +111,7 @@ public class ImageService {
                 if ("ok".equals(result.get("result"))) {
                     log.info("Successfully delete media from Cloudinary");
 
-                }else {
+                } else {
                     log.error("Failed to delete media from Cloudinary");
                     throw new AppException(ErrorCode.REMOVE_FILE_FAIL);
                 }
@@ -120,7 +122,8 @@ public class ImageService {
     }
 
     public void removeImageChoose(int productID, RemoveProductImage image) {
-        var product = productRepository.findById(productID)
+        var product = productRepository
+                .findById(productID)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         Set<Image> images =
@@ -164,10 +167,11 @@ public class ImageService {
             throw new IllegalArgumentException("Invalid Cloudinary URL format");
         }
 
-        return String.join("/", Arrays.stream(urlParts, uploadIndex + 1, urlParts.length)
-                        .filter(part -> !part.startsWith("v"))
-                        .collect(Collectors.toList()))
+        return String.join(
+                        "/",
+                        Arrays.stream(urlParts, uploadIndex + 1, urlParts.length)
+                                .filter(part -> !part.startsWith("v"))
+                                .collect(Collectors.toList()))
                 .replaceFirst("[.][^.]+$", "");
     }
-
 }
