@@ -17,8 +17,11 @@ public interface CategoryMapper {
     @Mapping(target = "parentCategory", source = "parentCategory", qualifiedByName = "mapParentCategory")
     Category toCategory(CategoryRequest request);
 
-    @Mapping(target = "parentCategory", source = "parentCategory", qualifiedByName = "mapParentCategoryResponse")
+    @Mapping(
+            target = "parentCategory",
+            expression = "java(entity.getParentCategory() != null ? entity.getParentCategory().getId() : 0)")
     @Mapping(target = "products", source = "products", qualifiedByName = "mapProductIds")
+    @Mapping(target = "subCategories", source = "subCategories", qualifiedByName = "mapSubCategories")
     CategoryResponse toCategoryResponse(Category entity);
 
     @Mapping(target = "parentCategory", source = "parentCategory", qualifiedByName = "mapParentCategory")
@@ -32,7 +35,6 @@ public interface CategoryMapper {
         return category;
     }
 
-    @Named("mapParentCategoryResponse")
     default int mapParentCategoryResponse(Category entity) {
         return (entity != null && entity.getParentCategory() != null)
                 ? entity.getParentCategory().getId()
@@ -45,5 +47,11 @@ public interface CategoryMapper {
         return products.stream()
                 .map(product -> String.valueOf(product.getProductName()))
                 .collect(Collectors.toList());
+    }
+
+    @Named("mapSubCategories")
+    default List<CategoryResponse> mapSubCategories(List<Category> subCategories) {
+        if (subCategories == null) return Collections.emptyList();
+        return subCategories.stream().map(this::toCategoryResponse).collect(Collectors.toList());
     }
 }
