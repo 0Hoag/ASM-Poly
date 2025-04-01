@@ -1,5 +1,6 @@
 package com.example.ASM.exception;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class GlobalException {
     private static final String MIN_ATTRIBUTES = "min";
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handRuntimeException(RuntimeException exception) {
+    ResponseEntity<ApiResponse> handRuntimeException(Exception exception) {
         ErrorCode errorCode = ErrorCode.UNCATEGORIZE_EXCEPTION;
         ApiResponse apiResponse = new ApiResponse();
 
@@ -43,35 +44,23 @@ public class GlobalException {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse> hanlMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        String enumKey = exception.getFieldError().getDefaultMessage();
+        // Tạo một map để lưu trữ các lỗi validation
+        Map<String, String> errors = new HashMap<>();
 
-        if (enumKey.isEmpty()) {
-            throw new NullPointerException();
-        }
+        // Thu thập tất cả các lỗi validation
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
 
-        ErrorCode errorCode = ErrorCode.INVALID_KEY;
-        Map<String, Object> attributes = null;
-        try {
-            errorCode = ErrorCode.valueOf(enumKey);
-
-            var constrainViolation =
-                    exception.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
-
-            attributes = constrainViolation.getConstraintDescriptor().getAttributes();
-
-            log.info(attributes.toString());
-
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException();
-        }
-
+        // Tạo response với mã lỗi validation
+        ErrorCode errorCode = ErrorCode.INVALID_KEY; // Hoặc một mã lỗi validation phù hợp
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(
-                Objects.nonNull(attributes)
-                        ? mapAttribute(errorCode.getMessage(), attributes)
-                        : errorCode.getMessage());
+        apiResponse.setMessage("Lỗi validation");
+        apiResponse.setResult(errors); // Thêm chi tiết lỗi vào kết quả
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
