@@ -1,0 +1,579 @@
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CategoryMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.Category.CategoryRequest;\r\nimport com.example.ASM.dto.request.Category.CategoryUpdateRequest;\r\nimport com.example.ASM.dto.response.CategoryResponse;\r\nimport com.example.ASM.entity.Category;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class CategoryMapperImpl implements CategoryMapper {\r\n\r\n    @Override\r\n    public Category toCategory(CategoryRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        Category category = new Category();\r\n\r\n        category.setParentCategory( mapParentCategory( request.getParentCategory() ) );\r\n        category.setCategoryName( request.getCategoryName() );\r\n\r\n        return category;\r\n    }\r\n\r\n    @Override\r\n    public CategoryResponse toCategoryResponse(Category entity) {\r\n        if ( entity == null ) {\r\n            return null;\r\n        }\r\n\r\n        CategoryResponse.CategoryResponseBuilder categoryResponse = CategoryResponse.builder();\r\n\r\n        categoryResponse.parentCategory( mapParentCategoryResponse( entity.getParentCategory() ) );\r\n        categoryResponse.products( mapProductIds( entity.getProducts() ) );\r\n        categoryResponse.id( entity.getId() );\r\n        categoryResponse.categoryName( entity.getCategoryName() );\r\n        categoryResponse.subCategories( categoryListToCategoryResponseList( entity.getSubCategories() ) );\r\n\r\n        return categoryResponse.build();\r\n    }\r\n\r\n    @Override\r\n    public void updateCategory(Category profile, CategoryUpdateRequest request) {\r\n        if ( request == null ) {\r\n            return;\r\n        }\r\n\r\n        profile.setParentCategory( mapParentCategory( request.getParentCategory() ) );\r\n        profile.setCategoryName( request.getCategoryName() );\r\n    }\r\n\r\n    protected List<CategoryResponse> categoryListToCategoryResponseList(List<Category> list) {\r\n        if ( list == null ) {\r\n            return null;\r\n        }\r\n\r\n        List<CategoryResponse> list1 = new ArrayList<CategoryResponse>( list.size() );\r\n        for ( Category category : list ) {\r\n            list1.add( toCategoryResponse( category ) );\r\n        }\r\n\r\n        return list1;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CategoryMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CategoryMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CategoryMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CategoryMapperImpl.java	(date 1743468723220)
+@@ -11,7 +11,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class CategoryMapperImpl implements CategoryMapper {
+Index: Asm_Backend/src/main/java/com/example/ASM/service/ProductSpecificationService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/service/ProductSpecificationService.java b/Asm_Backend/src/main/java/com/example/ASM/service/ProductSpecificationService.java
+new file mode 100644
+--- /dev/null	(date 1743477042313)
++++ b/Asm_Backend/src/main/java/com/example/ASM/service/ProductSpecificationService.java	(date 1743477042313)
+@@ -0,0 +1,90 @@
++package com.example.ASM.service;
++
++
++import com.example.ASM.dto.PageResponse;
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
++import com.example.ASM.dto.response.ProductSpecificationResponse;
++import com.example.ASM.exception.AppException;
++import com.example.ASM.exception.ErrorCode;
++import com.example.ASM.mapper.ProductSpecificationMapper;
++import com.example.ASM.repository.ProductSpecificationRepository;
++import lombok.AccessLevel;
++import lombok.AllArgsConstructor;
++import lombok.experimental.FieldDefaults;
++import lombok.extern.slf4j.Slf4j;
++import org.springframework.dao.DataIntegrityViolationException;
++import org.springframework.data.domain.PageRequest;
++import org.springframework.data.domain.Pageable;
++import org.springframework.stereotype.Service;
++
++import java.util.List;
++import java.util.stream.Collectors;
++
++@Service
++@Slf4j
++@AllArgsConstructor
++@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
++public class ProductSpecificationService {
++    ProductSpecificationRepository repository;
++    ProductSpecificationMapper mapper;
++
++    public boolean create(ProductSpecificationRequest request) {
++        try {
++            repository.save(mapper.toProductSpecification(request));
++        } catch (DataIntegrityViolationException e) {
++            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
++        }
++        return true;
++    }
++
++
++    public ProductSpecificationResponse detail(int id) {
++        var entity = repository.findById(id)
++                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
++        return mapper.toProductSpecificationResponse(entity);
++    }
++
++
++    public List<ProductSpecificationResponse> list() {
++        return repository.findAll().stream()
++                .map(mapper::toProductSpecificationResponse)
++                .collect(Collectors.toList());
++    }
++
++    public PageResponse<ProductSpecificationResponse> get(int page, int size) {
++        Pageable pageable = PageRequest.of(page - 1, size);
++        var pageData = repository.findAll(pageable);
++
++        var data = pageData.getContent().stream()
++                .map(mapper::toProductSpecificationResponse)
++                .collect(Collectors.toList());
++
++        return PageResponse.<ProductSpecificationResponse>builder()
++                .currentPage(page)
++                .totalPages(pageData.getTotalPages())
++                .pageSize(pageData.getSize())
++                .totalElements(pageData.getTotalElements())
++                .data(data)
++                .build();
++    }
++
++    public ProductSpecificationResponse update(int id, ProductSpecificationUpdateRequest request) {
++        var entity = repository.findById(id)
++                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
++
++        mapper.updateProductSpecification(entity, request);
++        return mapper.toProductSpecificationResponse(repository.save(entity));
++    }
++
++    public void delete(int id) {
++        if (!repository.existsById(id)) {
++            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
++        }
++        try {
++            repository.deleteById(id);
++        } catch (DataIntegrityViolationException e) {
++            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
++        }
++    }
++}
+Index: Asm_Backend/src/main/java/com/example/ASM/controller/ProductSpecificationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/controller/ProductSpecificationController.java b/Asm_Backend/src/main/java/com/example/ASM/controller/ProductSpecificationController.java
+new file mode 100644
+--- /dev/null	(date 1743477208497)
++++ b/Asm_Backend/src/main/java/com/example/ASM/controller/ProductSpecificationController.java	(date 1743477208497)
+@@ -0,0 +1,81 @@
++package com.example.ASM.controller;
++
++import com.example.ASM.dto.ApiResponse;
++import com.example.ASM.dto.PageResponse;
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
++import com.example.ASM.dto.response.ProductSpecificationResponse;
++import com.example.ASM.service.ProductSpecificationService;
++import jakarta.validation.Valid;
++import lombok.AccessLevel;
++import lombok.RequiredArgsConstructor;
++import lombok.experimental.FieldDefaults;
++import lombok.extern.slf4j.Slf4j;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/productSpecification")
++@RequiredArgsConstructor
++@Slf4j
++@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
++public class ProductSpecificationController {
++
++    ProductSpecificationService service;
++
++    @PostMapping("/")
++    public ApiResponse<Boolean> create(@RequestBody @Valid ProductSpecificationRequest request) {
++        return ApiResponse.<Boolean>builder()
++                .code(1000)
++                .result(service.create(request))
++                .build();
++    }
++
++    @GetMapping("/{id}")
++    public ApiResponse<ProductSpecificationResponse> detail(@PathVariable("id") int id) {
++        return ApiResponse.<ProductSpecificationResponse>builder()
++                .code(1000)
++                .result(service.detail(id))
++                .build();
++    }
++
++    @GetMapping("/list")
++    public ApiResponse<List<ProductSpecificationResponse>> list() {
++        return ApiResponse.<List<ProductSpecificationResponse>>builder()
++                .code(1000)
++                .result(service.list())
++                .build();
++    }
++
++    @GetMapping("/get")
++    public ApiResponse<PageResponse<ProductSpecificationResponse>> getPaged(
++            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
++            @RequestParam(value = "size", required = false, defaultValue = "10") int size
++    ) {
++        return ApiResponse.<PageResponse<ProductSpecificationResponse>>builder()
++                .code(1000)
++                .result(service.get(page, size))
++                .build();
++    }
++
++    @PutMapping("/{id}")
++    public ApiResponse<ProductSpecificationResponse> update(
++            @PathVariable("id") int id,
++            @RequestBody ProductSpecificationUpdateRequest request
++    ) {
++        return ApiResponse.<ProductSpecificationResponse>builder()
++                .code(1000)
++                .result(service.update(id, request))
++                .build();
++    }
++
++    @DeleteMapping("/{id}")
++    public ApiResponse<Void> delete(@PathVariable("id") int id) {
++        service.delete(id);
++        return ApiResponse.<Void>builder()
++                .code(1000)
++                .message("Delete success!")
++                .build();
++    }
++}
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.Product.ProductRequest;\r\nimport com.example.ASM.dto.request.Product.ProductUpdateRequest;\r\nimport com.example.ASM.dto.response.ProductResponse;\r\nimport com.example.ASM.entity.Category;\r\nimport com.example.ASM.entity.Product;\r\nimport com.example.ASM.entity.ProductType;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class ProductMapperImpl implements ProductMapper {\r\n\r\n    @Override\r\n    public Product toProduct(ProductRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        Product product = new Product();\r\n\r\n        product.setCartDetails( mapCartDetails( request.getCartDetails() ) );\r\n        product.setFavoriteProducts( mapFavoriteProducts( request.getFavoriteProducts() ) );\r\n        product.setImages( mapImages( request.getImages() ) );\r\n        product.setOrderDetails( mapOrderDetails( request.getOrderDetails() ) );\r\n        product.setDescription( request.getDescription() );\r\n        product.setPrice( request.getPrice() );\r\n        product.setProductName( request.getProductName() );\r\n        product.setSalePrice( request.getSalePrice() );\r\n        product.setSoldQuantity( request.getSoldQuantity() );\r\n        product.setStockQuantity( request.getStockQuantity() );\r\n        product.setCategory( map( request.getCategory() ) );\r\n        product.setProductType( mapProductType( request.getProductType() ) );\r\n\r\n        return product;\r\n    }\r\n\r\n    @Override\r\n    public ProductResponse toProductResponse(Product entity) {\r\n        if ( entity == null ) {\r\n            return null;\r\n        }\r\n\r\n        ProductResponse.ProductResponseBuilder productResponse = ProductResponse.builder();\r\n\r\n        productResponse.category( entityCategoryCategoryName( entity ) );\r\n        productResponse.productType( entityProductTypeNameType( entity ) );\r\n        productResponse.cartDetails( mapCartDetailsToIds( entity.getCartDetails() ) );\r\n        productResponse.favoriteProducts( mapFavoriteProductsToIds( entity.getFavoriteProducts() ) );\r\n        productResponse.orderDetails( mapOrderDetailsToIds( entity.getOrderDetails() ) );\r\n        productResponse.id( entity.getId() );\r\n        productResponse.productName( entity.getProductName() );\r\n        productResponse.description( entity.getDescription() );\r\n        productResponse.price( entity.getPrice() );\r\n        productResponse.salePrice( entity.getSalePrice() );\r\n        productResponse.soldQuantity( entity.getSoldQuantity() );\r\n        productResponse.stockQuantity( entity.getStockQuantity() );\r\n        productResponse.createdAt( entity.getCreatedAt() );\r\n        productResponse.images( map( entity.getImages() ) );\r\n\r\n        return productResponse.build();\r\n    }\r\n\r\n    @Override\r\n    public void updateProduct(Product entity, ProductUpdateRequest request) {\r\n        if ( request == null ) {\r\n            return;\r\n        }\r\n\r\n        entity.setDescription( request.getDescription() );\r\n        entity.setPrice( request.getPrice() );\r\n        entity.setProductName( request.getProductName() );\r\n        entity.setSalePrice( request.getSalePrice() );\r\n        entity.setSoldQuantity( request.getSoldQuantity() );\r\n        entity.setStockQuantity( request.getStockQuantity() );\r\n        entity.setCategory( map( request.getCategory() ) );\r\n        entity.setProductType( mapProductType( request.getProductType() ) );\r\n    }\r\n\r\n    private String entityCategoryCategoryName(Product product) {\r\n        if ( product == null ) {\r\n            return null;\r\n        }\r\n        Category category = product.getCategory();\r\n        if ( category == null ) {\r\n            return null;\r\n        }\r\n        String categoryName = category.getCategoryName();\r\n        if ( categoryName == null ) {\r\n            return null;\r\n        }\r\n        return categoryName;\r\n    }\r\n\r\n    private String entityProductTypeNameType(Product product) {\r\n        if ( product == null ) {\r\n            return null;\r\n        }\r\n        ProductType productType = product.getProductType();\r\n        if ( productType == null ) {\r\n            return null;\r\n        }\r\n        String nameType = productType.getNameType();\r\n        if ( nameType == null ) {\r\n            return null;\r\n        }\r\n        return nameType;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductMapperImpl.java	(date 1743468723299)
+@@ -11,7 +11,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class ProductMapperImpl implements ProductMapper {
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductTypeMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.ProductType.ProductTypeRequest;\r\nimport com.example.ASM.dto.response.ProductTypeResponse;\r\nimport com.example.ASM.entity.ProductType;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class ProductTypeMapperImpl implements ProductTypeMapper {\r\n\r\n    @Override\r\n    public ProductType toProductType(ProductTypeRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        ProductType productType = new ProductType();\r\n\r\n        productType.setNameType( request.getNameType() );\r\n\r\n        return productType;\r\n    }\r\n\r\n    @Override\r\n    public ProductTypeResponse toProductTypeResponse(ProductType productType) {\r\n        if ( productType == null ) {\r\n            return null;\r\n        }\r\n\r\n        ProductTypeResponse.ProductTypeResponseBuilder productTypeResponse = ProductTypeResponse.builder();\r\n\r\n        productTypeResponse.products( mapProductsToNames( productType.getProducts() ) );\r\n        productTypeResponse.specificationTypes( mapSpecificationTypesToNames( productType.getSpecificationTypes() ) );\r\n        productTypeResponse.id( productType.getId() );\r\n        productTypeResponse.nameType( productType.getNameType() );\r\n\r\n        return productTypeResponse.build();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductTypeMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductTypeMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductTypeMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/ProductTypeMapperImpl.java	(date 1743468723068)
+@@ -8,7 +8,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class ProductTypeMapperImpl implements ProductTypeMapper {
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/SpecificationTypeMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;\r\nimport com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;\r\nimport com.example.ASM.dto.response.SpecificationTypeResponse;\r\nimport com.example.ASM.entity.ProductType;\r\nimport com.example.ASM.entity.SpecificationType;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class SpecificationTypeMapperImpl implements SpecificationTypeMapper {\r\n\r\n    @Override\r\n    public SpecificationType toSpecificationType(SpecificationTypeRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        SpecificationType specificationType = new SpecificationType();\r\n\r\n        specificationType.setProductType( mapProductType( request.getProductType() ) );\r\n        specificationType.setSpecName( request.getSpecName() );\r\n\r\n        return specificationType;\r\n    }\r\n\r\n    @Override\r\n    public SpecificationTypeResponse toSpecificationTypeResponse(SpecificationType entity) {\r\n        if ( entity == null ) {\r\n            return null;\r\n        }\r\n\r\n        SpecificationTypeResponse.SpecificationTypeResponseBuilder specificationTypeResponse = SpecificationTypeResponse.builder();\r\n\r\n        specificationTypeResponse.productTypeName( entityProductTypeNameType( entity ) );\r\n        specificationTypeResponse.productSpecifications( mapProductSpecifications( entity.getProductSpecifications() ) );\r\n        specificationTypeResponse.id( entity.getId() );\r\n        specificationTypeResponse.specName( entity.getSpecName() );\r\n\r\n        return specificationTypeResponse.build();\r\n    }\r\n\r\n    @Override\r\n    public void updateSpecificationType(SpecificationType entity, SpecificationTypeUpdateRequest request) {\r\n        if ( request == null ) {\r\n            return;\r\n        }\r\n\r\n        entity.setProductType( mapProductType( request.getProductType() ) );\r\n        entity.setSpecName( request.getSpecName() );\r\n    }\r\n\r\n    private String entityProductTypeNameType(SpecificationType specificationType) {\r\n        if ( specificationType == null ) {\r\n            return null;\r\n        }\r\n        ProductType productType = specificationType.getProductType();\r\n        if ( productType == null ) {\r\n            return null;\r\n        }\r\n        String nameType = productType.getNameType();\r\n        if ( nameType == null ) {\r\n            return null;\r\n        }\r\n        return nameType;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/SpecificationTypeMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/SpecificationTypeMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/SpecificationTypeMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/SpecificationTypeMapperImpl.java	(date 1743468723014)
+@@ -10,7 +10,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class SpecificationTypeMapperImpl implements SpecificationTypeMapper {
+Index: Asm_Backend/src/main/java/com/example/ASM/repository/ProductSpecificationRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/repository/ProductSpecificationRepository.java b/Asm_Backend/src/main/java/com/example/ASM/repository/ProductSpecificationRepository.java
+new file mode 100644
+--- /dev/null	(date 1743475780233)
++++ b/Asm_Backend/src/main/java/com/example/ASM/repository/ProductSpecificationRepository.java	(date 1743475780233)
+@@ -0,0 +1,10 @@
++package com.example.ASM.repository;
++
++
++import com.example.ASM.entity.ProductSpecification;
++import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface ProductSpecificationRepository extends JpaRepository<ProductSpecification, Integer> {
++}
+Index: Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationRequest.java b/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationRequest.java
+new file mode 100644
+--- /dev/null	(date 1743476557523)
++++ b/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationRequest.java	(date 1743476557523)
+@@ -0,0 +1,22 @@
++package com.example.ASM.dto.request.ProductSpecification;
++
++import jakarta.validation.constraints.NotBlank;
++import jakarta.validation.constraints.NotNull;
++import lombok.*;
++import lombok.experimental.FieldDefaults;
++
++@Data
++@NoArgsConstructor
++@AllArgsConstructor
++@Builder
++@FieldDefaults(level = AccessLevel.PRIVATE)
++public class ProductSpecificationRequest {
++    @NotBlank(message = "Tên thông số sản phẩm không được để trống")
++    private String name;
++
++    @NotBlank(message = "Giá trị thông số không được để trống")
++    private String value;
++
++    @NotNull(message = "SpecificationType không được để trống")
++    private Integer specificationTypeId;
++}
+Index: Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationUpdateRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationUpdateRequest.java b/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationUpdateRequest.java
+new file mode 100644
+--- /dev/null	(date 1743476758492)
++++ b/Asm_Backend/src/main/java/com/example/ASM/dto/request/ProductSpecification/ProductSpecificationUpdateRequest.java	(date 1743476758492)
+@@ -0,0 +1,22 @@
++package com.example.ASM.dto.request.ProductSpecification;
++
++import jakarta.validation.constraints.NotBlank;
++import jakarta.validation.constraints.NotNull;
++import lombok.*;
++import lombok.experimental.FieldDefaults;
++
++@Data
++@NoArgsConstructor
++@AllArgsConstructor
++@Builder
++@FieldDefaults(level = AccessLevel.PRIVATE)
++public class ProductSpecificationUpdateRequest {
++    @NotBlank(message = "Tên thông số không được để trống")
++    String name;
++
++    @NotBlank(message = "Giá trị thông số không được để trống")
++    String value;
++
++    @NotNull(message = "SpecificationType không được để trống")
++    Integer specificationTypeId;
++}
+Index: Asm_Backend/src/main/java/com/example/ASM/dto/response/ProductSpecificationResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/dto/response/ProductSpecificationResponse.java b/Asm_Backend/src/main/java/com/example/ASM/dto/response/ProductSpecificationResponse.java
+new file mode 100644
+--- /dev/null	(date 1743472612846)
++++ b/Asm_Backend/src/main/java/com/example/ASM/dto/response/ProductSpecificationResponse.java	(date 1743472612846)
+@@ -0,0 +1,17 @@
++package com.example.ASM.dto.response;
++
++
++import lombok.*;
++import lombok.experimental.FieldDefaults;
++
++@Data
++@Builder
++@NoArgsConstructor
++@AllArgsConstructor
++@FieldDefaults(level = AccessLevel.PRIVATE)
++public class ProductSpecificationResponse {
++    private int id;
++    private String name;
++    private String value;
++    private String specificationTypeName;
++}
+Index: Asm_Backend/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n\t\t xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n\t<modelVersion>4.0.0</modelVersion>\r\n\t<parent>\r\n\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t<artifactId>spring-boot-starter-parent</artifactId>\r\n\t\t<version>3.2.5</version>\r\n\t\t<relativePath/> <!-- lookup parent from repository -->\r\n\t</parent>\r\n\t<groupId>com.example</groupId>\r\n\t<artifactId>ASM</artifactId>\r\n\t<name>ASM</name>\r\n\t<version>0.0.1-SNAPSHOT</version>\r\n\t<description>ASM</description>\r\n\t<properties>\r\n\t\t<java.version>21</java.version>\r\n\t\t<projectlombok-lombok.version>1.18.30</projectlombok-lombok.version>\r\n\t\t<mapstruct.version>1.5.5.Final</mapstruct.version>\r\n\t\t<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>\r\n\t\t<spotless.version>2.43.0</spotless.version>\r\n\t\t<spring-cloud.version>2023.0.1</spring-cloud.version>\r\n\t</properties>\r\n\t<dependencies>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-web</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.cloud</groupId>\r\n\t\t\t<artifactId>spring-cloud-starter-openfeign</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.fasterxml.jackson.datatype</groupId>\r\n\t\t\t<artifactId>jackson-datatype-jsr310</artifactId>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.cloudinary</groupId>\r\n\t\t\t<artifactId>cloudinary-http44</artifactId>\r\n\t\t\t<version>1.17.0</version>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-data-jpa</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-validation</artifactId>\r\n\t\t</dependency>\r\n\t\t<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.security</groupId>\r\n\t\t\t<artifactId>spring-security-crypto</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.mysql</groupId>\r\n\t\t\t<artifactId>mysql-connector-j</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.projectlombok</groupId>\r\n\t\t\t<artifactId>lombok</artifactId>\r\n\t\t\t<version>${projectlombok-lombok.version}</version>\r\n\t\t\t<scope>provided</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.mapstruct</groupId>\r\n\t\t\t<artifactId>mapstruct</artifactId>\r\n\t\t\t<version>${mapstruct.version}</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.security</groupId>\r\n\t\t\t<artifactId>spring-security-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\t\t<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.h2database</groupId>\r\n\t\t\t<artifactId>h2</artifactId>\r\n\t\t\t<version>2.2.224</version>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.testcontainers</groupId>\r\n\t\t\t<artifactId>mysql</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.testcontainers</groupId>\r\n\t\t\t<artifactId>junit-jupiter</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\r\n\t\t<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.google.code.gson</groupId>\r\n\t\t\t<artifactId>gson</artifactId>\r\n\t\t\t<version>2.11.0</version>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>jakarta.xml.bind</groupId>\r\n\t\t\t<artifactId>jakarta.xml.bind-api</artifactId>\r\n\t\t\t<version>4.0.2</version>\r\n\t\t</dependency>\r\n\t\t<!--        <dependency>-->\r\n\t\t<!--            <groupId>org.projectlombok</groupId>-->\r\n\t\t<!--            <artifactId>lombok</artifactId>-->\r\n\t\t<!--            <scope>provided</scope>-->\r\n\t\t<!--        </dependency>-->\r\n\r\n\r\n\t</dependencies>\r\n\t<dependencyManagement>\r\n\t\t<dependencies>\r\n\t\t\t<dependency>\r\n\t\t\t\t<groupId>org.springframework.cloud</groupId>\r\n\t\t\t\t<artifactId>spring-cloud-dependencies</artifactId>\r\n\t\t\t\t<version>${spring-cloud.version}</version>\r\n\t\t\t\t<type>pom</type>\r\n\t\t\t\t<scope>import</scope>\r\n\t\t\t</dependency>\r\n\r\n\t\t\t<!--\t\t\t<dependency>-->\r\n\t\t\t<!--\t\t\t\t<groupId>org.testcontainers</groupId>-->\r\n\t\t\t<!--\t\t\t\t<artifactId>testcontainers-bom</artifactId>-->\r\n\t\t\t<!--\t\t\t\t<version>1.19.7</version>-->\r\n\t\t\t<!--\t\t\t\t<type>pom</type>-->\r\n\t\t\t<!--\t\t\t\t<scope>import</scope>-->\r\n\t\t\t<!--\t\t\t</dependency>-->\r\n\r\n\t\t</dependencies>\r\n\t</dependencyManagement>\r\n\t<build>\r\n\t\t<plugins>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t\t<artifactId>spring-boot-maven-plugin</artifactId>\r\n\t\t\t\t<configuration>\r\n\t\t\t\t\t<excludes>\r\n\t\t\t\t\t\t<exclude>\r\n\t\t\t\t\t\t\t<groupId>org.projectlombok</groupId>\r\n\t\t\t\t\t\t\t<artifactId>lombok</artifactId>\r\n\t\t\t\t\t\t</exclude>\r\n\t\t\t\t\t</excludes>\r\n\t\t\t\t</configuration>\r\n\t\t\t</plugin>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.apache.maven.plugins</groupId>\r\n\t\t\t\t<artifactId>maven-compiler-plugin</artifactId>\r\n\t\t\t\t<version>${maven-compiler-plugin.version}</version>\r\n\t\t\t\t<configuration>\r\n\t\t\t\t\t<source>21</source>\r\n\t\t\t\t\t<target>21</target>\r\n\t\t\t\t\t<annotationProcessorPaths>\r\n\t\t\t\t\t\t<path>\r\n\t\t\t\t\t\t\t<groupId>org.projectlombok</groupId>\r\n\t\t\t\t\t\t\t<artifactId>lombok</artifactId>\r\n\t\t\t\t\t\t\t<version>${projectlombok-lombok.version}</version>\r\n\t\t\t\t\t\t</path>\r\n\t\t\t\t\t\t<path>\r\n\t\t\t\t\t\t\t<groupId>org.projectlombok</groupId>\r\n\t\t\t\t\t\t\t<artifactId>lombok-mapstruct-binding</artifactId>\r\n\t\t\t\t\t\t\t<version>${lombok-mapstruct-binding.version}</version>\r\n\t\t\t\t\t\t</path>\r\n\t\t\t\t\t\t<path>\r\n\t\t\t\t\t\t\t<groupId>org.mapstruct</groupId>\r\n\t\t\t\t\t\t\t<artifactId>mapstruct-processor</artifactId>\r\n\t\t\t\t\t\t\t<version>${mapstruct.version}</version>\r\n\t\t\t\t\t\t</path>\r\n\t\t\t\t\t</annotationProcessorPaths>\r\n\t\t\t\t\t<compilerArgs>\r\n\t\t\t\t\t\t<arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>\r\n\t\t\t\t\t\t<arg>-Amapstruct.defaultComponentModel=spring</arg>\r\n\t\t\t\t\t\t<arg>-Amapstruct.verbose=true</arg>\r\n\t\t\t\t\t</compilerArgs>\r\n\t\t\t\t</configuration>\r\n\t\t\t</plugin>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.jacoco</groupId>\r\n\t\t\t\t<artifactId>jacoco-maven-plugin</artifactId>\r\n\t\t\t\t<version>0.8.12</version>\r\n\t\t\t\t<executions>\r\n\t\t\t\t\t<execution>\r\n\t\t\t\t\t\t<goals>\r\n\t\t\t\t\t\t\t<goal>prepare-agent</goal>\r\n\t\t\t\t\t\t</goals>\r\n\t\t\t\t\t</execution>\r\n\t\t\t\t\t<execution>\r\n\t\t\t\t\t\t<id>report</id>\r\n\t\t\t\t\t\t<phase>test</phase>\r\n\t\t\t\t\t\t<goals>\r\n\t\t\t\t\t\t\t<goal>report</goal>\r\n\t\t\t\t\t\t</goals>\r\n\t\t\t\t\t</execution>\r\n\t\t\t\t</executions>\r\n\t\t\t\t<configuration>\r\n\t\t\t\t\t<excludes>\r\n\t\t\t\t\t\t<exclude>com/example/identityservice/dto/**</exclude>\r\n\t\t\t\t\t\t<exclude>com/example/identityservice/mapper/**</exclude>\r\n\t\t\t\t\t\t<exclude>com/example/identityservice/entity/**</exclude>\r\n\t\t\t\t\t\t<exclude>com/example/identityservice/enums/**</exclude>\r\n\t\t\t\t\t\t<exclude>com/example/identityservice/configuration/**</exclude>\r\n\t\t\t\t\t</excludes>\r\n\t\t\t\t</configuration>\r\n\t\t\t</plugin>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>com.diffplug.spotless</groupId>\r\n\t\t\t\t<artifactId>spotless-maven-plugin</artifactId>\r\n\t\t\t\t<version>${spotless.version}</version>\r\n\t\t\t\t<configuration>\r\n\t\t\t\t\t<java>\r\n\t\t\t\t\t\t<removeUnusedImports />\r\n\t\t\t\t\t\t<toggleOffOn/>\r\n\t\t\t\t\t\t<trimTrailingWhitespace/>\r\n\t\t\t\t\t\t<endWithNewline/>\r\n\t\t\t\t\t\t<indent>\r\n\t\t\t\t\t\t\t<tabs>true</tabs>\r\n\t\t\t\t\t\t\t<spacesPerTab>4</spacesPerTab>\r\n\t\t\t\t\t\t</indent>\r\n\t\t\t\t\t\t<palantirJavaFormat/>\r\n\t\t\t\t\t\t<importOrder>\r\n\t\t\t\t\t\t\t<!-- Specify either order or file, but not both -->\r\n\t\t\t\t\t\t\t<order>java,jakarta,org,com,com.diffplug,</order>\r\n\t\t\t\t\t\t</importOrder>\r\n\t\t\t\t\t</java>\r\n\t\t\t\t</configuration>\r\n\t\t\t\t<executions>\r\n\t\t\t\t\t<execution>\r\n\t\t\t\t\t\t<phase>compile</phase>\r\n\t\t\t\t\t\t<goals>\r\n\t\t\t\t\t\t\t<goal>apply</goal>\r\n\t\t\t\t\t\t</goals>\r\n\t\t\t\t\t</execution>\r\n\t\t\t\t</executions>\r\n\t\t\t</plugin>\r\n\t\t</plugins>\r\n\t</build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/pom.xml b/Asm_Backend/pom.xml
+--- a/Asm_Backend/pom.xml	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/pom.xml	(date 1743468424506)
+@@ -54,11 +54,13 @@
+ 			<groupId>org.springframework.security</groupId>
+ 			<artifactId>spring-security-crypto</artifactId>
+ 		</dependency>
++
+ 		<dependency>
+-			<groupId>com.mysql</groupId>
+-			<artifactId>mysql-connector-j</artifactId>
+-			<scope>runtime</scope>
++			<groupId>com.microsoft.sqlserver</groupId>
++			<artifactId>mssql-jdbc</artifactId>
++			<version>12.6.1.jre11</version> <!-- Kiểm tra và cập nhật phiên bản mới nhất -->
+ 		</dependency>
++
+ 		<dependency>
+ 			<groupId>org.projectlombok</groupId>
+ 			<artifactId>lombok</artifactId>
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartDetailMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.CartDetail.CartDetailRequest;\r\nimport com.example.ASM.dto.response.CartDetailResponse;\r\nimport com.example.ASM.entity.CartDetail;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class CartDetailMapperImpl implements CartDetailMapper {\r\n\r\n    @Override\r\n    public CartDetail toCartDetail(CartDetailRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        CartDetail cartDetail = new CartDetail();\r\n\r\n        cartDetail.setProduct( mapProduct( request.getProduct() ) );\r\n        cartDetail.setCart( mapCart( request.getCart() ) );\r\n        cartDetail.setQuantity( request.getQuantity() );\r\n\r\n        return cartDetail;\r\n    }\r\n\r\n    @Override\r\n    public CartDetailResponse toCartDetailResponse(CartDetail entity) {\r\n        if ( entity == null ) {\r\n            return null;\r\n        }\r\n\r\n        CartDetailResponse.CartDetailResponseBuilder cartDetailResponse = CartDetailResponse.builder();\r\n\r\n        cartDetailResponse.productName( mapProductName( entity.getProduct() ) );\r\n        cartDetailResponse.cart( mapCartId( entity.getCart() ) );\r\n        cartDetailResponse.id( entity.getId() );\r\n        cartDetailResponse.quantity( entity.getQuantity() );\r\n\r\n        return cartDetailResponse.build();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartDetailMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartDetailMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartDetailMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartDetailMapperImpl.java	(date 1743468723142)
+@@ -8,7 +8,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class CartDetailMapperImpl implements CartDetailMapper {
+Index: Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartMapperImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.mapper;\r\n\r\nimport com.example.ASM.dto.request.Cart.CartRequest;\r\nimport com.example.ASM.dto.response.CartDetailResponse;\r\nimport com.example.ASM.dto.response.CartResponse;\r\nimport com.example.ASM.entity.Cart;\r\nimport com.example.ASM.entity.CartDetail;\r\nimport javax.annotation.processing.Generated;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Generated(\r\n    value = \"org.mapstruct.ap.MappingProcessor\",\r\n    comments = \"version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)\"\r\n)\r\n@Component\r\npublic class CartMapperImpl implements CartMapper {\r\n\r\n    @Override\r\n    public Cart toCart(CartRequest request) {\r\n        if ( request == null ) {\r\n            return null;\r\n        }\r\n\r\n        Cart cart = new Cart();\r\n\r\n        cart.setUser( mapUser( request.getUser() ) );\r\n\r\n        return cart;\r\n    }\r\n\r\n    @Override\r\n    public CartResponse toCartResponse(Cart entity) {\r\n        if ( entity == null ) {\r\n            return null;\r\n        }\r\n\r\n        CartResponse.CartResponseBuilder cartResponse = CartResponse.builder();\r\n\r\n        cartResponse.userName( mapUserName( entity.getUser() ) );\r\n        cartResponse.cartDetails( mapCartDetails( entity.getCartDetails() ) );\r\n        cartResponse.id( entity.getId() );\r\n        cartResponse.createdAt( entity.getCreatedAt() );\r\n\r\n        return cartResponse.build();\r\n    }\r\n\r\n    @Override\r\n    public CartDetailResponse mapCartDetail(CartDetail cartDetail) {\r\n        if ( cartDetail == null ) {\r\n            return null;\r\n        }\r\n\r\n        CartDetailResponse.CartDetailResponseBuilder cartDetailResponse = CartDetailResponse.builder();\r\n\r\n        cartDetailResponse.cart( mapCartId( cartDetail.getCart() ) );\r\n        cartDetailResponse.id( cartDetail.getId() );\r\n        cartDetailResponse.quantity( cartDetail.getQuantity() );\r\n\r\n        return cartDetailResponse.build();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartMapperImpl.java b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartMapperImpl.java
+--- a/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartMapperImpl.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/generated-sources/annotations/com/example/ASM/mapper/CartMapperImpl.java	(date 1743468723112)
+@@ -10,7 +10,7 @@
+ 
+ @Generated(
+     value = "org.mapstruct.ap.MappingProcessor",
+-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
++    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Amazon.com Inc.)"
+ )
+ @Component
+ public class CartMapperImpl implements CartMapper {
+Index: Asm_Backend/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java b/Asm_Backend/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java
+new file mode 100644
+--- /dev/null	(date 1743475780227)
++++ b/Asm_Backend/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java	(date 1743475780227)
+@@ -0,0 +1,33 @@
++package com.example.ASM.mapper;
++
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
++import com.example.ASM.dto.response.ProductSpecificationResponse;
++import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
++import com.example.ASM.entity.ProductSpecification;
++import com.example.ASM.entity.SpecificationType;
++import org.mapstruct.*;
++import org.mapstruct.factory.Mappers;
++
++@Mapper(componentModel = "spring")
++public interface ProductSpecificationMapper {
++    ProductSpecificationMapper INSTANCE = Mappers.getMapper(ProductSpecificationMapper.class);
++
++    @Mapping(source = "specificationTypeId", target = "specificationType", qualifiedByName = "mapSpecificationType")
++    ProductSpecification toProductSpecification(ProductSpecificationRequest request);
++
++    @Mapping(source = "specificationType.specName", target = "specificationTypeName")
++    ProductSpecificationResponse toProductSpecificationResponse(ProductSpecification entity);
++
++    @Mapping(target = "id", ignore = true)
++    void updateProductSpecification(@MappingTarget ProductSpecification entity, ProductSpecificationUpdateRequest request);
++
++    @Named("mapSpecificationType")
++    default SpecificationType mapSpecificationType(Integer id) {
++        if (id == null) {
++            return null;
++        }
++        SpecificationType type = new SpecificationType();
++        type.setId(id);
++        return type;
++    }
++}
+Index: Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.ASM.exception;\r\n\r\nimport lombok.Getter;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.HttpStatusCode;\r\n\r\n@Getter\r\npublic enum ErrorCode {\r\n    UNCATEGORIZE_EXCEPTION(9999, \"UNCATEGORIZE_EXCEPTION\", HttpStatus.INTERNAL_SERVER_ERROR),\r\n    INVALID_KEY(1001, \"INVALID MESSAGE KEY\", HttpStatus.BAD_REQUEST),\r\n    USER_EXITSTED(1002, \"USER EXITED\", HttpStatus.BAD_REQUEST),\r\n    EMAIL_EXITSTED(1002, \"EMAIL EXITED\", HttpStatus.BAD_REQUEST),\r\n    SELECTED_PRODUCT_NOT_EXISTED(1003, \"SELECTED_PRODUCT_NOT_EXISTED\", HttpStatus.BAD_REQUEST),\r\n    USERNAME_INVALID(1004, \"USERNAME MUST AT LEES THAN {min} CHARACTER\", HttpStatus.BAD_REQUEST),\r\n    INVALID_PASSWORD(1005, \"PASSWORD NOT BE AT LEES THAN {min} CHARACTER\", HttpStatus.BAD_REQUEST),\r\n    USER_NOT_EXISTED(1006, \"USER_NOT_EXISTED\", HttpStatus.NOT_FOUND),\r\n    UNAUTHENTICATED(1007, \"UNAUTHENTICATED\", HttpStatus.UNAUTHORIZED),\r\n    UNAUTHORIZE(1008, \"YOU DO NOT HAVE PREMISSION\", HttpStatus.FORBIDDEN),\r\n    INVALID_DOB(1009, \"YOU AGE MUST BE AT least {min}\", HttpStatus.BAD_REQUEST),\r\n    PASSWORD_EXISTED(1010, \"PASSWORD_EXISTED\", HttpStatus.BAD_REQUEST),\r\n    PERMISSION_NOT_FOUND(1011, \"PERMISSION_NOT_FOUND\", HttpStatus.BAD_REQUEST),\r\n    CART_ITEM_EXISTED(1012, \"CART_ITEM_EXISTED\", HttpStatus.BAD_REQUEST),\r\n    ORDERS_NOT_EXISTED(1013, \"ORDERS_NOT_EXISTED\", HttpStatus.BAD_REQUEST),\r\n    IMAGE_NOT_EXISTED(1014, \"Image not existed\", HttpStatus.BAD_REQUEST),\r\n\r\n    UPLOAD_FILE_FAIL(1015, \"Upload file to fail!\", HttpStatus.BAD_REQUEST),\r\n    REMOVE_FILE_FAIL(1016, \"Remove file to fail!\", HttpStatus.BAD_REQUEST),\r\n\r\n    MISSING_INPUT(8888, \"Missing input\", HttpStatus.BAD_REQUEST),\r\n    CATEGORIES_NOT_EXISTED(1017, \"Categories not existed\", HttpStatus.BAD_REQUEST),\r\n    CATEGORIES_EXISTED(1018, \"Categories existed\", HttpStatus.BAD_REQUEST),\r\n    CATEGORIES_NAME_EXISTED(1019, \"Categories name existed\", HttpStatus.CONFLICT),\r\n\r\n    PRODUCT_NOT_EXISTED(1020, \"Product not existed\", HttpStatus.BAD_REQUEST),\r\n    PRODUCT_EXISTED(1021, \"Product existed\", HttpStatus.BAD_REQUEST),\r\n    PRODUCT_NAME_EXISTED(1022, \"Product name existed\", HttpStatus.CONFLICT),\r\n\r\n    PRODUCT_TYPE_NOT_EXISTED(1023, \"Product type not existed\", HttpStatus.BAD_REQUEST),\r\n    PRODUCT_TYPE_EXISTED(1024, \"Product type existed\", HttpStatus.BAD_REQUEST),\r\n    PRODUCT_TYPE_NAME_EXISTED(1025, \"Product type name existed\", HttpStatus.CONFLICT),\r\n\r\n    SPECIFICATION_TYPE_NOT_EXISTED(1026, \"Specification type not existed\", HttpStatus.BAD_REQUEST),\r\n    SPECIFICATION_TYPE_EXISTED(1027, \"Specification type existed\", HttpStatus.BAD_REQUEST),\r\n    SPECIFICATION_TYPE_NAME_EXISTED(1028, \"Specification type name existed\", HttpStatus.CONFLICT),\r\n\r\n    CART_NOT_EXISTED(1029, \"Cart not existed\", HttpStatus.BAD_REQUEST),\r\n    CART_EXISTED(1030, \"Cart existed\", HttpStatus.BAD_REQUEST),\r\n    CART_NAME_EXISTED(1031, \"Cart name existed\", HttpStatus.CONFLICT),\r\n\r\n    CART_DETAIL_NOT_EXISTED(1029, \"Cart detail not existed\", HttpStatus.BAD_REQUEST),\r\n    CART_DETAIL_EXISTED(1030, \"Cart detail existed\", HttpStatus.BAD_REQUEST),\r\n    CART_DETAIL_NAME_EXISTED(1031, \"Cart detail name existed\", HttpStatus.CONFLICT),\r\n    ;\r\n\r\n    private int code;\r\n    private String message;\r\n    private HttpStatusCode statusCode;\r\n\r\n    ErrorCode(int code, String message, HttpStatusCode statusCode) {\r\n        this.code = code;\r\n        this.message = message;\r\n        this.statusCode = statusCode;\r\n    }\r\n\r\n    ErrorCode() {}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java b/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java
+--- a/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java	(date 1743471663241)
+@@ -50,6 +50,8 @@
+     CART_DETAIL_NOT_EXISTED(1029, "Cart detail not existed", HttpStatus.BAD_REQUEST),
+     CART_DETAIL_EXISTED(1030, "Cart detail existed", HttpStatus.BAD_REQUEST),
+     CART_DETAIL_NAME_EXISTED(1031, "Cart detail name existed", HttpStatus.CONFLICT),
++
++    SPECIFICATION_NOT_FOUND(1032, "Specification not found", HttpStatus.NOT_FOUND),
+     ;
+ 
+     private int code;
+Index: Asm_Backend/src/main/resources/application.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring:\r\n  application:\r\n    name: asm\r\n  datasource:\r\n    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}\r\n    driverClassName: \"com.mysql.cj.jdbc.Driver\"\r\n    username: root\r\n    password: 601748\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\n    show-sql: true\r\n\r\nserver:\r\n  port: 8080\r\n  servlet:\r\n    context-path: /asm/api/v1\r\n\r\ncloudinary:\r\n  cloud-name: \"ddclol9ih\"\r\n  api-key: \"484769914577293\"\r\n  api-secret: \"41IJGj5NP901wP-74TR-fmIj0OQ\"
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/src/main/resources/application.yaml b/Asm_Backend/src/main/resources/application.yaml
+--- a/Asm_Backend/src/main/resources/application.yaml	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/src/main/resources/application.yaml	(date 1743468484768)
+@@ -2,11 +2,13 @@
+   application:
+     name: asm
+   datasource:
+-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}
+-    driverClassName: "com.mysql.cj.jdbc.Driver"
+-    username: root
+-    password: 601748
++    url: jdbc:sqlserver://localhost:1433;databaseName=db;encrypt=false
++    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
++    username: sa
++    password: 135999
++
+   jpa:
++    database-platform: org.hibernate.dialect.SQLServerDialect
+     hibernate:
+       ddl-auto: update
+     show-sql: true
+@@ -14,7 +16,7 @@
+ server:
+   port: 8080
+   servlet:
+-    context-path: /asm/api/v1
++    context-path: /asm
+ 
+ cloudinary:
+   cloud-name: "ddclol9ih"
+Index: Asm_Backend/target/classes/application.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring:\r\n  application:\r\n    name: asm\r\n  datasource:\r\n    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}\r\n    driverClassName: \"com.mysql.cj.jdbc.Driver\"\r\n    username: root\r\n    password: 601748\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\n    show-sql: true\r\n\r\nserver:\r\n  port: 8080\r\n  servlet:\r\n    context-path: /asm/api/v1\r\n\r\ncloudinary:\r\n  cloud-name: \"ddclol9ih\"\r\n  api-key: \"484769914577293\"\r\n  api-secret: \"41IJGj5NP901wP-74TR-fmIj0OQ\"
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Asm_Backend/target/classes/application.yaml b/Asm_Backend/target/classes/application.yaml
+--- a/Asm_Backend/target/classes/application.yaml	(revision 9c1d0d37e3d09295015df5ab2c43315fc85006a1)
++++ b/Asm_Backend/target/classes/application.yaml	(date 1743472475276)
+@@ -2,11 +2,13 @@
+   application:
+     name: asm
+   datasource:
+-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/asm}
+-    driverClassName: "com.mysql.cj.jdbc.Driver"
+-    username: root
+-    password: 601748
++    url: jdbc:sqlserver://localhost:1433;databaseName=db;encrypt=false
++    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
++    username: sa
++    password: 135999
++
+   jpa:
++    database-platform: org.hibernate.dialect.SQLServerDialect
+     hibernate:
+       ddl-auto: update
+     show-sql: true
+@@ -14,7 +16,7 @@
+ server:
+   port: 8080
+   servlet:
+-    context-path: /asm/api/v1
++    context-path: /asm
+ 
+ cloudinary:
+   cloud-name: "ddclol9ih"
