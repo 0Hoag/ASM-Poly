@@ -39,7 +39,7 @@ public class ProductTypeService {
         try {
             repo.save(mapper.toProductType(request));
         } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION );
         }
 
         return true;

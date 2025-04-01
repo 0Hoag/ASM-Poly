@@ -41,7 +41,7 @@ public class CartDetailService {
         try {
             repo.save(mapper.toCartDetail(request));
         } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION );
         }
 
         return true;

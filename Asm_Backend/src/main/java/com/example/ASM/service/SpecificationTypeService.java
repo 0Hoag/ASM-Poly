@@ -36,7 +36,7 @@ public class SpecificationTypeService {
         try {
             repo.save(mapper.toSpecificationType(request));
         } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION );
         }
 
         return true;
