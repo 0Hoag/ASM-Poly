@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="14bf6385-da36-4112-93ad-e500bc4d8125" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/service/build/CategoryBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/configuration/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/configuration/FileUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/controller/ImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/controller/ImageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/dto/response/CartDetailResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/dto/response/CartDetailResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/dto/response/CategoryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/dto/response/CategoryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/exception/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/mapper/CategoryMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/mapper/CategoryMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/service/ImageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/service/ImageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/configuration/FileUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/configuration/FileUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/controller/ImageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/controller/ImageController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/dto/response/CategoryResponse$CategoryResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/dto/response/CategoryResponse$CategoryResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/dto/response/CategoryResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/dto/response/CategoryResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/exception/ErrorCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/exception/ErrorCode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/mapper/CategoryMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/mapper/CategoryMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/service/CategoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/service/CategoryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/service/ImageService.class" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/target/classes/com/example/ASM/service/ImageService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2v5V0voq8QCrpdCnN2g60zvqaUI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AsmApplication.executor": "Debug",
+    "Maven.ASM [clean].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "huyhoang-dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/hoag/HotBook"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="AsmApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.ASM.AsmApplication" />
+      <module name="ASM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.ASM.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.AsmApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="14bf6385-da36-4112-93ad-e500bc4d8125" name="Changes" comment="" />
+      <created>1743434704764</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1743434704764</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -59,35 +59,39 @@ public class ImageService {
         return cloudinary;
     }
 
-    public void uploadImageProduct(int productID, MultipartFile file) throws IOException, SQLException {
+    public void uploadImageProduct(int productID, MultipartFile[] files) throws IOException, SQLException {
         var product = productRepository.findById(productID)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
-        if (!FileUtils.validateFile(file)) {
-            log.error("Invalid file: {}", file.getOriginalFilename());
+        if (files == null || files.length == 0) {
             throw new AppException(ErrorCode.UPLOAD_FILE_FAIL);
         }
-        log.info("OriginalFilename: {}", file.getOriginalFilename()); // type file ex: image
 
-        try {
-            Map<String, Object> uploadOptions = new HashMap<>();
-            Map<String, Object> uploadResult = cloudinaryConfig()
-                    .uploader()
-                    .upload(file.getBytes(), uploadOptions);
+        for (MultipartFile file : files) {
+            if (!FileUtils.validateFile(file)) {
+                throw new AppException(ErrorCode.UPLOAD_FILE_FAIL);
+            }
 
-            String publicId = (String) uploadResult.get("public_id");
+            try {
+                Map<String, Object> uploadOptions = new HashMap<>();
+                Map<String, Object> uploadResult = cloudinaryConfig()
+                        .uploader()
+                        .upload(file.getBytes(), uploadOptions);
 
-            String image1080pUrl = cloudinaryConfig().url()
-                    .transformation(new Transformation().width(1080).crop("scale"))
-                    .generate(publicId);
+                String publicId = (String) uploadResult.get("public_id");
 
-            var image = imageRepository.save(Image.builder().product(product).url(image1080pUrl).build());
-            product.getImages().add(image);
+                String image1080pUrl = cloudinaryConfig().url()
+                        .transformation(new Transformation().width(1080).crop("scale"))
+                        .generate(publicId);
 
-            productRepository.save(product);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+                var image = imageRepository.save(Image.builder().product(product).url(image1080pUrl).build());
+                product.getImages().add(image);
+            } catch (DataIntegrityViolationException e) {
+                throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            }
         }
+
+        productRepository.save(product);
     }
 
     public void removeImageProduct(int productID) {
@@ -98,7 +102,6 @@ public class ImageService {
         for (Image url: productImages) {
             try {
                 String publicId = extractPublicIdFromUrl(url.getUrl());
-                log.info("publicId: {}", publicId);
 
                 Map<String, Object> params = new HashMap<>();
 
@@ -108,7 +111,6 @@ public class ImageService {
 
                 if ("ok".equals(result.get("result"))) {
                     log.info("Successfully delete media from Cloudinary");
-
                 }else {
                     log.error("Failed to delete media from Cloudinary");
                     throw new AppException(ErrorCode.REMOVE_FILE_FAIL);
@@ -123,51 +125,44 @@ public class ImageService {
         var product = productRepository.findById(productID)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
-        Set<Image> images =
-                imageRepository.findAllById(image.getImages()).stream().collect(Collectors.toSet());
+        List<Image> imagesToRemove = new ArrayList<>(imageRepository.findAllById(image.getImages()));
 
-        for (Image url : images) {
+        if (imagesToRemove.isEmpty()) return;
+
+        for (Image img : imagesToRemove) {
+            product.getImages().removeIf(productImage -> productImage.getId() == img.getId());
+        }
+
+        productRepository.save(product);
+
+        for (Image img : imagesToRemove) {
             try {
-                String publicId = extractPublicIdFromUrl(url.getUrl());
-                log.info("publicId: {}", publicId);
+                String publicId = extractPublicIdFromUrl(img.getUrl());
 
-                Map result = cloudinaryConfig().uploader().destroy(publicId, ObjectUtils.emptyMap());
+                Map<String, Object> params = new HashMap<>();
+                Map result = cloudinaryConfig().uploader().destroy(publicId, params);
 
-                imageRepository.deleteById(url.getId());
+                imageRepository.deleteById(img.getId());
 
                 if ("ok".equals(result.get("result"))) {
-                    log.info("Successfully delete image from Cloudinary: {}", publicId);
+                    log.info("Successfully deleted image from Cloudinary: {}", publicId);
                 } else {
                     log.error("Failed to delete image from Cloudinary: {}", publicId);
                     throw new AppException(ErrorCode.REMOVE_FILE_FAIL);
                 }
-
             } catch (IOException e) {
                 throw new AppException(ErrorCode.REMOVE_FILE_FAIL);
             }
         }
-
-        productRepository.save(product);
     }
 
     public String extractPublicIdFromUrl(String imageUrl) {
-        String[] urlParts = imageUrl.split("/");
-        int uploadIndex = -1;
-        for (int i = 0; i < urlParts.length; i++) {
-            if ("upload".equals(urlParts[i])) {
-                uploadIndex = i;
-                break;
-            }
+        String filename = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+
+        if (filename.contains(".")) {
+            filename = filename.substring(0, filename.lastIndexOf('.'));
         }
 
-        if (uploadIndex == -1 || uploadIndex == urlParts.length - 1) {
-            throw new IllegalArgumentException("Invalid Cloudinary URL format");
-        }
-
-        return String.join("/", Arrays.stream(urlParts, uploadIndex + 1, urlParts.length)
-                        .filter(part -> !part.startsWith("v"))
-                        .collect(Collectors.toList()))
-                .replaceFirst("[.][^.]+$", "");
+        return filename;
     }
-
 }

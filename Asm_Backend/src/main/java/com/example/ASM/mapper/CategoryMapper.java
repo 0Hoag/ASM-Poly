@@ -3,12 +3,14 @@ package com.example.ASM.mapper;
 import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.entity.CartDetail;
 import com.example.ASM.entity.Category;
 import com.example.ASM.entity.Product;
 import org.mapstruct.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
@@ -36,7 +38,10 @@ public interface CategoryMapper {
     }
 
     @Named("mapProductIds")
-    default List<Integer> mapProductIds(List<Product> products) {
-        return products != null ? products.stream().map(Product::getId).toList() : Collections.emptyList();
+    default List<String> mapProductIds(List<Product> products) {
+        if (products == null) return Collections.emptyList();
+        return products.stream()
+                .map(product -> String.valueOf(product.getProductName()))
+                .collect(Collectors.toList());
     }
 }

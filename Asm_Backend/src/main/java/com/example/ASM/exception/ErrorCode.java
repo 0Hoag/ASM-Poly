@@ -50,6 +50,8 @@ public enum ErrorCode {
     CART_DETAIL_NOT_EXISTED(1029, "Cart detail not existed", HttpStatus.BAD_REQUEST),
     CART_DETAIL_EXISTED(1030, "Cart detail existed", HttpStatus.BAD_REQUEST),
     CART_DETAIL_NAME_EXISTED(1031, "Cart detail name existed", HttpStatus.CONFLICT),
+
+    CIRCULAR_REFERENCE_NOT_ALLOWED(7777, "Circular reference not allow", HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

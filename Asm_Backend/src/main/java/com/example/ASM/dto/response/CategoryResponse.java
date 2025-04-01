@@ -15,5 +15,5 @@ public class CategoryResponse {
     String categoryName;
     int parentCategory;
     List<CategoryResponse> subCategories;
-    List<Integer> products;
+    List<String> products;
 }

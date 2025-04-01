@@ -13,6 +13,6 @@ import java.util.List;
 public class CartDetailResponse {
     int id;
     int quantity;
-    String productName; // Lấy tên sản phẩm từ Product
+    String productName;
     Integer cart;
 }
