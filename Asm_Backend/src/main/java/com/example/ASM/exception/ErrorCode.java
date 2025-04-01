@@ -7,15 +7,19 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZE_EXCEPTION(9999, "UNCATEGORIZE_EXCEPTION", HttpStatus.INTERNAL_SERVER_ERROR),
+    MISSING_INPUT(8888, "Missing input", HttpStatus.BAD_REQUEST),
+    CIRCULAR_REFERENCE_NOT_ALLOWED(7777, "Circular reference not allow", HttpStatus.BAD_REQUEST),
+    ENTITY_HASH_MANY_CHILDREN(6666, "Entity hash many children", HttpStatus.BAD_REQUEST),
+
     INVALID_KEY(1001, "INVALID MESSAGE KEY", HttpStatus.BAD_REQUEST),
-    USER_EXITSTED(1002, "USER EXITED", HttpStatus.BAD_REQUEST),
-    EMAIL_EXITSTED(1002, "EMAIL EXITED", HttpStatus.BAD_REQUEST),
+    USER_EXISTS(1002, "USER EXITED", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTS(1002, "EMAIL EXITED", HttpStatus.BAD_REQUEST),
     SELECTED_PRODUCT_NOT_EXISTED(1003, "SELECTED_PRODUCT_NOT_EXISTED", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1004, "USERNAME MUST AT LEES THAN {min} CHARACTER", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(1005, "PASSWORD NOT BE AT LEES THAN {min} CHARACTER", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1006, "USER_NOT_EXISTED", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1007, "UNAUTHENTICATED", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZE(1008, "YOU DO NOT HAVE PREMISSION", HttpStatus.FORBIDDEN),
+    UN_AUTHORIZATION(1008, "YOU DO NOT HAVE PERMISSION", HttpStatus.FORBIDDEN),
     INVALID_DOB(1009, "YOU AGE MUST BE AT least {min}", HttpStatus.BAD_REQUEST),
     PASSWORD_EXISTED(1010, "PASSWORD_EXISTED", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_FOUND(1011, "PERMISSION_NOT_FOUND", HttpStatus.BAD_REQUEST),
@@ -26,7 +30,6 @@ public enum ErrorCode {
     UPLOAD_FILE_FAIL(1015, "Upload file to fail!", HttpStatus.BAD_REQUEST),
     REMOVE_FILE_FAIL(1016, "Remove file to fail!", HttpStatus.BAD_REQUEST),
 
-    MISSING_INPUT(8888, "Missing input", HttpStatus.BAD_REQUEST),
     CATEGORIES_NOT_EXISTED(1017, "Categories not existed", HttpStatus.BAD_REQUEST),
     CATEGORIES_EXISTED(1018, "Categories existed", HttpStatus.BAD_REQUEST),
     CATEGORIES_NAME_EXISTED(1019, "Categories name existed", HttpStatus.CONFLICT),
@@ -59,8 +62,7 @@ public enum ErrorCode {
     ADDRESS_EXISTED(1039, "Address existed", HttpStatus.BAD_REQUEST),
     ADDRESS_NAME_EXISTED(1040, "Address name existed", HttpStatus.CONFLICT),
 
-    CIRCULAR_REFERENCE_NOT_ALLOWED(7777, "Circular reference not allow", HttpStatus.BAD_REQUEST),
-    ENTITY_HASH_MANY_CHILDREN(6666, "Entity hash many children", HttpStatus.BAD_REQUEST),
+
     ;
 
     private int code;

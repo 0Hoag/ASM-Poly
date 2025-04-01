@@ -1,8 +1,5 @@
 package com.example.ASM.dto.response;
 
-import com.example.ASM.entity.Product;
-import com.example.ASM.entity.SpecificationType;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
