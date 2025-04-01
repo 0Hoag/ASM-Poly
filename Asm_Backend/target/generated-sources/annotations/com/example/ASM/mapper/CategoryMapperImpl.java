@@ -4,8 +4,6 @@ import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.CategoryResponse;
 import com.example.ASM.entity.Category;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -38,11 +36,12 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         CategoryResponse.CategoryResponseBuilder categoryResponse = CategoryResponse.builder();
 
-        categoryResponse.parentCategory( mapParentCategoryResponse( entity.getParentCategory() ) );
         categoryResponse.products( mapProductIds( entity.getProducts() ) );
+        categoryResponse.subCategories( mapSubCategories( entity.getSubCategories() ) );
         categoryResponse.id( entity.getId() );
         categoryResponse.categoryName( entity.getCategoryName() );
-        categoryResponse.subCategories( categoryListToCategoryResponseList( entity.getSubCategories() ) );
+
+        categoryResponse.parentCategory( entity.getParentCategory() != null ? entity.getParentCategory().getId() : 0 );
 
         return categoryResponse.build();
     }
@@ -55,18 +54,5 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         profile.setParentCategory( mapParentCategory( request.getParentCategory() ) );
         profile.setCategoryName( request.getCategoryName() );
-    }
-
-    protected List<CategoryResponse> categoryListToCategoryResponseList(List<Category> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<CategoryResponse> list1 = new ArrayList<CategoryResponse>( list.size() );
-        for ( Category category : list ) {
-            list1.add( toCategoryResponse( category ) );
-        }
-
-        return list1;
     }
 }
