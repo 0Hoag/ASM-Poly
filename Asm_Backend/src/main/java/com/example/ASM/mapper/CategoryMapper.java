@@ -2,6 +2,7 @@ package com.example.ASM.mapper;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.*;
 
@@ -39,7 +40,10 @@ public interface CategoryMapper {
     }
 
     @Named("mapProductIds")
-    default List<Integer> mapProductIds(List<Product> products) {
-        return products != null ? products.stream().map(Product::getId).toList() : Collections.emptyList();
+    default List<String> mapProductIds(List<Product> products) {
+        if (products == null) return Collections.emptyList();
+        return products.stream()
+                .map(product -> String.valueOf(product.getProductName()))
+                .collect(Collectors.toList());
     }
 }

@@ -16,6 +16,7 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CategoryMapper;
 import com.example.ASM.repository.CategoryRepository;
+import com.example.ASM.service.build.CategoryBuilder;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryService {
     CategoryMapper mapper;
     CategoryRepository repo;
+    CategoryBuilder builder;
 
     public Boolean CreateCategory(CategoryRequest request) {
         if (request.getCategoryName().isEmpty()) {
@@ -87,15 +89,29 @@ public class CategoryService {
     public CategoryResponse Update(int id, CategoryUpdateRequest request) {
         var cate = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
 
+        if (request.getParentCategory() != 0) {
+            if (cate.getParentCategory() == null || cate.getParentCategory().getId() != request.getParentCategory()) {
+                var parentCategory = repo.findById(request.getParentCategory())
+                        .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
+
+                if (builder.wouldCreateCircularReference(id, parentCategory.getId())) {
+                    throw new AppException(ErrorCode.CIRCULAR_REFERENCE_NOT_ALLOWED);
+                }
+            }
+        }
+
         mapper.updateCategory(cate, request);
+
         return mapper.toCategoryResponse(repo.save(cate));
     }
 
     public void Delete(int id) {
-        if (!repo.existsById(id)) {
-            throw new AppException(ErrorCode.CATEGORIES_NOT_EXISTED);
-        }
+        var cate = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
 
-        repo.deleteById(id);
+        if (cate.getProducts().size() <= 0) {
+            repo.deleteById(id);
+        } else {
+            throw new AppException(ErrorCode.ENTITY_HASH_MANY_CHILDREN);
+        }
     }
 }

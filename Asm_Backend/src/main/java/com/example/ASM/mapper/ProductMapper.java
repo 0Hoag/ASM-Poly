@@ -52,12 +52,9 @@ public interface ProductMapper {
         return productType != null ? productType.getId() : 0;
     }
 
-    // Phương thức map chuyển List<Image> sang List<String> lấy URL
     default List<String> map(List<Image> images) {
         if (images == null) return Collections.emptyList();
-        return images.stream()
-                .map(image -> image.getUrl()) // Lấy URL của image
-                .collect(Collectors.toList());
+        return images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
     }
 
     @Named("mapCartDetailsToIds")
@@ -90,7 +87,7 @@ public interface ProductMapper {
         return cartDetailIds.stream()
                 .map(id -> {
                     CartDetail cartDetail = new CartDetail();
-                    cartDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+                    cartDetail.setId(Integer.parseInt(id));
                     return cartDetail;
                 })
                 .collect(Collectors.toList());
@@ -102,7 +99,7 @@ public interface ProductMapper {
         return favoriteProductIds.stream()
                 .map(id -> {
                     FavoriteProduct favoriteProduct = new FavoriteProduct();
-                    favoriteProduct.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+                    favoriteProduct.setId(Integer.parseInt(id));
                     return favoriteProduct;
                 })
                 .collect(Collectors.toList());
@@ -114,7 +111,7 @@ public interface ProductMapper {
         return imageIds.stream()
                 .map(id -> {
                     Image image = new Image();
-                    image.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+                    image.setId(Integer.parseInt(id));
                     return image;
                 })
                 .collect(Collectors.toList());
@@ -126,7 +123,7 @@ public interface ProductMapper {
         return orderDetailIds.stream()
                 .map(id -> {
                     OrderDetail orderDetail = new OrderDetail();
-                    orderDetail.setId(Integer.parseInt(id)); // Chuyển String thành Integer
+                    orderDetail.setId(Integer.parseInt(id));
                     return orderDetail;
                 })
                 .collect(Collectors.toList());

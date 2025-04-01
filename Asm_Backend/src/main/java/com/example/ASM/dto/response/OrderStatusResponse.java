@@ -1,16 +1,19 @@
 package com.example.ASM.dto.response;
 
+import java.util.List;
+
+import com.example.ASM.entity.Order;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CartDetailResponse {
+public class OrderStatusResponse {
     int id;
-    int quantity;
-    String productName;
-    Integer cart;
+    String statusName;
+    List<Order> orders;
 }

@@ -1,19 +1,22 @@
 package com.example.ASM.dto.response;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryResponse {
+public class OrderResponse {
     int id;
-    String categoryName;
-    int parentCategory;
-    List<CategoryResponse> subCategories;
-    List<String> products;
+    Timestamp createdAt;
+    double totalAmount;
+    List<String> orderDetails;
+    int address;
+    String orderStatus; // take name
+    int user;
 }

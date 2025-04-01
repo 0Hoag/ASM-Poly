@@ -25,15 +25,8 @@ public class ImageController {
 
     @PostMapping("/{productID}")
     ApiResponse<Void> uploadImageToProduct(
-            @PathVariable("productID") int productID, @RequestPart("file") MultipartFile file)
+            @PathVariable("productID") int productID, @RequestPart("file") MultipartFile[] file)
             throws IOException, SQLException {
-        log.info(
-                "Received file upload request for productID: {}, file name: {}, file size: {}, content type: {}",
-                productID,
-                file.getOriginalFilename(),
-                file.getSize(),
-                file.getContentType());
-
         imageService.uploadImageProduct(productID, file);
         return ApiResponse.<Void>builder()
                 .code(1000)
@@ -41,7 +34,7 @@ public class ImageController {
                 .build();
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{productID}")
     public ApiResponse<Void> removeImageChoose(
             @PathVariable("productID") int productID, @RequestBody RemoveProductImage request) {
         imageService.removeImageChoose(productID, request);
