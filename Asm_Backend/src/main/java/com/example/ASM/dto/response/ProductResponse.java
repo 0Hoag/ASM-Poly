@@ -22,7 +22,7 @@ public class ProductResponse {
     Timestamp createdAt;
     String category;
     String productType;
-    List<String> images;
+    List<ImageResponse> images;
     List<String> cartDetails;
     List<String> favoriteProducts;
     List<String> orderDetails;
