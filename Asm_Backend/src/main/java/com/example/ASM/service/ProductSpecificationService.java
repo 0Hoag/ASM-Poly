@@ -75,15 +75,13 @@ public class ProductSpecificationService {
     public ProductSpecificationResponse Update(int id, ProductSpecificationUpdateRequest request) {
         var productSpecification = repo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
-
         builder.processUpdateRequest(request);
-
         return mapper.toProductSpecificationResponse(repo.save(productSpecification));
     }
 
     public void Delete(int id) {
         if (!repo.existsById(id)) {
-            throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
+            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
         }
 
         repo.deleteById(id);

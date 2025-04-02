@@ -1,12 +1,13 @@
 package com.example.ASM.service.build;
 
-
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
+import com.example.ASM.entity.ProductSpecification;
+import com.example.ASM.entity.SpecificationType;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
-import com.example.ASM.repository.ProductSpecificationRepository;
+import com.example.ASM.repository.SpecificationTypeRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @FieldDefaults(makeFinal = true)
 public class ProductSpecificationBuilder {
-    ProductSpecificationRepository productSpecificationRepository;
+//    ProductSpecificationRepository productSpecificationRepository;
+    SpecificationTypeRepository specificationTypeRepository;
     ProductSpecificationMapper productSpecificationMapper;
 
     public void processRequest(ProductSpecificationRequest request) {
@@ -29,8 +31,8 @@ public class ProductSpecificationBuilder {
             throw new AppException(ErrorCode.MISSING_INPUT);
         }
 
-        if (!productSpecificationRepository.existsById(request.getSpecificationTypeId())) {
-            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
+        if (!specificationTypeRepository.existsById(request.getSpecificationTypeId())) {
+            throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
         }
     }
 
@@ -39,8 +41,31 @@ public class ProductSpecificationBuilder {
             throw new AppException(ErrorCode.MISSING_INPUT);
         }
 
-        if (!productSpecificationRepository.existsById(request.getSpecificationTypeId())) {
-            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
+        if (!specificationTypeRepository.existsById(request.getSpecificationTypeId())) {
+            throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
         }
+    }
+
+    public ProductSpecification toProductSpecification(ProductSpecificationRequest request) {
+        // Ánh xạ từ ProductSpecificationRequest sang ProductSpecification
+        SpecificationType specificationType = specificationTypeRepository.findById(request.getSpecificationTypeId())
+                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
+
+        ProductSpecification productSpecification = productSpecificationMapper.toProductSpecification(request);
+        productSpecification.setSpecificationType(specificationType); // Set SpecificationType vào ProductSpecification
+
+        return productSpecification;
+    }
+
+    public ProductSpecification toProductSpecification(ProductSpecificationUpdateRequest request, ProductSpecification existingProductSpecification) {
+        // Ánh xạ từ ProductSpecificationUpdateRequest sang ProductSpecification
+        SpecificationType specificationType = specificationTypeRepository.findById(request.getSpecificationTypeId())
+                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
+
+        existingProductSpecification.setName(request.getName());
+        existingProductSpecification.setValue(request.getValue());
+        existingProductSpecification.setSpecificationType(specificationType); // Set lại SpecificationType
+
+        return existingProductSpecification;
     }
 }

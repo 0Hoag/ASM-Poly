@@ -77,4 +77,6 @@ public class GlobalException {
         String minValues = String.valueOf(attributes.get(MIN_ATTRIBUTES));
         return message.replace("{" + MIN_ATTRIBUTES + "}", minValues);
     }
+
+
 }
