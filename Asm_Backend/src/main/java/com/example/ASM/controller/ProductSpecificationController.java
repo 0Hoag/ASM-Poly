@@ -42,7 +42,7 @@ public class ProductSpecificationController {
                 .build();
     }
 
-    @GetMapping("/list")
+    @GetMapping("/List")
     public ApiResponse<List<ProductSpecificationResponse>> list() {
         return ApiResponse.<List<ProductSpecificationResponse>>builder()
                 .code(1000)
@@ -50,7 +50,7 @@ public class ProductSpecificationController {
                 .build();
     }
 
-    @GetMapping("/get")
+    @GetMapping("/Get")
     public ApiResponse<PageResponse<ProductSpecificationResponse>> getPaged(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size

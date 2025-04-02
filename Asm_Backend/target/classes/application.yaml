@@ -3,7 +3,7 @@ spring:
     name: asm
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=db;encrypt=false
+    url: jdbc:sqlserver://localhost:1433;databaseName=Java6_AsmPoly;encrypt=false
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     username: sa
     password: 135999
