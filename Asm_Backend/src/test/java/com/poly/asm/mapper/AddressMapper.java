@@ -9,7 +9,6 @@ import com.poly.asm.entity.Address;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
-    @Mapping(source = "user.fullName", target = "userName")
 	@Mapping(source = "defaultAddress", target = "defaultAddress")
     AddressResponse toAddressResponse(Address address);
     

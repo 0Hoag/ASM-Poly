@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateUserRequest {
+	
 	@NotEmpty(message = "Full name cannot be empty")
     String fullName;
 
@@ -24,6 +25,8 @@ public class UpdateUserRequest {
 
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number format")
     String phoneNumber;
+    
+    boolean role;
 
 
 }

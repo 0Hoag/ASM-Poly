@@ -1,6 +1,4 @@
-package com.poly.asm.dto.response.user;
-
-
+package com.poly.asm.dto.request.user;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,15 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-	int id;
-	String fullName;
-	String phoneNumber;
-	String email;
-	boolean role;
-	
+public class PasswordRequest {
+    String password;
+    String newPass;
+    String cofimPass;
+
 }

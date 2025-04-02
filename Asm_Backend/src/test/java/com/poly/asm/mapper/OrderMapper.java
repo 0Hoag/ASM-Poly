@@ -1,6 +1,7 @@
 package com.poly.asm.mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 
@@ -17,9 +18,8 @@ public interface OrderMapper {
         if (images == null) {
             return null;
         }
-        // Giả sử bạn muốn ánh xạ đến URL của ảnh trong Image entity (thay đổi tùy theo yêu cầu)
         return images.stream()
-                .map(image -> image.getUrl())  // Giả sử Image có phương thức getUrl() trả về URL ảnh
-                .collect(java.util.stream.Collectors.toList());
+                .map(image -> image.getUrl())  
+                .collect(Collectors.toList());
     }
 }

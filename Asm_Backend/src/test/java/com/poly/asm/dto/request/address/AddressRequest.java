@@ -17,7 +17,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressRequest {
 	int id;
-	
 	@NotEmpty(message = "Address cannot be empty")
 	String address;
 	
