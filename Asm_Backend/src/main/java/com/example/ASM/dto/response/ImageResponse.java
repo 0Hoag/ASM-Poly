@@ -1,15 +1,15 @@
-package com.example.ASM.dto.request.Image;
+package com.example.ASM.dto.response;
 
-import java.util.Set;
-
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RemoveProductImage {
-    Set<Integer> images;
+public class ImageResponse {
+    int id;
+    String url;
 }

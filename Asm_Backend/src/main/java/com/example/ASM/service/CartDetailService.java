@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.CartDetail.CartDetailRequest;
 import com.example.ASM.dto.response.CartDetailResponse;
@@ -9,17 +17,11 @@ import com.example.ASM.mapper.CartDetailMapper;
 import com.example.ASM.repository.CartDetailRepository;
 import com.example.ASM.repository.CartRepository;
 import com.example.ASM.repository.ProductRepository;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,7 +42,8 @@ public class CartDetailService {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
 
-        productRepository.findById(request.getProduct())
+        productRepository
+                .findById(request.getProduct())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         try {
@@ -53,24 +56,20 @@ public class CartDetailService {
     }
 
     public CartDetailResponse Detail(int id) {
-        var cartDetail = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CART_DETAIL_NOT_EXISTED));
+        var cartDetail = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CART_DETAIL_NOT_EXISTED));
         return mapper.toCartDetailResponse(cartDetail);
     }
 
     public List<CartDetailResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toCartDetailResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toCartDetailResponse).collect(Collectors.toList());
     }
 
     public PageResponse<CartDetailResponse> Get(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         var pageData = repo.findAll(pageable);
 
-        var data = pageData.getContent().stream()
-                .map(mapper::toCartDetailResponse)
-                .collect(Collectors.toList());
+        var data =
+                pageData.getContent().stream().map(mapper::toCartDetailResponse).collect(Collectors.toList());
 
         return PageResponse.<CartDetailResponse>builder()
                 .currentPage(page)
@@ -82,8 +81,7 @@ public class CartDetailService {
     }
 
     public CartDetailResponse UpdateQuantity(int id, int quantity) {
-        var cartDetail = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CART_DETAIL_NOT_EXISTED));
+        var cartDetail = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CART_DETAIL_NOT_EXISTED));
 
         if (quantity == 0) {
             throw new AppException(ErrorCode.MISSING_INPUT);

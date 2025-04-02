@@ -1,10 +1,11 @@
 package com.example.ASM.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.sql.Timestamp;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Table(name = "Users")

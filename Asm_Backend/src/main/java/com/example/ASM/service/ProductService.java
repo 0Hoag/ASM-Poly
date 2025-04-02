@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
@@ -9,17 +17,11 @@ import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductMapper;
 import com.example.ASM.repository.ProductRepository;
 import com.example.ASM.service.build.ProductBuild;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -48,24 +50,19 @@ public class ProductService {
     }
 
     public ProductResponse Detail(int id) {
-        var product = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+        var product = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
         return mapper.toProductResponse(product);
     }
 
     public List<ProductResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toProductResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toProductResponse).collect(Collectors.toList());
     }
 
     public PageResponse<ProductResponse> Get(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         var pageData = repo.findAll(pageable);
 
-        var data = pageData.getContent().stream()
-                .map(mapper::toProductResponse)
-                .collect(Collectors.toList());
+        var data = pageData.getContent().stream().map(mapper::toProductResponse).collect(Collectors.toList());
 
         return PageResponse.<ProductResponse>builder()
                 .currentPage(page)
@@ -77,8 +74,7 @@ public class ProductService {
     }
 
     public ProductResponse Update(int id, ProductUpdateRequest request) {
-        var product = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+        var product = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         productBuild.processUpdateRequest(request);
 

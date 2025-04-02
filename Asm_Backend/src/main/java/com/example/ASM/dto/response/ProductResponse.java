@@ -1,10 +1,11 @@
 package com.example.ASM.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.sql.Timestamp;
 import java.util.List;
+
+import com.example.ASM.entity.Image;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class ProductResponse {
     Timestamp createdAt;
     String category;
     String productType;
-    List<String> images;
+    List<ImageResponse> images;
     List<String> cartDetails;
     List<String> favoriteProducts;
     List<String> orderDetails;

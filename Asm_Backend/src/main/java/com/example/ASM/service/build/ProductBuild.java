@@ -1,22 +1,22 @@
 package com.example.ASM.service.build;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.entity.Product;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
-
 import com.example.ASM.mapper.ProductMapper;
 import com.example.ASM.repository.CategoryRepository;
 import com.example.ASM.repository.ProductTypeRepository;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.List;
-
 
 @Data
 @AllArgsConstructor
@@ -27,7 +27,7 @@ import java.util.List;
 public class ProductBuild {
     ProductMapper mapper;
     ProductTypeRepository productTypeRepository;
-	CategoryRepository categoryRepository;
+    CategoryRepository categoryRepository;
 
     public void processRequest(ProductRequest request) {
         if (request.getProductName() == null || request.getProductName().trim().isEmpty()) {

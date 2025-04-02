@@ -1,19 +1,22 @@
 package com.example.ASM.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
 import com.example.ASM.dto.response.OrderResponse;
 import com.example.ASM.service.OrderService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -50,8 +53,7 @@ public class OrderController { // chua test duoc vi can userID va AddressID
     @GetMapping("/Get")
     public ApiResponse<PageResponse<OrderResponse>> getPaged(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
-    ) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         return ApiResponse.<PageResponse<OrderResponse>>builder()
                 .code(1000)
                 .result(orderService.Get(page, size))
@@ -60,9 +62,7 @@ public class OrderController { // chua test duoc vi can userID va AddressID
 
     @PutMapping("/{id}")
     public ApiResponse<OrderResponse> update(
-            @PathVariable("id") int id,
-            @RequestBody @Valid OrderUpdateRequest request
-    ) {
+            @PathVariable("id") int id, @RequestBody @Valid OrderUpdateRequest request) {
         return ApiResponse.<OrderResponse>builder()
                 .code(1000)
                 .result(orderService.Update(id, request))
@@ -72,9 +72,6 @@ public class OrderController { // chua test duoc vi can userID va AddressID
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") int id) {
         orderService.Delete(id);
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Delete success!")
-                .build();
+        return ApiResponse.<Void>builder().code(1000).message("Delete success!").build();
     }
 }

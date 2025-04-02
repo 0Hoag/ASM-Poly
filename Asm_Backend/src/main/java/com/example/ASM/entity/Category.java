@@ -1,20 +1,22 @@
 package com.example.ASM.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Entity
 @Table(name = "Category")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-	public class Category{
+public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private int id;
 
@@ -33,5 +35,4 @@ import java.util.List;
     // Liên kết một-đến-nhiều với sản phẩm
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
-
 }

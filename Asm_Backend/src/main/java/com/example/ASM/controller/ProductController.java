@@ -1,19 +1,22 @@
 package com.example.ASM.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
 import com.example.ASM.dto.response.ProductResponse;
 import com.example.ASM.service.ProductService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -50,8 +53,7 @@ public class ProductController {
     @GetMapping("/Get")
     public ApiResponse<PageResponse<ProductResponse>> getPaged(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
-    ) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         return ApiResponse.<PageResponse<ProductResponse>>builder()
                 .code(1000)
                 .result(productService.Get(page, size))
@@ -69,9 +71,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") int id) {
         productService.Delete(id);
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Delete success!")
-                .build();
+        return ApiResponse.<Void>builder().code(1000).message("Delete success!").build();
     }
 }

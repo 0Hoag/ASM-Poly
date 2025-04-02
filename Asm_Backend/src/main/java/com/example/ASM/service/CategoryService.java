@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
@@ -9,17 +17,11 @@ import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CategoryMapper;
 import com.example.ASM.repository.CategoryRepository;
 import com.example.ASM.service.build.CategoryBuilder;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -55,17 +57,13 @@ public class CategoryService {
     }
 
     public CategoryResponse Detail(int id) {
-        var cate = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
+        var cate = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
         return mapper.toCategoryResponse(cate);
     }
 
     public List<CategoryResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toCategoryResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toCategoryResponse).collect(Collectors.toList());
     }
-
 
     public PageResponse<CategoryResponse> Get(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -76,7 +74,8 @@ public class CategoryService {
                     var cate = repo.findById(category.getId())
                             .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
                     return mapper.toCategoryResponse(cate);
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
 
         return PageResponse.<CategoryResponse>builder()
                 .currentPage(page)
@@ -88,8 +87,7 @@ public class CategoryService {
     }
 
     public CategoryResponse Update(int id, CategoryUpdateRequest request) {
-        var cate = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
+        var cate = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
 
         if (request.getParentCategory() != 0) {
             if (cate.getParentCategory() == null || cate.getParentCategory().getId() != request.getParentCategory()) {
@@ -108,8 +106,7 @@ public class CategoryService {
     }
 
     public void Delete(int id) {
-        var cate = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
+        var cate = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORIES_NOT_EXISTED));
 
         if (cate.getProducts().size() <= 0) {
             repo.deleteById(id);

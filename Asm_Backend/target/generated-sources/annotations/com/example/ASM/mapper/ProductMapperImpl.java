@@ -2,10 +2,14 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
+import com.example.ASM.dto.response.ImageResponse;
 import com.example.ASM.dto.response.ProductResponse;
 import com.example.ASM.entity.Category;
+import com.example.ASM.entity.Image;
 import com.example.ASM.entity.Product;
 import com.example.ASM.entity.ProductType;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +65,7 @@ public class ProductMapperImpl implements ProductMapper {
         productResponse.soldQuantity( entity.getSoldQuantity() );
         productResponse.stockQuantity( entity.getStockQuantity() );
         productResponse.createdAt( entity.getCreatedAt() );
-        productResponse.images( map( entity.getImages() ) );
+        productResponse.images( imageListToImageResponseList( entity.getImages() ) );
 
         return productResponse.build();
     }
@@ -110,5 +114,31 @@ public class ProductMapperImpl implements ProductMapper {
             return null;
         }
         return nameType;
+    }
+
+    protected ImageResponse imageToImageResponse(Image image) {
+        if ( image == null ) {
+            return null;
+        }
+
+        ImageResponse.ImageResponseBuilder imageResponse = ImageResponse.builder();
+
+        imageResponse.id( image.getId() );
+        imageResponse.url( image.getUrl() );
+
+        return imageResponse.build();
+    }
+
+    protected List<ImageResponse> imageListToImageResponseList(List<Image> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<ImageResponse> list1 = new ArrayList<ImageResponse>( list.size() );
+        for ( Image image : list ) {
+            list1.add( imageToImageResponse( image ) );
+        }
+
+        return list1;
     }
 }

@@ -1,17 +1,18 @@
 package com.example.ASM.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
 import com.example.ASM.dto.request.Cart.CartRequest;
 import com.example.ASM.dto.response.CartDetailResponse;
 import com.example.ASM.dto.response.CartResponse;
 import com.example.ASM.entity.Cart;
 import com.example.ASM.entity.CartDetail;
 import com.example.ASM.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CartMapper {
@@ -40,9 +41,7 @@ public interface CartMapper {
         if (cartDetails == null) {
             return null;
         }
-        return cartDetails.stream()
-                .map(this::mapCartDetail)
-                .collect(Collectors.toList());
+        return cartDetails.stream().map(this::mapCartDetail).collect(Collectors.toList());
     }
 
     @Mapping(target = "cart", source = "cart", qualifiedByName = "mapCartId")
@@ -53,4 +52,3 @@ public interface CartMapper {
         return cart != null ? cart.getId() : null;
     }
 }
-

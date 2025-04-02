@@ -1,21 +1,22 @@
 package com.example.ASM.entity;
 
+import java.sql.Timestamp;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "FavoriteProduct")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-	public class FavoriteProduct{
-
+public class FavoriteProduct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private int id;
 

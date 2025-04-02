@@ -1,8 +1,9 @@
 package com.example.ASM.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -61,8 +62,6 @@ public enum ErrorCode {
     ADDRESS_NOT_EXISTED(1038, "Address not existed", HttpStatus.BAD_REQUEST),
     ADDRESS_EXISTED(1039, "Address existed", HttpStatus.BAD_REQUEST),
     ADDRESS_NAME_EXISTED(1040, "Address name existed", HttpStatus.CONFLICT),
-
-
     ;
 
     private int code;

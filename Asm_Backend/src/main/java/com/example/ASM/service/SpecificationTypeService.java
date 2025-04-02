@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
@@ -9,17 +17,11 @@ import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.SpecificationTypeMapper;
 import com.example.ASM.repository.SpecificationTypeRepository;
 import com.example.ASM.service.build.SpecificationTypeBuilder;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,15 +45,12 @@ public class SpecificationTypeService {
     }
 
     public SpecificationTypeResponse Detail(int id) {
-        var spec = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
+        var spec = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
         return mapper.toSpecificationTypeResponse(spec);
     }
 
     public List<SpecificationTypeResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toSpecificationTypeResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toSpecificationTypeResponse).collect(Collectors.toList());
     }
 
     public PageResponse<SpecificationTypeResponse> Get(int page, int size) {
@@ -72,8 +71,7 @@ public class SpecificationTypeService {
     }
 
     public SpecificationTypeResponse Update(int id, SpecificationTypeUpdateRequest request) {
-        var spec = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
+        var spec = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
 
         builder.processUpdateRequest(request);
 

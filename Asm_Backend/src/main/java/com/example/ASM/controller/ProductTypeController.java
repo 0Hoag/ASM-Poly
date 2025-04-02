@@ -1,18 +1,21 @@
 package com.example.ASM.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
 import com.example.ASM.dto.response.ProductTypeResponse;
 import com.example.ASM.service.ProductTypeService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/productType")
@@ -49,8 +52,7 @@ public class ProductTypeController {
     @GetMapping("/Get")
     public ApiResponse<PageResponse<ProductTypeResponse>> Get(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
-    ) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         return ApiResponse.<PageResponse<ProductTypeResponse>>builder()
                 .code(1000)
                 .result(productTypeService.Get(page, size))
@@ -58,7 +60,8 @@ public class ProductTypeController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductTypeResponse> Update(@PathVariable("id") int id, @RequestBody ProductTypeRequest request) {
+    public ApiResponse<ProductTypeResponse> Update(
+            @PathVariable("id") int id, @RequestBody ProductTypeRequest request) {
         return ApiResponse.<ProductTypeResponse>builder()
                 .code(1000)
                 .result(productTypeService.Update(id, request))
@@ -68,9 +71,6 @@ public class ProductTypeController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> Delete(@PathVariable("id") int id) {
         productTypeService.Delete(id);
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Delete success!")
-                .build();
+        return ApiResponse.<Void>builder().code(1000).message("Delete success!").build();
     }
 }

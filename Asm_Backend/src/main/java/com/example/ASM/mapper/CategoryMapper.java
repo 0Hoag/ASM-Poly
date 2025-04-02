@@ -1,23 +1,25 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.Category.CategoryRequest;
-import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
-import com.example.ASM.dto.response.CategoryResponse;
-import com.example.ASM.entity.CartDetail;
-import com.example.ASM.entity.Category;
-import com.example.ASM.entity.Product;
-import org.mapstruct.*;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.mapstruct.*;
+
+import com.example.ASM.dto.request.Category.CategoryRequest;
+import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
+import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.entity.Category;
+import com.example.ASM.entity.Product;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
     @Mapping(target = "parentCategory", source = "parentCategory", qualifiedByName = "mapParentCategory")
     Category toCategory(CategoryRequest request);
 
-    @Mapping(target = "parentCategory", expression = "java(entity.getParentCategory() != null ? entity.getParentCategory().getId() : 0)")
+    @Mapping(
+            target = "parentCategory",
+            expression = "java(entity.getParentCategory() != null ? entity.getParentCategory().getId() : 0)")
     @Mapping(target = "products", source = "products", qualifiedByName = "mapProductIds")
     @Mapping(target = "subCategories", source = "subCategories", qualifiedByName = "mapSubCategories")
     CategoryResponse toCategoryResponse(Category entity);
@@ -34,7 +36,9 @@ public interface CategoryMapper {
     }
 
     default int mapParentCategoryResponse(Category entity) {
-        return (entity != null && entity.getParentCategory() != null) ? entity.getParentCategory().getId() : 0;
+        return (entity != null && entity.getParentCategory() != null)
+                ? entity.getParentCategory().getId()
+                : 0;
     }
 
     @Named("mapProductIds")

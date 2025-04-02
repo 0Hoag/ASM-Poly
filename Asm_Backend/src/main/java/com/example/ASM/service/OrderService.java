@@ -1,29 +1,27 @@
 package com.example.ASM.service;
 
-import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.Order.OrderRequest;
-import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.request.OrderStatus.OrderStatusRequest;
-import com.example.ASM.dto.response.OrderResponse;
-import com.example.ASM.dto.response.OrderStatusResponse;
-import com.example.ASM.exception.AppException;
-import com.example.ASM.exception.ErrorCode;
-import com.example.ASM.mapper.OrderMapper;
-import com.example.ASM.mapper.OrderStatusMapper;
-import com.example.ASM.repository.OrderRepository;
-import com.example.ASM.repository.OrderStatusRepository;
-import com.example.ASM.service.build.OrderBuilder;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.example.ASM.dto.PageResponse;
+import com.example.ASM.dto.request.Order.OrderRequest;
+import com.example.ASM.dto.request.Order.OrderUpdateRequest;
+import com.example.ASM.dto.response.OrderResponse;
+import com.example.ASM.exception.AppException;
+import com.example.ASM.exception.ErrorCode;
+import com.example.ASM.mapper.OrderMapper;
+import com.example.ASM.repository.OrderRepository;
+import com.example.ASM.service.build.OrderBuilder;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -47,24 +45,19 @@ public class OrderService {
     }
 
     public OrderResponse Detail(int id) {
-        var order = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_EXISTED));
+        var order = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_EXISTED));
         return mapper.toOrderResponse(order);
     }
 
     public List<OrderResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toOrderResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toOrderResponse).collect(Collectors.toList());
     }
 
     public PageResponse<OrderResponse> Get(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         var pageData = repo.findAll(pageable);
 
-        var data = pageData.getContent().stream()
-                .map(mapper::toOrderResponse)
-                .collect(Collectors.toList());
+        var data = pageData.getContent().stream().map(mapper::toOrderResponse).collect(Collectors.toList());
 
         return PageResponse.<OrderResponse>builder()
                 .currentPage(page)
@@ -76,8 +69,7 @@ public class OrderService {
     }
 
     public OrderResponse Update(int id, OrderUpdateRequest request) {
-        var order = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_EXISTED));
+        var order = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_EXISTED));
 
         builder.processUpdateRequest(request);
 

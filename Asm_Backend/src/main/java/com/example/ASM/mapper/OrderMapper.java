@@ -1,16 +1,17 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.Order.OrderRequest;
-import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.response.OrderResponse;
-import com.example.ASM.entity.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.example.ASM.dto.request.Order.OrderRequest;
+import com.example.ASM.dto.request.Order.OrderUpdateRequest;
+import com.example.ASM.dto.response.OrderResponse;
+import com.example.ASM.entity.*;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -29,7 +30,8 @@ public interface OrderMapper {
     @Named("mapOrderDetails")
     default List<String> mapOrderDetails(List<OrderDetail> orderDetails) {
         return orderDetails.stream()
-                .map(orderDetail -> "Product: " + orderDetail.getProduct().getProductName() + ", Quantity: " + orderDetail.getQuantity())
+                .map(orderDetail -> "Product: " + orderDetail.getProduct().getProductName() + ", Quantity: "
+                        + orderDetail.getQuantity())
                 .collect(Collectors.toList());
     }
 

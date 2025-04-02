@@ -1,17 +1,18 @@
 package com.example.ASM.mapper;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
 import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
 import com.example.ASM.dto.response.ProductTypeResponse;
 import com.example.ASM.entity.Product;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ProductTypeMapper {
@@ -19,7 +20,10 @@ public interface ProductTypeMapper {
     ProductType toProductType(ProductTypeRequest request);
 
     @Mapping(target = "products", source = "products", qualifiedByName = "mapProductsToNames")
-    @Mapping(target = "specificationTypes", source = "specificationTypes", qualifiedByName = "mapSpecificationTypesToNames")
+    @Mapping(
+            target = "specificationTypes",
+            source = "specificationTypes",
+            qualifiedByName = "mapSpecificationTypesToNames")
     ProductTypeResponse toProductTypeResponse(ProductType productType);
 
     @Named("mapProductsToNames")

@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.OrderStatus.OrderStatusRequest;
 import com.example.ASM.dto.response.OrderStatusResponse;
@@ -7,17 +15,11 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.OrderStatusMapper;
 import com.example.ASM.repository.OrderStatusRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,15 +43,12 @@ public class OrderStatusService {
     }
 
     public OrderStatusResponse Detail(int id) {
-        var status = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDERS_STATUS_NOT_EXISTED));
+        var status = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_STATUS_NOT_EXISTED));
         return mapper.toOrderStatusResponse(status);
     }
 
     public List<OrderStatusResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toOrderStatusResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toOrderStatusResponse).collect(Collectors.toList());
     }
 
     public PageResponse<OrderStatusResponse> Get(int page, int size) {
@@ -70,8 +69,7 @@ public class OrderStatusService {
     }
 
     public Boolean Update(int id, OrderStatusRequest request) {
-        var status = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDERS_STATUS_NOT_EXISTED));
+        var status = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_STATUS_NOT_EXISTED));
 
         status.setStatusName(request.getStatusName());
         repo.save(status);

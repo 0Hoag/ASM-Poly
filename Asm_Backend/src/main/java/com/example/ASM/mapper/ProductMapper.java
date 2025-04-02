@@ -1,17 +1,18 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.request.Product.ProductRequest;
-import com.example.ASM.dto.request.Product.ProductUpdateRequest;
-import com.example.ASM.dto.response.ProductResponse;
-import com.example.ASM.entity.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.example.ASM.dto.request.Product.ProductRequest;
+import com.example.ASM.dto.request.Product.ProductUpdateRequest;
+import com.example.ASM.dto.response.ProductResponse;
+import com.example.ASM.entity.*;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
@@ -53,9 +54,7 @@ public interface ProductMapper {
 
     default List<String> map(List<Image> images) {
         if (images == null) return Collections.emptyList();
-        return images.stream()
-                .map(image -> image.getUrl())
-                .collect(Collectors.toList());
+        return images.stream().map(image -> image.getUrl()).collect(Collectors.toList());
     }
 
     @Named("mapCartDetailsToIds")
@@ -85,40 +84,48 @@ public interface ProductMapper {
     @Named("mapCartDetails")
     default List<CartDetail> mapCartDetails(List<String> cartDetailIds) {
         if (cartDetailIds == null) return Collections.emptyList();
-        return cartDetailIds.stream().map(id -> {
-            CartDetail cartDetail = new CartDetail();
-            cartDetail.setId(Integer.parseInt(id));
-            return cartDetail;
-        }).collect(Collectors.toList());
+        return cartDetailIds.stream()
+                .map(id -> {
+                    CartDetail cartDetail = new CartDetail();
+                    cartDetail.setId(Integer.parseInt(id));
+                    return cartDetail;
+                })
+                .collect(Collectors.toList());
     }
 
     @Named("mapFavoriteProducts")
     default List<FavoriteProduct> mapFavoriteProducts(List<String> favoriteProductIds) {
         if (favoriteProductIds == null) return Collections.emptyList();
-        return favoriteProductIds.stream().map(id -> {
-            FavoriteProduct favoriteProduct = new FavoriteProduct();
-            favoriteProduct.setId(Integer.parseInt(id));
-            return favoriteProduct;
-        }).collect(Collectors.toList());
+        return favoriteProductIds.stream()
+                .map(id -> {
+                    FavoriteProduct favoriteProduct = new FavoriteProduct();
+                    favoriteProduct.setId(Integer.parseInt(id));
+                    return favoriteProduct;
+                })
+                .collect(Collectors.toList());
     }
 
     @Named("mapImages")
     default List<Image> mapImages(List<String> imageIds) {
         if (imageIds == null) return Collections.emptyList();
-        return imageIds.stream().map(id -> {
-            Image image = new Image();
-            image.setId(Integer.parseInt(id));
-            return image;
-        }).collect(Collectors.toList());
+        return imageIds.stream()
+                .map(id -> {
+                    Image image = new Image();
+                    image.setId(Integer.parseInt(id));
+                    return image;
+                })
+                .collect(Collectors.toList());
     }
 
     @Named("mapOrderDetails")
     default List<OrderDetail> mapOrderDetails(List<String> orderDetailIds) {
         if (orderDetailIds == null) return Collections.emptyList();
-        return orderDetailIds.stream().map(id -> {
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setId(Integer.parseInt(id));
-            return orderDetail;
-        }).collect(Collectors.toList());
+        return orderDetailIds.stream()
+                .map(id -> {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId(Integer.parseInt(id));
+                    return orderDetail;
+                })
+                .collect(Collectors.toList());
     }
 }

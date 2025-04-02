@@ -1,9 +1,9 @@
 package com.example.ASM.dto.request.Product;
 
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

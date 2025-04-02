@@ -1,5 +1,13 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
 import com.example.ASM.dto.response.ProductTypeResponse;
@@ -7,17 +15,11 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductTypeMapper;
 import com.example.ASM.repository.ProductTypeRepository;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,8 +48,7 @@ public class ProductTypeService {
     }
 
     public ProductTypeResponse Detail(int id) {
-        var productType = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_TYPE_NOT_EXISTED));
+        var productType = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_TYPE_NOT_EXISTED));
         return mapper.toProductTypeResponse(productType);
     }
 
@@ -69,14 +70,11 @@ public class ProductTypeService {
     }
 
     public List<ProductTypeResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toProductTypeResponse)
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(mapper::toProductTypeResponse).collect(Collectors.toList());
     }
 
     public ProductTypeResponse Update(int id, ProductTypeRequest request) {
-        var productType = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_TYPE_NOT_EXISTED));
+        var productType = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_TYPE_NOT_EXISTED));
 
         if (request.getNameType().isEmpty()) {
             throw new AppException(ErrorCode.MISSING_INPUT);

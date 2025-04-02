@@ -1,19 +1,20 @@
 package com.example.ASM.mapper;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
 import com.example.ASM.dto.response.SpecificationTypeResponse;
 import com.example.ASM.entity.ProductSpecification;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface SpecificationTypeMapper {
@@ -22,7 +23,10 @@ public interface SpecificationTypeMapper {
     SpecificationType toSpecificationType(SpecificationTypeRequest request);
 
     @Mapping(target = "productTypeName", source = "productType.nameType")
-    @Mapping(target = "productSpecifications", source = "productSpecifications", qualifiedByName = "mapProductSpecifications")
+    @Mapping(
+            target = "productSpecifications",
+            source = "productSpecifications",
+            qualifiedByName = "mapProductSpecifications")
     SpecificationTypeResponse toSpecificationTypeResponse(SpecificationType entity);
 
     @Mapping(target = "productType", source = "productType", qualifiedByName = "mapProductType")
@@ -43,8 +47,6 @@ public interface SpecificationTypeMapper {
         if (specifications == null) {
             return Collections.emptyList();
         }
-        return specifications.stream()
-                .map(ProductSpecification::getName)
-                .collect(Collectors.toList());
+        return specifications.stream().map(ProductSpecification::getName).collect(Collectors.toList());
     }
 }
