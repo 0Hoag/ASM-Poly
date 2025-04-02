@@ -1,35 +1,21 @@
 package com.example.ASM.mapper;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import org.mapstruct.*;
 
-import org.springframework.stereotype.Component;
-
-import com.example.ASM.dto.request.User.RegisterRequest;
+import com.example.ASM.dto.request.User.UserRegisterRequest;
 import com.example.ASM.dto.response.UserResponse;
 import com.example.ASM.entity.User;
 
-@Component
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "carts", ignore = true)
+    @Mapping(target = "favoriteProducts", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    User toUser(UserRegisterRequest request);
 
-    public User toEntity(RegisterRequest request) {
-        return User.builder()
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .password(request.getPassword()) // Lưu ý: Mật khẩu sẽ được mã hóa trước khi lưu
-                .phoneNumber(request.getPhoneNumber())
-                .role(false) // Mặc định là user thường
-                .createdAt(Timestamp.from(Instant.now()))
-                .build();
-    }
-
-    public UserResponse toResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .fullName(user.getFullName())
-                .phoneNumber(user.getPhoneNumber())
-                .role(user.isRole())
-                .build();
-    }
+    UserResponse toUserResponse(User user);
 }

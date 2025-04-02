@@ -3,6 +3,7 @@ package com.example.ASM.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.ASM.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,6 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CartMapper;
 import com.example.ASM.repository.CartRepository;
-import com.example.ASM.repository.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

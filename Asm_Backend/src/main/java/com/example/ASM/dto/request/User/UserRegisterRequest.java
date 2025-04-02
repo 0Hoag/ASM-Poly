@@ -1,6 +1,4 @@
-package com.example.ASM.dto.response;
-
-import java.sql.Timestamp;
+package com.example.ASM.dto.request.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-    private int id;
+public class UserRegisterRequest {
     private String email;
     private String fullName;
+    private String password;
     private String phoneNumber;
-    private boolean role;
-    private Timestamp createdAt;
+
 }

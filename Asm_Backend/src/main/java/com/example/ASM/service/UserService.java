@@ -2,174 +2,134 @@ package com.example.ASM.service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.request.User.ForgotPasswordRequest;
-import com.example.ASM.dto.request.User.LoginRequest;
-import com.example.ASM.dto.request.User.RegisterRequest;
-import com.example.ASM.dto.request.User.ResetPasswordRequest;
+import com.example.ASM.dto.request.User.UserLoginRequest;
+import com.example.ASM.dto.request.User.UserRegisterRequest;
+import com.example.ASM.dto.response.ForgotPasswordResponse;
 import com.example.ASM.dto.response.UserResponse;
 import com.example.ASM.entity.User;
-import com.example.ASM.exception.BadRequestException;
-import com.example.ASM.exception.ResourceNotFoundException;
+import com.example.ASM.exception.AppException;
+import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.UserMapper;
 import com.example.ASM.repository.UserRepository;
-import com.example.ASM.util.PasswordEncoder;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
+    UserMapper mapper;
+    UserRepository repo;
 
-    @Autowired
-    private UserRepository userRepository;
+    public UserResponse register(UserRegisterRequest request) {
+        // Kiểm tra dữ liệu đầu vào
+        if (request.getEmail() == null || request.getEmail().isEmpty() ||
+                request.getPassword() == null || request.getPassword().isEmpty() ||
+                request.getFullName() == null || request.getFullName().isEmpty() ||
+                request.getPhoneNumber() == null || request.getPhoneNumber().isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_INPUT);
+        }
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private EmailService emailService;
-
-    // Lưu trữ token đặt lại mật khẩu tạm thời (trong thực tế nên lưu vào database)
-    private final Map<String, String> resetPasswordTokens = new HashMap<>();
-
-    /**
-     * Đăng ký tài khoản mới
-     */
-    public ApiResponse<UserResponse> register(RegisterRequest request) {
         // Kiểm tra email đã tồn tại chưa
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new BadRequestException("Email đã được đăng ký");
+        if (repo.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXITSTED);
         }
 
         // Kiểm tra số điện thoại đã tồn tại chưa
-        if (userRepository.findByPhoneNumber(request.getPhoneNumber()).isPresent()) {
-            throw new BadRequestException("Số điện thoại đã được đăng ký");
+        if (repo.existsByPhoneNumber(request.getPhoneNumber())) {
+            // Sử dụng USER_EXITSTED vì không có mã lỗi cụ thể cho số điện thoại
+            throw new AppException(ErrorCode.USER_EXITSTED);
         }
 
-        // Mã hóa mật khẩu
-        String encodedPassword = PasswordEncoder.encode(request.getPassword());
+        // Chuyển đổi request thành entity và lưu vào database
+        User user = mapper.toUser(request);
+        user.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()));
+        user.setRole(false); // Mặc định là user thường
+        User savedUser = repo.save(user);
 
-        // Tạo user mới
-        User user = userMapper.toEntity(request);
-        user.setPassword(encodedPassword);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
-
-        // Lưu user
-        User savedUser = userRepository.save(user);
-
-        // Tạo response
-        UserResponse userResponse = userMapper.toResponse(savedUser);
-
-        return ApiResponse.<UserResponse>builder()
-                .code(1000)
-                .message("Đăng ký thành công")
-                .result(userResponse)
-                .build();
+        // Trả về thông tin người dùng đã đăng ký
+        return mapper.toUserResponse(savedUser);
     }
 
-    /**
-     * Đăng nhập
-     */
-    public ApiResponse<UserResponse> login(LoginRequest request) {
-        // Tìm user theo email
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadRequestException("Email hoặc mật khẩu không chính xác"));
-
-        // Kiểm tra mật khẩu
-        if (!PasswordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Email hoặc mật khẩu không chính xác");
-        }
-
-        // Tạo response
-        UserResponse userResponse = userMapper.toResponse(user);
-
-        return ApiResponse.<UserResponse>builder()
-                .code(1000)
-                .message("Đăng nhập thành công")
-                .result(userResponse)
-                .build();
-    }
-
-    /**
-     * Quên mật khẩu
-     */
-    public ApiResponse<Void> forgotPassword(ForgotPasswordRequest request) {
-        // Tìm user theo email
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản với email này"));
-
-        // Tạo token đặt lại mật khẩu
-        String resetToken = UUID.randomUUID().toString();
-        resetPasswordTokens.put(resetToken, user.getEmail());
-
-        // Gửi email đặt lại mật khẩu
-        String resetLink = "http://localhost:5173/reset-password?token=" + resetToken;
-        String emailContent = "Xin chào " + user.getFullName() + ",\n\n"
-                + "Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng nhấp vào liên kết sau để đặt lại mật khẩu của bạn:\n\n"
-                + resetLink + "\n\n"
-                + "Liên kết này sẽ hết hạn sau 30 phút.\n\n"
-                + "Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.";
-
-        emailService.sendEmail(user.getEmail(), "Đặt lại mật khẩu", emailContent);
-
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Đã gửi email đặt lại mật khẩu. Vui lòng kiểm tra hộp thư của bạn.")
-                .build();
-    }
-
-    /**
-     * Đặt lại mật khẩu
-     */
-    public ApiResponse<Void> resetPassword(ResetPasswordRequest request) {
-        // Kiểm tra token
-        String email = resetPasswordTokens.get(request.getToken());
-        if (email == null) {
-            throw new BadRequestException("Token không hợp lệ hoặc đã hết hạn");
-        }
-
-        // Kiểm tra mật khẩu xác nhận
-        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new BadRequestException("Mật khẩu xác nhận không khớp");
+    public UserResponse login(UserLoginRequest request) {
+        // Kiểm tra dữ liệu đầu vào
+        if (request.getEmail() == null || request.getEmail().isEmpty() ||
+                request.getPassword() == null || request.getPassword().isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_INPUT);
         }
 
         // Tìm user theo email
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản"));
+        User user = repo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        // Cập nhật mật khẩu
-        user.setPassword(PasswordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
+        // Kiểm tra mật khẩu (so sánh trực tiếp không mã hóa)
+        if (!request.getPassword().equals(user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
 
-        // Xóa token
-        resetPasswordTokens.remove(request.getToken());
+        // Trả về thông tin người dùng đã đăng nhập
+        return mapper.toUserResponse(user);
+    }
 
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Đặt lại mật khẩu thành công")
+    public UserResponse getUserById(int id) {
+        User user = repo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return mapper.toUserResponse(user);
+    }
+
+    public UserResponse getUserByEmail(String email) {
+        User user = repo.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return mapper.toUserResponse(user);
+    }
+
+    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
+        // Kiểm tra dữ liệu đầu vào
+        if (request.getEmail() == null || request.getEmail().isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_INPUT);
+        }
+
+        // Tìm user theo email
+        User user = repo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        // Tạo mật khẩu mới ngẫu nhiên
+        String newPassword = generateRandomPassword();
+
+        // Cập nhật mật khẩu mới cho user
+        user.setPassword(newPassword);
+        repo.save(user);
+
+        // Trong thực tế, bạn sẽ gửi email với mật khẩu mới
+        // Ở đây chúng ta chỉ trả về mật khẩu mới để demo
+        return ForgotPasswordResponse.builder()
+                .email(user.getEmail())
+                .newPassword(newPassword)
+                .message("Mật khẩu mới đã được tạo thành công")
                 .build();
     }
 
-    /**
-     * Lấy thông tin người dùng theo email
-     */
-    public ApiResponse<UserResponse> getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản"));
+    // Phương thức tạo mật khẩu ngẫu nhiên
+    private String generateRandomPassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
 
-        UserResponse userResponse = userMapper.toResponse(user);
+        // Tạo mật khẩu ngẫu nhiên có độ dài 6   ký tự
+        for (int i = 0; i < 6; i++) {
+            int index = random.nextInt(chars.length());
+            sb.append(chars.charAt(index));
+        }
 
-        return ApiResponse.<UserResponse>builder()
-                .code(1000)
-                .message("Lấy thông tin người dùng thành công")
-                .result(userResponse)
-                .build();
+        return sb.toString();
     }
 }
-
