@@ -174,6 +174,7 @@ const productType = ref({
   id: "",
   nameType: "",
 });
+const totalPage = ref(null);
 // methods
 
 // getAllProductType
@@ -196,6 +197,8 @@ const pageinatedProductType = async () => {
       },
     });
     filteredProductTypes.value = resp.data.result.data;
+    totalPage.value = resp.data.result.totalPages;
+    console.log(filteredProductTypes.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -227,11 +230,11 @@ const createProductType = async () => {
     const newProductType = { ...productType.value };
     const resp = await axios.post("http://localhost:8080/asm/api/v1/productType/", newProductType);
     if (resp.data.result) {
-      productTypes.value.push(newProductType);
-      filteredProductTypes.value.push(newProductType);
+      await pageinatedProductType();
     }
     alert("Thêm thành công");
     productType.value = { id: "", nameType: "" };
+    console.log("create", productTypes.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -246,12 +249,15 @@ const editProductType = async () => {
   try {
     const { id, nameType } = { ...productType.value };
     const resp = await axios.put(`http://localhost:8080/asm/api/v1/productType/${id}`, { nameType });
-    const index = productTypes.value.findIndex((productType) => productType.id === id);
+    const index = filteredProductTypes.value.findIndex((productType) => productType.id === id);
+    console.log(id, index);
+
     if (index !== -1) {
-      productTypes.value[index] = resp.data.result;
+      filteredProductTypes.value[index] = resp.data.result;
+      console.log(filteredProductTypes.value);
+      alert("Cập nhật thành công");
+      productType.value = { id: "", nameType: "" };
     }
-    alert("Cập nhật thành công");
-    productType.value = { id: "", nameType: "" };
   } catch (error) {
     console.log(error.message);
   }
@@ -260,20 +266,22 @@ const editProductType = async () => {
 const deleteProductType = async (id) => {
   try {
     const index = filteredProductTypes.value.findIndex((cat) => cat.id === id);
+    console.log(filteredProductTypes.value);
+    console.log(id);
     if (index === -1) {
       alert("Không tìm thấy loại sản phẩm!");
       return;
     }
 
-    if (filteredProductTypes.value[index].products.length > 0) {
-      alert("Loại sản phẩm này có chứa sản phẩm nên không thể xóa!");
+    if (filteredProductTypes.value[index].products.length > 0 || filteredProductTypes.value[index].specificationTypes.length > 0) {
+      alert("Loại sản phẩm này có chứa dữ liệu liên quan nên không thể xóa!");
       return;
     }
     await axios.delete(`http://localhost:8080/asm/api/v1/productType/${id}`);
+
     productTypes.value = productTypes.value.filter((productType) => productType.id !== id);
     filteredProductTypes.value = filteredProductTypes.value.filter((productType) => productType.id !== id);
     alert("Xóa thành công");
-    changePerPage();
   } catch (error) {
     console.log(error.message);
   }
@@ -289,18 +297,21 @@ const findByitle = () => {
 };
 // computed
 
-const totalPage = computed(() => Math.ceil(productTypes.value.length / limit.value));
 // watch
 watch([currentPage, limit], () => {
   pageinatedProductType();
 });
 
 // mounted
+
 onBeforeMount(async () => {
   await getAllProductType();
   await pageinatedProductType();
 });
-onMounted(() => {
+
+onMounted(async () => {
+  // await getAllProductType();
+  // await pageinatedProductType();
   const modalEdit = document.getElementById("editProductTypeModal");
   modalEdit.addEventListener("hidden.bs.modal", closeEditModal);
 });

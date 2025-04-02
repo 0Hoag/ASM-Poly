@@ -172,7 +172,7 @@
 <script setup>
 import axios from "axios";
 import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
-
+//khởi tạo biến
 const categories = ref([]);
 const filterCategories = ref([]);
 const limits = ref([5, 10, 15, 25]);
@@ -185,6 +185,8 @@ const category = ref({
   categoryName: "",
   parentCategory: "",
 });
+// methods
+
 // getAllCategories
 const getAllCategories = async () => {
   try {
@@ -216,8 +218,10 @@ const createCategory = async () => {
     const newCategory = { ...category.value };
     const resp = await axios.post("http://localhost:8080/asm/api/v1/category/", newCategory);
     if (resp.data.result) {
-      filterCategories.value.push(newCategory);
-      categories.value.push(newCategory);
+      // filterCategories.value.push(newCategory);
+      // categories.value.push(newCategory);
+      await pageinatedCategories();
+      alert("Thêm thành công");
     }
     category.value = { id: "", categoryName: "", parentCategory: "" };
   } catch (error) {
@@ -239,6 +243,7 @@ const editCategory = async () => {
     const index = filterCategories.value.findIndex((cat) => cat.id === id);
     if (index !== -1) {
       filterCategories.value[index] = resp.data.result;
+      alert("Cập nhật thanh cong!");
     }
     category.value = { id: "", categoryName: "", parentCategory: "" };
   } catch (error) {
@@ -269,11 +274,6 @@ const deleteCategory = async (id) => {
   }
 };
 
-watch([currentPage, limit], () => {
-  pageinatedCategories();
-});
-
-// const totalPage = computed(() => Math.ceil(categories.value.length / limit.value));
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
@@ -313,6 +313,15 @@ onBeforeMount(async () => {
   // filterCategories.value = [...categories.value];
 });
 
+// computed
+// const totalPage = computed(() => Math.ceil(categories.value.length / limit.value));
+// watch
+
+watch([currentPage, limit], () => {
+  pageinatedCategories();
+});
+
+// mounted
 onMounted(() => {
   const modalEdit = document.getElementById("editCategoryModal");
   modalEdit.addEventListener("hidden.bs.modal", closeEditModal);

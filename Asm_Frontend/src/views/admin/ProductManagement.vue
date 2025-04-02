@@ -82,7 +82,7 @@
                 <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewProductModal">
                   <i class="bi bi-eye"></i>
                 </button> -->
-                <router-link :to="{ name: 'edit-product', params: { id: product.id } }" class="btn btn-warning btn-sm">
+                <router-link :to="{ name: 'edit-product', params: { idProduct: product.id } }" class="btn btn-warning btn-sm">
                   <i class="bi bi-pencil"></i>
                 </router-link>
                 <button @click="deleteProduct(product.id)" class="btn btn-danger btn-sm">

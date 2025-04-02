@@ -57,10 +57,10 @@ const adminRouter = [
         component: CreateProduct,
       },
       {
-        path: "products/form/:id",
+        path: "products/form/:idProduct",
         name: "edit-product",
         component: CreateProduct,
-        props: true,
+        // props: true,
       },
       {
         path: "users",
