@@ -46,7 +46,7 @@
             <tr v-for="(category, index) in filterCategories" :key="category.id">
               <td>{{ index + 1 + limit * (currentPage - 1) }}</td>
               <td>{{ category.categoryName }}</td>
-              <td>{{ category.parentCategory }}</td>
+              <td>{{ getParentCategoryName(category.parentCategory) }}</td>
               <td>
                 <span class="badge bg-success">{{ category.products ? category.products.length : 0 }}</span>
               </td>
@@ -178,6 +178,7 @@ const filterCategories = ref([]);
 const limits = ref([5, 10, 15, 25]);
 const limit = ref(5);
 const currentPage = ref(1);
+const totalPage = ref(null);
 const keyword = ref("");
 const category = ref({
   id: "",
@@ -203,6 +204,7 @@ const pageinatedCategories = async () => {
       },
     });
     filterCategories.value = resp.data.result.data;
+    totalPage.value = resp.data.result.totalPages;
   } catch (error) {
     console.log(error.message);
   }
@@ -271,7 +273,7 @@ watch([currentPage, limit], () => {
   pageinatedCategories();
 });
 
-const totalPage = computed(() => Math.ceil(categories.value.length / limit.value));
+// const totalPage = computed(() => Math.ceil(categories.value.length / limit.value));
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
@@ -300,6 +302,11 @@ const findByitle = () => {
   currentPage.value = 1;
 };
 
+const getParentCategoryName = (parentId) => {
+  if (!parentId) return "Không có";
+  const parent = categories.value.find((category) => category.id === parentId);
+  return parent ? parent.categoryName : "Unknown";
+};
 onBeforeMount(async () => {
   await getAllCategories();
   await pageinatedCategories();
