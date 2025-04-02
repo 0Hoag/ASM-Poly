@@ -9,6 +9,7 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
 import com.example.ASM.repository.ProductSpecificationRepository;
+import com.example.ASM.service.build.ProductSpecificationBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,35 +27,37 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductSpecificationService {
-    ProductSpecificationRepository repository;
     ProductSpecificationMapper mapper;
+    ProductSpecificationRepository repo;
+    ProductSpecificationBuilder builder;
 
-    public boolean create(ProductSpecificationRequest request) {
+    public boolean Create(ProductSpecificationRequest request) {
+        builder.processRequest(request);
+
         try {
-            repository.save(mapper.toProductSpecification(request));
+            repo.save(mapper.toProductSpecification(request));
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
+
         return true;
     }
 
-
-    public ProductSpecificationResponse detail(int id) {
-        var entity = repository.findById(id)
+    public ProductSpecificationResponse Detail(int id) {
+        var productSpecification = repo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
-        return mapper.toProductSpecificationResponse(entity);
+        return mapper.toProductSpecificationResponse(productSpecification);
     }
 
-
-    public List<ProductSpecificationResponse> list() {
-        return repository.findAll().stream()
+    public List<ProductSpecificationResponse> List() {
+        return repo.findAll().stream()
                 .map(mapper::toProductSpecificationResponse)
                 .collect(Collectors.toList());
     }
 
-    public PageResponse<ProductSpecificationResponse> get(int page, int size) {
+    public PageResponse<ProductSpecificationResponse> Get(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        var pageData = repository.findAll(pageable);
+        var pageData = repo.findAll(pageable);
 
         var data = pageData.getContent().stream()
                 .map(mapper::toProductSpecificationResponse)
@@ -69,22 +72,20 @@ public class ProductSpecificationService {
                 .build();
     }
 
-    public ProductSpecificationResponse update(int id, ProductSpecificationUpdateRequest request) {
-        var entity = repository.findById(id)
+    public ProductSpecificationResponse Update(int id, ProductSpecificationUpdateRequest request) {
+        var productSpecification = repo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
 
-        mapper.updateProductSpecification(entity, request);
-        return mapper.toProductSpecificationResponse(repository.save(entity));
+        builder.processUpdateRequest(request);
+
+        return mapper.toProductSpecificationResponse(repo.save(productSpecification));
     }
 
-    public void delete(int id) {
-        if (!repository.existsById(id)) {
-            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
+    public void Delete(int id) {
+        if (!repo.existsById(id)) {
+            throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
         }
-        try {
-            repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-        }
+
+        repo.deleteById(id);
     }
 }

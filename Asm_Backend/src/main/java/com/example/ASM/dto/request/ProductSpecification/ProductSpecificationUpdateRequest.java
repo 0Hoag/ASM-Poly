@@ -11,12 +11,12 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductSpecificationUpdateRequest {
-    @NotBlank(message = "Tên thông số không được để trống")
-    String name;
+    @NotBlank(message = "Tên thông số sản phẩm không được để trống")
+    private String name;
 
     @NotBlank(message = "Giá trị thông số không được để trống")
-    String value;
+    private String value;
 
     @NotNull(message = "SpecificationType không được để trống")
-    Integer specificationTypeId;
+    private Integer specificationTypeId;
 }

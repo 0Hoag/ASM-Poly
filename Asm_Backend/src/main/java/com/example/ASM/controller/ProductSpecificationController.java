@@ -24,19 +24,21 @@ public class ProductSpecificationController {
 
     ProductSpecificationService productSpecificationService;
 
+
     @PostMapping("/")
     public ApiResponse<Boolean> create(@RequestBody @Valid ProductSpecificationRequest request) {
         return ApiResponse.<Boolean>builder()
                 .code(1000)
-                .result(productSpecificationService.create(request))
+                .result(productSpecificationService.Create(request))
                 .build();
     }
+
 
     @GetMapping("/{id}")
     public ApiResponse<ProductSpecificationResponse> detail(@PathVariable("id") int id) {
         return ApiResponse.<ProductSpecificationResponse>builder()
                 .code(1000)
-                .result(productSpecificationService.detail(id))
+                .result(productSpecificationService.Detail(id))
                 .build();
     }
 
@@ -44,7 +46,7 @@ public class ProductSpecificationController {
     public ApiResponse<List<ProductSpecificationResponse>> list() {
         return ApiResponse.<List<ProductSpecificationResponse>>builder()
                 .code(1000)
-                .result(productSpecificationService.list())
+                .result(productSpecificationService.List())
                 .build();
     }
 
@@ -55,24 +57,21 @@ public class ProductSpecificationController {
     ) {
         return ApiResponse.<PageResponse<ProductSpecificationResponse>>builder()
                 .code(1000)
-                .result(productSpecificationService.get(page, size))
+                .result(productSpecificationService.Get(page, size))
                 .build();
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductSpecificationResponse> update(
-            @PathVariable("id") int id,
-            @RequestBody ProductSpecificationUpdateRequest request
-    ) {
+    public ApiResponse<ProductSpecificationResponse> update(@PathVariable("id") int id, @RequestBody ProductSpecificationUpdateRequest request) {
         return ApiResponse.<ProductSpecificationResponse>builder()
                 .code(1000)
-                .result(productSpecificationService.update(id, request))
+                .result(productSpecificationService.Update(id, request))
                 .build();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") int id) {
-        productSpecificationService.delete(id);
+        productSpecificationService.Delete(id);
         return ApiResponse.<Void>builder()
                 .code(1000)
                 .message("Delete success!")
