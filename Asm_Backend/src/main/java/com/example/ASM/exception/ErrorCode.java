@@ -62,6 +62,11 @@ public enum ErrorCode {
     ADDRESS_NOT_EXISTED(1038, "Address not existed", HttpStatus.BAD_REQUEST),
     ADDRESS_EXISTED(1039, "Address existed", HttpStatus.BAD_REQUEST),
     ADDRESS_NAME_EXISTED(1040, "Address name existed", HttpStatus.CONFLICT),
+
+
+    SPECIFICATION_NOT_FOUND(1041, "Specification not found", HttpStatus.NOT_FOUND),
+    SPECIFICATION_EXISTED(1042, "Specification existed", HttpStatus.BAD_REQUEST),
+    SPECIFICATION_NAME_EXISTED(1043, "Specification name existed", HttpStatus.CONFLICT),
     ;
 
     private int code;
