@@ -34,7 +34,6 @@ public class FavoriteService{
 	ProductRepository productRepository;
 	FavoriteMapper favoriteMapper;
 	
-	
 	public PageResponse<FavoriteResponse> getFavoriteUser(int userId, int page, int size) {
 	   
 	    Pageable pageable = PageRequest.of(page -1 , size);
@@ -51,10 +50,13 @@ public class FavoriteService{
 				.data(data)
 				.build();
 	}
+	
+	
 
 	@Transactional 
 	public String toggleLike(int userId, int productId) {
 		var favorite = favoriteRepository.findByUserIdAndProductId(userId, productId);
+		
 		 if (favorite.isPresent()) {
 	            favoriteRepository.deleteByUserIdAndProductId(userId, productId);
 	            return "Bỏ thích thành công";
@@ -66,6 +68,7 @@ public class FavoriteService{
 	            newFavorite.setUser(user);
 	            newFavorite.setProduct(product);
 	            newFavorite.setLikedAt(new Timestamp(System.currentTimeMillis()));
+	            
 	            favoriteRepository.save(newFavorite);
 	            return "Thích thành công";
 	        }

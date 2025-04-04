@@ -1,6 +1,7 @@
 package com.poly.asm.controller;
 
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,22 +60,32 @@ public class UserController {
 	}
 	
 	@PostMapping("/create")
-    public ApiResponse<Boolean> Create(@RequestBody @Valid UserRequest request) {
+    public ApiResponse<Boolean> Create(@RequestBody UserRequest request) {
+		userService.Create(request);
 		return ApiResponse.<Boolean>builder()
                 .code(1000)
-                .result(userService.Create(request))
+                .message("Create User success!")
                 .build();
 	}
 	
+	@DeleteMapping("/{userId}")
+	public ApiResponse<Void> Delete(@PathVariable int userId) {
+		userService.Delete(userId);
+		return  ApiResponse.<Void>builder()
+				.code(1000)
+        		.message("Delete success!")
+        		.build();
+	}
+	
 	@PutMapping("/{userId}")
-    public ApiResponse<UserResponse> Update(@PathVariable int userId,@RequestBody @Valid UpdateUserRequest request) {
+    public ApiResponse<UserResponse> Update(@PathVariable int userId,@RequestBody UpdateUserRequest request) {
     	return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .result(userService.Update(userId,request))
                 .build();
     }
 	@PostMapping("/changePass/{userId}")
-	public ApiResponse<UserResponse> changePassword(@PathVariable int userId,@RequestBody @Valid PasswordRequest request) {
+	public ApiResponse<UserResponse> changePassword(@PathVariable int userId,@RequestBody PasswordRequest request) {
 		return ApiResponse.<UserResponse>builder()
 				.code(1000)
 				.result(userService.changePassword(userId,request))

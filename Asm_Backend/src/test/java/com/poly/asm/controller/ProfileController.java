@@ -49,21 +49,21 @@ public class ProfileController {
     }
 	
 	@PutMapping("/{userId}")
-    public ApiResponse<UserResponse> updateUser(@PathVariable int userId,@RequestBody @Valid UpdateUserRequest request) {
+    public ApiResponse<UserResponse> updateUser(@PathVariable int userId,@RequestBody UpdateUserRequest request) {
     	return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .result(userService.Update(userId,request))
                 .build();
     }
 	@PutMapping("/changePass/{userId}")
-	public ApiResponse<UserResponse> changePassword(@PathVariable int userId,@RequestBody @Valid PasswordRequest request) {
+	public ApiResponse<UserResponse> changePassword(@PathVariable int userId,@RequestBody PasswordRequest request) {
 		return ApiResponse.<UserResponse>builder()
 				.code(1000)
 				.result(userService.changePassword(userId,request))
 				.build();
 	}
 	
-    @GetMapping("address/{userId}")
+    @GetMapping("/address/{userId}")
     public ApiResponse<PageResponse<AddressResponse>> getAddress(@PathVariable int userId,
     		@RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
@@ -73,18 +73,18 @@ public class ProfileController {
 				.build();
     }
 	@PostMapping("/address/{userId}")
-    public ApiResponse<AddressResponse> createAddress(@PathVariable int userId,@RequestBody @Valid AddressRequest request) {
+    public ApiResponse<AddressResponse> createAddress(@PathVariable int userId,@RequestBody AddressRequest request) {
 		return ApiResponse.<AddressResponse>builder()
                 .code(1000)
-                .result(addressService.createUserId(userId,request))
+                .result(addressService.createByUserId(userId,request))
                 .build();
 	}
     
-	@PostMapping("/like")
-	public ApiResponse<String> toggleLike(@RequestParam int userId, @RequestParam int prodctId) {
+	@GetMapping("/like")
+	public ApiResponse<String> toggleLike(@RequestParam int userId, @RequestParam int productId) {
 		return ApiResponse.<String>builder()
 				.code(1000)
-				.result(favoriteService.toggleLike( userId, prodctId))
+				.result(favoriteService.toggleLike( userId, productId))
 				.build();
 	}
 	

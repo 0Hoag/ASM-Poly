@@ -78,23 +78,24 @@ public class UserService{
 	}
 	
 	public Boolean Create(UserRequest request) {
-		if ((request.getEmail() == null || request.getEmail().trim().isEmpty()) &&
-				(request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty())) {
-			throw new AppException(ErrorCode.EMAIL_OR_PHONE_REQUIRED); 
-		}
+		String checkPhone = "^(0[3|5|7|8|9])+([0-9]{8})$";
+		String checkEmail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+		if (!request.getPhoneNumber().matches(checkPhone))
+			throw new AppException(ErrorCode.PHONE_VALID);
+		if (!request.getEmail().matches(checkEmail))
+			throw new AppException(ErrorCode.EMAIL_REQUIRED);
 		if (userReponsitory.existsByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber())) {
-            throw new AppException(ErrorCode.USER_EXITSTED);
-        }
-        var user = userMapper.toUser(request);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        userReponsitory.save(user);
-        return true;
+			throw new AppException(ErrorCode.USER_EXITSTED);
+		}
+		var user = userMapper.toUser(request);
+		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		userReponsitory.save(user);
+		return true;
 	}
 	
 	public UserResponse Update(int userId, UpdateUserRequest request) {
         var user = userReponsitory.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        
         userMapper.updateUser(user, request);
         
         return userMapper.toUserResponse(userReponsitory.save(user));
@@ -114,9 +115,8 @@ public class UserService{
         if (!request.getPassword().equals(user.getPassword())) {
             throw new AppException(ErrorCode.PASSWORD_INCORRECT);
         }
-
         if (!request.getNewPass().equals(request.getCofimPass())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+            throw new AppException(ErrorCode.PASSWORDS_DO_NOT_MATCH);
         }
         
         user.setPassword(request.getNewPass());

@@ -1,8 +1,8 @@
 package com.poly.asm.dto.response.favorite;
 
 
-
-import com.poly.asm.dto.response.product.ProductResponse;
+import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FavoriteResponse {
 	 int id;
-	 String likedAt;
-	 ProductResponse product;
-
+	 Timestamp likedAt;
+	 int productId;
+	 String productName;
+	 List<String> images;
+	 long price;
+	 
 }

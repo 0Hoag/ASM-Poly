@@ -29,6 +29,7 @@ public class AddressService{
 	AddressRepository addressRepository;
 	UserReponsitory userReponsitory;
 	AddressMapper addressMapper;
+	String checkPhone = "^(0[3|5|7|8|9])+([0-9]{8})$";
 	
 	
 	
@@ -80,19 +81,30 @@ public class AddressService{
 		addressRepository.deleteById(addressId);
 	}
 
-	public AddressResponse createUserId(int userId, AddressRequest request) {
+	public AddressResponse createByUserId(int userId, AddressRequest request) {
 		var user = userReponsitory.findById(userId)
 	            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)); 
-
 	    addressRepository.updateAllToNonDefault(userId);
 
-	    var address = addressMapper.toAddress(request);
-	    address.setUser(user);
+		var address = addressMapper.toAddress(request);
+		if (request.getAddress() == null )
+			throw new AppException(ErrorCode.ADDRESS_REQUIRED);
+		
+		if (request.getUserName() == null )
+			address.setUserName(user.getFullName());
+
+		if (request.getPhoneNumber() == null )
+			address.setUserName(user.getFullName());
+		
+		if (!request.getPhoneNumber().matches(checkPhone))
+			throw new AppException(ErrorCode.PHONE_VALID);
+		
+		address.setUser(user);
 		address.setDefaultAddress(true);
-	    
-	    addressRepository.save(address);
-	    
-	    return addressMapper.toAddressResponse(address);
+
+		addressRepository.save(address);
+
+		return addressMapper.toAddressResponse(address);
 	}
 
 	public AddressResponse Update(int addressId, AddressRequest request) {
@@ -108,6 +120,9 @@ public class AddressService{
 	    if (request.getUserName() != null) {
 	        address.setUserName(request.getUserName());
 	    }
+	    if (!request.getPhoneNumber().matches(checkPhone))
+			throw new AppException(ErrorCode.PHONE_VALID);
+	    
 		addressRepository.save(address);
 		return addressMapper.toAddressResponse(address);
 	}

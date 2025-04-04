@@ -19,6 +19,7 @@ public class OrderResponse {
 	int id;
     long totalAmount;
     String createdAt;
+    List<String> images;
     List<OrderDetailResponse> orderDetails;
     OrderStatusResponse orderStatus; 
 }

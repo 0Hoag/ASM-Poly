@@ -1,5 +1,4 @@
-package com.poly.asm.dto.response.order;
-
+package com.poly.asm.dto.response.image;
 
 
 
@@ -15,8 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailResponse {
-	long currentPrice;
-    int quantity;
-    int productId;
+public class ImageResponse {
+	int id;
+	String url;
 }

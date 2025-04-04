@@ -17,7 +17,6 @@ import com.poly.asm.dto.request.address.AddressRequest;
 import com.poly.asm.dto.response.address.AddressResponse;
 import com.poly.asm.service.AddressService;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -49,14 +48,14 @@ public class AddressController {
 				.build();
 	}
 	@PutMapping("/{addressId}")
-    public ApiResponse<AddressResponse> updateAddress(@PathVariable int addressId, @RequestBody @Valid AddressRequest request) {
+    public ApiResponse<AddressResponse> updateAddress(@PathVariable int addressId, @RequestBody AddressRequest request) {
     	return ApiResponse.<AddressResponse>builder()
 				.code(1000)
 				.result(addressService.Update(addressId, request))
 				.build();
     }
-	@DeleteMapping("/delete/{addressId}")
-	public ApiResponse<Void> createAddress(@PathVariable int addressId) {
+	@DeleteMapping("/{addressId}")
+	public ApiResponse<Void> Delete(@PathVariable int addressId) {
 		addressService.Delete(addressId);
 		return ApiResponse.<Void>builder()
 				.code(1000)

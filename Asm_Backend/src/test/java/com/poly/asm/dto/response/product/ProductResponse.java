@@ -2,6 +2,7 @@ package com.poly.asm.dto.response.product;
 
 import java.util.List;
 
+import com.poly.asm.dto.response.image.ImageResponse;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,5 +21,7 @@ public class ProductResponse {
 	String productName;
 	long price;
 	long salePrice;
-	List<String> images;
+	List<ImageResponse> images;
+	List<String> favoriteProducts;
+	
 }
