@@ -36,9 +36,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResponse<UserResponse> login(@RequestBody @Valid UserLoginRequest request) {
+        UserResponse userResponse = userService.login(request);
+
+        // Thêm thông báo về vai trò vào message
+        String roleMessage = userResponse.isRole() ? "Đăng nhập với vai trò admin" : "Đăng nhập với vai trò khách hàng";
+
         return ApiResponse.<UserResponse>builder()
                 .code(1000)
-                .result(userService.login(request))
+                .message(roleMessage)
+                .result(userResponse)
                 .build();
     }
 
@@ -63,6 +69,30 @@ public class UserController {
         return ApiResponse.<ForgotPasswordResponse>builder()
                 .code(1000)
                 .result(userService.forgotPassword(request))
+                .build();
+    }
+
+    @GetMapping("/check-role/{id}")
+    public ApiResponse<Boolean> checkRole(@PathVariable("id") int id) {
+        boolean isAdmin = userService.isAdmin(id);
+        String message = isAdmin ? "Người dùng có vai trò admin" : "Người dùng có vai trò khách hàng";
+
+        return ApiResponse.<Boolean>builder()
+                .code(1000)
+                .message(message)
+                .result(isAdmin)
+                .build();
+    }
+
+    @GetMapping("/check-role/email/{email}")
+    public ApiResponse<Boolean> checkRoleByEmail(@PathVariable("email") String email) {
+        boolean isAdmin = userService.isAdmin(email);
+        String message = isAdmin ? "Người dùng có vai trò admin" : "Người dùng có vai trò khách hàng";
+
+        return ApiResponse.<Boolean>builder()
+                .code(1000)
+                .message(message)
+                .result(isAdmin)
                 .build();
     }
 }

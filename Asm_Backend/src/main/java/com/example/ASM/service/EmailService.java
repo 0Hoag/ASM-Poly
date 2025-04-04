@@ -37,5 +37,22 @@ public class EmailService {
             System.err.println("Lỗi khi gửi email: " + e.getMessage());
         }
     }
-}
 
+    /**
+     * Gửi email đặt lại mật khẩu
+     *
+     * @param to          Địa chỉ email người nhận
+     * @param newPassword Mật khẩu mới
+     */
+    public void sendPasswordResetEmail(String to, String newPassword) {
+        String subject = "Mật khẩu mới cho tài khoản của bạn";
+
+        String text = "Xin chào,\n\n"
+                + "Mật khẩu mới của bạn là: " + newPassword + "\n\n"
+                + "Vui lòng đăng nhập và đổi mật khẩu ngay sau khi đăng nhập thành công.\n\n"
+                + "Trân trọng,\n"
+                + "Đội ngũ hỗ trợ";
+
+        sendEmail(to, subject, text);
+    }
+}

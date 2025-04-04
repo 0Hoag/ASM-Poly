@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.request.User.ForgotPasswordRequest;
@@ -30,6 +33,13 @@ public class UserService {
     UserMapper mapper;
     UserRepository repo;
 
+    // Thêm EmailService
+    @Autowired
+    private EmailService emailService;
+
+    // Thêm PasswordEncoder để mã hóa mật khẩu
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public UserResponse register(UserRegisterRequest request) {
         // Kiểm tra dữ liệu đầu vào
         if (request.getEmail() == null || request.getEmail().isEmpty() ||
@@ -52,8 +62,10 @@ public class UserService {
 
         // Chuyển đổi request thành entity và lưu vào database
         User user = mapper.toUser(request);
+        // Mã hóa mật khẩu trước khi lưu
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()));
-        user.setRole(false); // Mặc định là user thường
+        user.setRole(false); // Mặc định là khách hàng (false)
         User savedUser = repo.save(user);
 
         // Trả về thông tin người dùng đã đăng ký
@@ -71,12 +83,12 @@ public class UserService {
         User user = repo.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        // Kiểm tra mật khẩu (so sánh trực tiếp không mã hóa)
-        if (!request.getPassword().equals(user.getPassword())) {
+        // Kiểm tra mật khẩu (sử dụng passwordEncoder để so sánh)
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
 
-        // Trả về thông tin người dùng đã đăng nhập
+        // Trả về thông tin người dùng đã đăng nhập, bao gồm vai trò
         return mapper.toUserResponse(user);
     }
 
@@ -105,17 +117,36 @@ public class UserService {
         // Tạo mật khẩu mới ngẫu nhiên
         String newPassword = generateRandomPassword();
 
-        // Cập nhật mật khẩu mới cho user
-        user.setPassword(newPassword);
+        // Lưu mật khẩu đã mã hóa vào database
+        user.setPassword(passwordEncoder.encode(newPassword));
         repo.save(user);
 
-        // Trong thực tế, bạn sẽ gửi email với mật khẩu mới
-        // Ở đây chúng ta chỉ trả về mật khẩu mới để demo
+        // Gửi email với mật khẩu mới
+        sendPasswordResetEmail(user.getEmail(), newPassword);
+
+        // Trả về thông báo thành công (KHÔNG trả về mật khẩu mới)
         return ForgotPasswordResponse.builder()
                 .email(user.getEmail())
-                .newPassword(newPassword)
-                .message("Mật khẩu mới đã được tạo thành công")
+                .message("Mật khẩu mới đã được gửi đến email của bạn")
                 .build();
+    }
+
+    // Phương thức gửi email đặt lại mật khẩu
+    private void sendPasswordResetEmail(String email, String newPassword) {
+        String subject = "Mật khẩu mới cho tài khoản của bạn";
+
+        String text = "Xin chào,\n\n"
+                + "Mật khẩu mới của bạn là: " + newPassword + "\n\n"
+                + "Vui lòng đăng nhập và đổi mật khẩu ngay sau khi đăng nhập thành công.\n\n"
+                + "Trân trọng,\n"
+                + "Đội ngũ hỗ trợ";
+
+        try {
+            emailService.sendEmail(email, subject, text);
+        } catch (Exception e) {
+            log.error("Lỗi khi gửi email đặt lại mật khẩu: {}", e.getMessage());
+            // Vẫn tiếp tục xử lý ngay cả khi gửi email thất bại
+        }
     }
 
     // Phương thức tạo mật khẩu ngẫu nhiên
@@ -124,12 +155,26 @@ public class UserService {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
-        // Tạo mật khẩu ngẫu nhiên có độ dài 6   ký tự
-        for (int i = 0; i < 6; i++) {
+        // Tạo mật khẩu ngẫu nhiên có độ dài 8 ký tự (tăng từ 6 lên 8 để an toàn hơn)
+        for (int i = 0; i < 8; i++) {
             int index = random.nextInt(chars.length());
             sb.append(chars.charAt(index));
         }
 
         return sb.toString();
+    }
+
+    // Phương thức kiểm tra vai trò người dùng
+    public boolean isAdmin(int userId) {
+        User user = repo.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return user.isRole(); // true là admin, false là khách hàng
+    }
+
+    // Phương thức kiểm tra vai trò người dùng theo email
+    public boolean isAdmin(String email) {
+        User user = repo.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return user.isRole(); // true là admin, false là khách hàng
     }
 }
