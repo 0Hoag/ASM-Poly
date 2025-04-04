@@ -1,6 +1,5 @@
 package com.example.ASM.service;
 
-
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
@@ -9,7 +8,7 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
 import com.example.ASM.repository.ProductSpecificationRepository;
-import com.example.ASM.service.build.ProductSpecificationBuilder;
+import com.example.ASM.repository.SpecificationTypeRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,10 +28,15 @@ import java.util.stream.Collectors;
 public class ProductSpecificationService {
     ProductSpecificationMapper mapper;
     ProductSpecificationRepository repo;
-    ProductSpecificationBuilder builder;
+    SpecificationTypeRepository specificationTypeRepository;
 
     public boolean Create(ProductSpecificationRequest request) {
-        builder.processRequest(request);
+        if (request.getName().isEmpty() || request.getValue().isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_INPUT);
+        }
+
+        specificationTypeRepository.findById(request.getSpecificationTypeId())
+                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
 
         try {
             repo.save(mapper.toProductSpecification(request));
@@ -45,14 +49,8 @@ public class ProductSpecificationService {
 
     public ProductSpecificationResponse Detail(int id) {
         var productSpecification = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
         return mapper.toProductSpecificationResponse(productSpecification);
-    }
-
-    public List<ProductSpecificationResponse> List() {
-        return repo.findAll().stream()
-                .map(mapper::toProductSpecificationResponse)
-                .collect(Collectors.toList());
     }
 
     public PageResponse<ProductSpecificationResponse> Get(int page, int size) {
@@ -72,16 +70,32 @@ public class ProductSpecificationService {
                 .build();
     }
 
+    public List<ProductSpecificationResponse> List() {
+        return repo.findAll().stream()
+                .map(mapper::toProductSpecificationResponse)
+                .collect(Collectors.toList());
+    }
+
     public ProductSpecificationResponse Update(int id, ProductSpecificationUpdateRequest request) {
         var productSpecification = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
-        builder.processUpdateRequest(request);
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
+        if (request.getName().isEmpty() || request.getValue().isEmpty()) {
+            throw new AppException(ErrorCode.MISSING_INPUT);
+        }
+
+        productSpecification.setName(request.getName());
+        productSpecification.setValue(request.getValue());
+
+        specificationTypeRepository.findById(request.getSpecificationTypeId())
+                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
+
         return mapper.toProductSpecificationResponse(repo.save(productSpecification));
     }
 
     public void Delete(int id) {
         if (!repo.existsById(id)) {
-            throw new AppException(ErrorCode.SPECIFICATION_NOT_FOUND);
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
 
         repo.deleteById(id);

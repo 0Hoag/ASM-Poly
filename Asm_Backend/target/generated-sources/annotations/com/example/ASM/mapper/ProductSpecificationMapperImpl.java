@@ -31,25 +31,6 @@ public class ProductSpecificationMapperImpl implements ProductSpecificationMappe
     }
 
     @Override
-    public ProductSpecificationResponse toProductSpecificationResponse(ProductSpecification entity) {
-        if ( entity == null ) {
-            return null;
-        }
-
-        ProductSpecificationResponse.ProductSpecificationResponseBuilder productSpecificationResponse = ProductSpecificationResponse.builder();
-
-        Integer id = entitySpecificationTypeId( entity );
-        if ( id != null ) {
-            productSpecificationResponse.specificationTypeName( String.valueOf( id ) );
-        }
-        productSpecificationResponse.id( entity.getId() );
-        productSpecificationResponse.name( entity.getName() );
-        productSpecificationResponse.value( entity.getValue() );
-
-        return productSpecificationResponse.build();
-    }
-
-    @Override
     public void updateProductSpecification(ProductSpecification entity, ProductSpecificationUpdateRequest request) {
         if ( request == null ) {
             return;
@@ -60,7 +41,23 @@ public class ProductSpecificationMapperImpl implements ProductSpecificationMappe
         entity.setValue( request.getValue() );
     }
 
-    private Integer entitySpecificationTypeId(ProductSpecification productSpecification) {
+    @Override
+    public ProductSpecificationResponse toProductSpecificationResponse(ProductSpecification entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        ProductSpecificationResponse.ProductSpecificationResponseBuilder productSpecificationResponse = ProductSpecificationResponse.builder();
+
+        productSpecificationResponse.specificationTypeName( entitySpecificationTypeSpecName( entity ) );
+        productSpecificationResponse.id( entity.getId() );
+        productSpecificationResponse.name( entity.getName() );
+        productSpecificationResponse.value( entity.getValue() );
+
+        return productSpecificationResponse.build();
+    }
+
+    private String entitySpecificationTypeSpecName(ProductSpecification productSpecification) {
         if ( productSpecification == null ) {
             return null;
         }
@@ -68,7 +65,10 @@ public class ProductSpecificationMapperImpl implements ProductSpecificationMappe
         if ( specificationType == null ) {
             return null;
         }
-        int id = specificationType.getId();
-        return id;
+        String specName = specificationType.getSpecName();
+        if ( specName == null ) {
+            return null;
+        }
+        return specName;
     }
 }
