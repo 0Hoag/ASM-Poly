@@ -42,7 +42,7 @@ public class ProfileController {
                 .result(userService.Update(userId,request))
                 .build();
     }
-	@PutMapping("/changePass/{userId}")
+	@PostMapping("/changePass/{userId}")
 	public ApiResponse<UserResponse> changePassword(@PathVariable int userId,@RequestBody @Valid PasswordRequest request) {
 		return ApiResponse.<UserResponse>builder()
 				.code(1000)

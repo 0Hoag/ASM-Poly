@@ -15,6 +15,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -28,7 +32,26 @@ import java.util.stream.Collectors;
 public class UserService {
 	UserRepository userRepository;
 	UserMapper userMapper;
-	
+
+	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+	public Boolean Create(UserRequest request) {
+		if ((request.getEmail() == null || request.getEmail().trim().isEmpty()) &&
+				(request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty())) {
+			throw new AppException(ErrorCode.EMAIL_OR_PHONE_REQUIRED);
+		}
+		if (userRepository.existsByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber())) {
+			throw new AppException(ErrorCode.USER_EXISTS);
+		}
+
+		var user = userMapper.toUser(request);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		userRepository.save(user);
+
+		return true;
+	}
+
 	public PageResponse<UserResponse> Get(int page , int size) {
 		Pageable pageable = PageRequest.of(page -1, size);
 		
@@ -74,20 +97,6 @@ public class UserService {
 	    return userMapper.toUserResponse(user);
 	}
 	
-	public Boolean Create(UserRequest request) {
-		if ((request.getEmail() == null || request.getEmail().trim().isEmpty()) &&
-				(request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty())) {
-			throw new AppException(ErrorCode.EMAIL_OR_PHONE_REQUIRED); 
-		}
-		if (userRepository.existsByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber())) {
-            throw new AppException(ErrorCode.USER_EXISTS);
-        }
-        var user = userMapper.toUser(request);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        userRepository.save(user);
-        return true;
-	}
-	
 	public UserResponse Update(int userId, UpdateUserRequest request) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -103,23 +112,20 @@ public class UserService {
         }
 		userRepository.deleteById(id);
 	}
-	
+
 	public UserResponse changePassword(int userId, PasswordRequest request) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+		var user = userRepository.findById(userId)
+				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        if (!request.getPassword().equals(user.getPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_INCORRECT);
-        }
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+			throw new AppException(ErrorCode.PASSWORD_INCORRECT);
+		}
 
-        if (!request.getNewPass().equals(request.getCofimPass())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
-        }
-        
-        user.setPassword(request.getNewPass());
-        return userMapper.toUserResponse(userRepository.save(user)) ;
-    }
-	
+		if (!request.getNewPass().equals(request.getConfirmPassword())) {
+			throw new AppException(ErrorCode.INVALID_PASSWORD);
+		}
 
-
+		user.setPassword(passwordEncoder.encode(request.getNewPass()));
+		return userMapper.toUserResponse(userRepository.save(user));
+	}
 }

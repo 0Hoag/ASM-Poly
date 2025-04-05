@@ -10,6 +10,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: phongtptps40812@gmail.com
+    password: "dybl lkqn ytcr kamc"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 8080
@@ -20,3 +31,6 @@ cloudinary:
   cloud-name: "ddclol9ih"
   api-key: "484769914577293"
   api-secret: "41IJGj5NP901wP-74TR-fmIj0OQ"
+
+chars:
+  key: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"

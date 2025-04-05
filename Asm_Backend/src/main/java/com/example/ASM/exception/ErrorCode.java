@@ -71,6 +71,8 @@ public enum ErrorCode {
     ORDER_DETAIL_NOT_FOUND(1044, "Order detail not found", HttpStatus.BAD_REQUEST),
     INVALID_QUANTITY(1045, "Invalid quantity", HttpStatus.BAD_REQUEST),
 
+    SEND_EMAIL_ERROR(1046, "Send email error", HttpStatus.BAD_REQUEST),
+
     EMAIL_OR_PHONE_REQUIRED(1040, "EMAIL OR PHONE NUMBER CANNOT BE EMPTY", HttpStatus.BAD_REQUEST),
     ACCOUNT_OR_PASSWORD_EMPTY(1050, "ACCOUNT OR PASSWORD CANNOT BE EMPTY", HttpStatus.BAD_REQUEST);
     ;

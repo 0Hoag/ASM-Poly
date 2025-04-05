@@ -11,6 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class PasswordRequest {
     String password;
     String newPass;
-    String cofimPass;
-
+    String confirmPassword;
 }
