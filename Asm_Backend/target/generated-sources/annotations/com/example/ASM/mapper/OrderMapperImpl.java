@@ -26,6 +26,7 @@ public class OrderMapperImpl extends OrderMapper {
         Order order = new Order();
 
         order.setUser( mapUser( request.getUserId() ) );
+        order.setTotalAmount( request.getTotalAmount() );
         order.setOrderDetails( orderDetailRequestListToOrderDetailList( request.getOrderDetails() ) );
 
         return order;
@@ -56,6 +57,7 @@ public class OrderMapperImpl extends OrderMapper {
 
         OrderDetail orderDetail = new OrderDetail();
 
+        orderDetail.setCurrentPrice( orderDetailRequest.getCurrentPrice() );
         orderDetail.setQuantity( orderDetailRequest.getQuantity() );
 
         return orderDetail;

@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderDetailMapper {
-    @Mapping(target = "productName", source = "product.productName")  // Ánh xạ productName từ Product
-    @Mapping(target = "productId", source = "product.id")  // Ánh xạ productId từ Product
+    @Mapping(target = "productName", source = "product.productName")  // Lấy tên sản phẩm
+    @Mapping(target = "orderId", source = "order.id")  // Lấy ID đơn hàng
     OrderDetailResponse toOrderDetailResponse(OrderDetail entity);
 }

@@ -125,7 +125,13 @@
 			<artifactId>jakarta.xml.bind-api</artifactId>
 			<version>4.0.2</version>
 		</dependency>
-		<!--        <dependency>-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--        <dependency>-->
 		<!--            <groupId>org.projectlombok</groupId>-->
 		<!--            <artifactId>lombok</artifactId>-->
 		<!--            <scope>provided</scope>-->

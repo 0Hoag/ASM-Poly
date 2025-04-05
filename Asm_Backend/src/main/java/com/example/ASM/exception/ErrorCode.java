@@ -69,7 +69,10 @@ public enum ErrorCode {
     ADDRESS_NOT_EXISTED(1042, "Address does not exist", HttpStatus.BAD_REQUEST),
 
     // **Mã lỗi mới cho trạng thái đơn hàng**
-    ORDER_STATUS_NOT_EXISTED(1043, "Order status does not exist", HttpStatus.BAD_REQUEST);
+    ORDER_STATUS_NOT_EXISTED(1043, "Order status does not exist", HttpStatus.BAD_REQUEST),
+
+    // **Mã lỗi cho số lượng không hợp lệ**
+    INVALID_QUANTITY(1044, "Invalid quantity", HttpStatus.BAD_REQUEST);  // Thêm mã lỗi này
 
     private final int code;
     private final String message;

@@ -1,6 +1,7 @@
 package com.example.ASM.mapper;
 
 import com.example.ASM.dto.response.OrderDetailResponse;
+import com.example.ASM.entity.Order;
 import com.example.ASM.entity.OrderDetail;
 import com.example.ASM.entity.Product;
 import javax.annotation.processing.Generated;
@@ -22,7 +23,7 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
 
         orderDetailResponse.setProductName( entityProductProductName( entity ) );
-        orderDetailResponse.setProductId( entityProductId( entity ) );
+        orderDetailResponse.setOrderId( entityOrderId( entity ) );
         orderDetailResponse.setCurrentPrice( entity.getCurrentPrice() );
         orderDetailResponse.setQuantity( entity.getQuantity() );
 
@@ -44,15 +45,15 @@ public class OrderDetailMapperImpl implements OrderDetailMapper {
         return productName;
     }
 
-    private int entityProductId(OrderDetail orderDetail) {
+    private int entityOrderId(OrderDetail orderDetail) {
         if ( orderDetail == null ) {
             return 0;
         }
-        Product product = orderDetail.getProduct();
-        if ( product == null ) {
+        Order order = orderDetail.getOrder();
+        if ( order == null ) {
             return 0;
         }
-        int id = product.getId();
+        int id = order.getId();
         return id;
     }
 }

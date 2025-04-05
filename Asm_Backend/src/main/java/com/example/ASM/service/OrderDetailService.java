@@ -1,6 +1,7 @@
 package com.example.ASM.service;
 
 import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
+import com.example.ASM.dto.request.OrderDetail.OrderDetailUpdateRequest;
 import com.example.ASM.dto.response.OrderDetailResponse;
 import com.example.ASM.entity.Order;
 import com.example.ASM.entity.OrderDetail;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,42 +39,70 @@ public class OrderDetailService {
     }
 
     /**
-     * Thêm OrderDetail vào một đơn hàng
+     * Lấy toàn bộ OrderDetail
+     */
+    public List<OrderDetailResponse> getAllOrderDetails() {
+        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
+        return orderDetails.stream()
+                .map(orderDetailMapper::toOrderDetailResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Lấy OrderDetail theo ID
+     */
+    public OrderDetailResponse getOrderDetailById(int id) {
+        OrderDetail orderDetail = orderDetailRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
+        return orderDetailMapper.toOrderDetailResponse(orderDetail);
+    }
+
+    /**
+     * Thêm OrderDetail vào một đơn hàng (Nếu đã có, cộng dồn số lượng)
      */
     @Transactional
-    public OrderDetailResponse addOrderDetail(int orderId, OrderDetailRequest request) {
+    public OrderDetailResponse createOrderDetail(int orderId, OrderDetailRequest request) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
 
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setOrder(order);
-        orderDetail.setProduct(product);
-        orderDetail.setQuantity(request.getQuantity());
-        orderDetail.setCurrentPrice(product.getPrice()); // Lưu giá tại thời điểm đặt hàng
+        // Kiểm tra xem sản phẩm đã có trong OrderDetail chưa
+        Optional<OrderDetail> existingDetail = orderDetailRepository.findByOrderIdAndProductId(orderId, request.getProductId());
+        if (existingDetail.isPresent()) {
+            // Nếu tồn tại, cộng dồn số lượng
+            OrderDetail orderDetail = existingDetail.get();
+            orderDetail.setQuantity(orderDetail.getQuantity() + request.getQuantity());
+            orderDetailRepository.save(orderDetail);
+            return orderDetailMapper.toOrderDetailResponse(orderDetail);
+        }
 
-        orderDetailRepository.save(orderDetail);
+        // Nếu chưa có, tạo OrderDetail mới
+        OrderDetail newOrderDetail = new OrderDetail();
+        newOrderDetail.setOrder(order);
+        newOrderDetail.setProduct(product);
+        newOrderDetail.setQuantity(request.getQuantity());
+        newOrderDetail.setCurrentPrice(product.getPrice());
 
-        return orderDetailMapper.toOrderDetailResponse(orderDetail);
+        orderDetailRepository.save(newOrderDetail);
+        return orderDetailMapper.toOrderDetailResponse(newOrderDetail);
     }
 
     /**
-     * Cập nhật OrderDetail (số lượng, giá hiện tại nếu cần)
+     * Cập nhật OrderDetail (Chỉ cho phép cập nhật số lượng)
      */
     @Transactional
-    public OrderDetailResponse updateOrderDetail(int orderDetailId, OrderDetailRequest request) {
+    public OrderDetailResponse updateOrderDetail(int orderDetailId, OrderDetailUpdateRequest request) {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
 
-        Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        // Đảm bảo số lượng mới hợp lệ
+        if (request.getQuantity() <= 0) {
+            throw new AppException(ErrorCode.INVALID_QUANTITY);
+        }
 
-        orderDetail.setProduct(product);
         orderDetail.setQuantity(request.getQuantity());
-        orderDetail.setCurrentPrice(product.getPrice());
-
         orderDetailRepository.save(orderDetail);
         return orderDetailMapper.toOrderDetailResponse(orderDetail);
     }
