@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class FavoriteService{
+public class FavoriteProductService{
 	FavoriteRepository favoriteRepository;
 	UserReponsitory userRepository;
 	ProductRepository productRepository;

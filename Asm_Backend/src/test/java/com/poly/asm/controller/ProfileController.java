@@ -19,11 +19,10 @@ import com.poly.asm.dto.response.favorite.FavoriteResponse;
 import com.poly.asm.dto.response.order.OrderResponse;
 import com.poly.asm.dto.response.user.UserResponse;
 import com.poly.asm.service.AddressService;
-import com.poly.asm.service.FavoriteService;
+import com.poly.asm.service.FavoriteProductService;
 import com.poly.asm.service.OrderService;
 import com.poly.asm.service.UserService;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProfileController {
 	UserService userService;
-	FavoriteService favoriteService;
+	FavoriteProductService favoriteService;
 	OrderService orderService;
 	AddressService addressService;
 	
