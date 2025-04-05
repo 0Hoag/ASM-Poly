@@ -12,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartRequest {
     @NotNull(message = "UserId không được để trống")
-    Integer user; // doi cong lam user moi lay userID
+    Integer user;
 }

@@ -3,13 +3,14 @@ package com.example.ASM.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.ASM.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.Cart.CartRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
-import com.example.ASM.dto.response.CartResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartResponse;
 import com.example.ASM.entity.Cart;
 import com.example.ASM.entity.CartDetail;
 import com.example.ASM.entity.User;
@@ -45,7 +46,13 @@ public interface CartMapper {
     }
 
     @Mapping(target = "cart", source = "cart", qualifiedByName = "mapCartId")
+    @Mapping(target = "productName", source = "product", qualifiedByName = "mapProductName")
     CartDetailResponse mapCartDetail(CartDetail cartDetail);
+
+    @Named("mapProductName")
+    default String mapProductName(Product product) {
+        return (product != null) ? product.getProductName() : null;
+    }
 
     @Named("mapCartId")
     default Integer mapCartId(Cart cart) {

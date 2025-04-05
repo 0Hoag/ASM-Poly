@@ -4,7 +4,7 @@ package com.example.ASM.service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
-import com.example.ASM.dto.response.ProductSpecificationResponse;
+import com.example.ASM.dto.response.product.ProductSpecificationResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
@@ -46,6 +46,11 @@ public class ProductSpecificationService {
     public ProductSpecificationResponse Detail(int id) {
         var productSpecification = repo.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
+        return mapper.toProductSpecificationResponse(productSpecification);
+    }
+
+    public ProductSpecificationResponse GetByName(String name) {
+        var productSpecification = repo.findByName(name);
         return mapper.toProductSpecificationResponse(productSpecification);
     }
 

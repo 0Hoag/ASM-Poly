@@ -2,7 +2,7 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
-import com.example.ASM.dto.response.ProductSpecificationResponse;
+import com.example.ASM.dto.response.product.ProductSpecificationResponse;
 import com.example.ASM.entity.ProductSpecification;
 import com.example.ASM.entity.SpecificationType;
 import org.mapstruct.Mapper;

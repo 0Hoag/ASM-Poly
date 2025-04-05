@@ -2,7 +2,7 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.OrderStatus.OrderStatusRequest;
 import com.example.ASM.dto.request.OrderStatus.OrderStatusUpdateRequest;
-import com.example.ASM.dto.response.OrderStatusResponse;
+import com.example.ASM.dto.response.order.OrderStatusResponse;
 import com.example.ASM.entity.Order;
 import com.example.ASM.entity.OrderStatus;
 import java.util.ArrayList;

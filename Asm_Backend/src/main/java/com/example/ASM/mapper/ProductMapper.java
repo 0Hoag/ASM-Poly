@@ -11,7 +11,7 @@ import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
-import com.example.ASM.dto.response.ProductResponse;
+import com.example.ASM.dto.response.product.ProductResponse;
 import com.example.ASM.entity.*;
 
 @Mapper(componentModel = "spring")

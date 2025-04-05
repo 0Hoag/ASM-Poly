@@ -2,8 +2,8 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
-import com.example.ASM.dto.response.ImageResponse;
-import com.example.ASM.dto.response.ProductResponse;
+import com.example.ASM.dto.response.product.ImageResponse;
+import com.example.ASM.dto.response.product.ProductResponse;
 import com.example.ASM.entity.Category;
 import com.example.ASM.entity.Image;
 import com.example.ASM.entity.Product;

@@ -11,7 +11,7 @@ import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
-import com.example.ASM.dto.response.SpecificationTypeResponse;
+import com.example.ASM.dto.response.product.SpecificationTypeResponse;
 import com.example.ASM.entity.ProductSpecification;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;

@@ -1,8 +1,8 @@
 package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.Cart.CartRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
-import com.example.ASM.dto.response.CartResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartResponse;
 import com.example.ASM.entity.Cart;
 import com.example.ASM.entity.CartDetail;
 import javax.annotation.processing.Generated;
@@ -53,6 +53,7 @@ public class CartMapperImpl implements CartMapper {
         CartDetailResponse.CartDetailResponseBuilder cartDetailResponse = CartDetailResponse.builder();
 
         cartDetailResponse.cart( mapCartId( cartDetail.getCart() ) );
+        cartDetailResponse.productName( mapProductName( cartDetail.getProduct() ) );
         cartDetailResponse.id( cartDetail.getId() );
         cartDetailResponse.quantity( cartDetail.getQuantity() );
 

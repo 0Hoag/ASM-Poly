@@ -2,7 +2,7 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.response.OrderResponse;
+import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.entity.Address;
 import com.example.ASM.entity.Order;
 import com.example.ASM.entity.OrderStatus;

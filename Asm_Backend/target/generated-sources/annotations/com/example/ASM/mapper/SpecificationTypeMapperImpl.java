@@ -2,7 +2,7 @@ package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
-import com.example.ASM.dto.response.SpecificationTypeResponse;
+import com.example.ASM.dto.response.product.SpecificationTypeResponse;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;
 import javax.annotation.processing.Generated;

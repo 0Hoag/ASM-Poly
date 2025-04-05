@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.OrderStatus.OrderStatusRequest;
-import com.example.ASM.dto.response.OrderStatusResponse;
+import com.example.ASM.dto.response.order.OrderStatusResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.OrderStatusMapper;

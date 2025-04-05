@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
-import com.example.ASM.dto.response.ProductTypeResponse;
+import com.example.ASM.dto.response.product.ProductTypeResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductTypeMapper;

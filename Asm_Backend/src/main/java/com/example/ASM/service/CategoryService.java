@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
-import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.dto.response.product.CategoryResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CategoryMapper;

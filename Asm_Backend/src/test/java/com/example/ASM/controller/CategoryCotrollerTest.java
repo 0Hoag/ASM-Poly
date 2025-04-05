@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Category.CategoryRequest;
-import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.dto.response.product.CategoryResponse;
 import com.example.ASM.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

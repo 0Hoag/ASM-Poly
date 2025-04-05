@@ -1,7 +1,7 @@
 package com.example.ASM.mapper;
 
 import com.example.ASM.dto.request.CartDetail.CartDetailRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
 import com.example.ASM.entity.CartDetail;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;

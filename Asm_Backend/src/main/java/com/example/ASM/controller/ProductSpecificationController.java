@@ -4,7 +4,7 @@ import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
-import com.example.ASM.dto.response.ProductSpecificationResponse;
+import com.example.ASM.dto.response.product.ProductSpecificationResponse;
 import com.example.ASM.service.ProductSpecificationService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -31,12 +31,19 @@ public class ProductSpecificationController {
                 .build();
     }
 
-
     @GetMapping("/{id}")
     public ApiResponse<ProductSpecificationResponse> detail(@PathVariable("id") int id) {
         return ApiResponse.<ProductSpecificationResponse>builder()
                 .code(1000)
                 .result(productSpecificationService.Detail(id))
+                .build();
+    }
+
+    @GetMapping("/getByName/{name}")
+    public ApiResponse<ProductSpecificationResponse> getByName(@PathVariable("name") String name) {
+        return ApiResponse.<ProductSpecificationResponse>builder()
+                .code(1000)
+                .result(productSpecificationService.GetByName(name))
                 .build();
     }
 

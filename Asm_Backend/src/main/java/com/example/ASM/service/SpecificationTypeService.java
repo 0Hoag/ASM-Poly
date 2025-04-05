@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
-import com.example.ASM.dto.response.SpecificationTypeResponse;
+import com.example.ASM.dto.response.product.SpecificationTypeResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.SpecificationTypeMapper;

@@ -10,7 +10,7 @@ import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
-import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.dto.response.product.CategoryResponse;
 import com.example.ASM.service.CategoryService;
 
 import lombok.AccessLevel;
