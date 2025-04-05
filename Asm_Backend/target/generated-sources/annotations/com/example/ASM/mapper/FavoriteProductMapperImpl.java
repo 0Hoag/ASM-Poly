@@ -1,6 +1,6 @@
 package com.example.ASM.mapper;
 
-import com.example.ASM.dto.response.user.FavoriteResponse;
+import com.example.ASM.dto.response.user.FavoriteProductResponse;
 import com.example.ASM.entity.FavoriteProduct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.5 (Oracle Corporation)"
 )
 @Component
-public class FavoriteMapperImpl implements FavoriteMapper {
+public class FavoriteProductMapperImpl implements FavoriteProductMapper {
 
     private final DatatypeFactory datatypeFactory;
 
-    public FavoriteMapperImpl() {
+    public FavoriteProductMapperImpl() {
         try {
             datatypeFactory = DatatypeFactory.newInstance();
         }
@@ -30,20 +30,20 @@ public class FavoriteMapperImpl implements FavoriteMapper {
     }
 
     @Override
-    public FavoriteResponse toFavoriteResponse(FavoriteProduct favoriteProduct) {
+    public FavoriteProductResponse toFavoriteResponse(FavoriteProduct favoriteProduct) {
         if ( favoriteProduct == null ) {
             return null;
         }
 
-        FavoriteResponse.FavoriteResponseBuilder favoriteResponse = FavoriteResponse.builder();
+        FavoriteProductResponse.FavoriteProductResponseBuilder favoriteProductResponse = FavoriteProductResponse.builder();
 
         if ( favoriteProduct.getProduct() != null ) {
-            favoriteResponse.product( String.valueOf( mapProductToString( favoriteProduct.getProduct() ) ) );
+            favoriteProductResponse.product( String.valueOf( mapProductToString( favoriteProduct.getProduct() ) ) );
         }
-        favoriteResponse.id( favoriteProduct.getId() );
-        favoriteResponse.likedAt( xmlGregorianCalendarToString( dateToXmlGregorianCalendar( favoriteProduct.getLikedAt() ), null ) );
+        favoriteProductResponse.id( favoriteProduct.getId() );
+        favoriteProductResponse.likedAt( xmlGregorianCalendarToString( dateToXmlGregorianCalendar( favoriteProduct.getLikedAt() ), null ) );
 
-        return favoriteResponse.build();
+        return favoriteProductResponse.build();
     }
 
     private String xmlGregorianCalendarToString( XMLGregorianCalendar xcal, String dateFormat ) {

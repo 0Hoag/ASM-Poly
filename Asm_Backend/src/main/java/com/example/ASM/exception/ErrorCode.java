@@ -68,6 +68,9 @@ public enum ErrorCode {
     SPECIFICATION_EXISTED(1042, "Specification existed", HttpStatus.BAD_REQUEST),
     SPECIFICATION_NAME_EXISTED(1043, "Specification name existed", HttpStatus.CONFLICT),
 
+    ORDER_DETAIL_NOT_FOUND(1044, "Order detail not found", HttpStatus.BAD_REQUEST),
+    INVALID_QUANTITY(1045, "Invalid quantity", HttpStatus.BAD_REQUEST),
+
     EMAIL_OR_PHONE_REQUIRED(1040, "EMAIL OR PHONE NUMBER CANNOT BE EMPTY", HttpStatus.BAD_REQUEST),
     ACCOUNT_OR_PASSWORD_EMPTY(1050, "ACCOUNT OR PASSWORD CANNOT BE EMPTY", HttpStatus.BAD_REQUEST);
     ;

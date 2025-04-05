@@ -1,7 +1,6 @@
 package com.example.ASM.dto.response.user;
 
 
-import com.example.ASM.dto.response.product.ProductResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FavoriteResponse {
+public class FavoriteProductResponse {
 	 int id;
 	 String likedAt;
 	 String product;

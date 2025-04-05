@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface FavoriteRepository extends JpaRepository<FavoriteProduct, Integer> {
+public interface FavoriteProductRepository extends JpaRepository<FavoriteProduct, Integer> {
 	Page<FavoriteProduct> findByUserId(int userId,Pageable pageable);
 
     Optional<FavoriteProduct> findByUserIdAndProductId(int userId, int productId);

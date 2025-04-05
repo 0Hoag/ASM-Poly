@@ -9,7 +9,7 @@ import com.example.ASM.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {FavoriteMapper.class})
+@Mapper(componentModel = "spring", uses = {FavoriteProductMapper.class})
 
 public interface UserMapper {
     User toUser(UserRequest request);

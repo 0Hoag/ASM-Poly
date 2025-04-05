@@ -2,15 +2,12 @@ package com.example.ASM.controller;
 
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.Address.AddressRequest;
 import com.example.ASM.dto.request.User.PasswordRequest;
 import com.example.ASM.dto.request.User.UpdateUserRequest;
 import com.example.ASM.dto.response.order.OrderResponse;
-import com.example.ASM.dto.response.user.AddressResponse;
-import com.example.ASM.dto.response.user.FavoriteResponse;
+import com.example.ASM.dto.response.user.FavoriteProductResponse;
 import com.example.ASM.dto.response.user.UserResponse;
-import com.example.ASM.service.AddressService;
-import com.example.ASM.service.FavoriteService;
+import com.example.ASM.service.FavoriteProductService;
 import com.example.ASM.service.OrderService;
 import com.example.ASM.service.UserService;
 import jakarta.validation.Valid;
@@ -27,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProfileController {
 	UserService userService;
-	FavoriteService favoriteService;
+	FavoriteProductService favoriteService;
 	OrderService orderService;
 
 	@GetMapping("/{userId}")
@@ -37,7 +34,7 @@ public class ProfileController {
                 .result(userService.findUserId(userId))
                 .build();
     }
-	
+
 	@PutMapping("/{userId}")
     public ApiResponse<UserResponse> updateUser(@PathVariable int userId,@RequestBody @Valid UpdateUserRequest request) {
     	return ApiResponse.<UserResponse>builder()
@@ -62,11 +59,11 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/favorite/{userId}")
-	public ApiResponse<PageResponse<FavoriteResponse>> Favorite(
+	public ApiResponse<PageResponse<FavoriteProductResponse>> Favorite(
 			@PathVariable int userId,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int size) {
-		return ApiResponse.<PageResponse<FavoriteResponse>>builder()
+		return ApiResponse.<PageResponse<FavoriteProductResponse>>builder()
 				.code(1000)
 				.result(favoriteService.getFavoriteUser(userId, page, size))
 				.build();
