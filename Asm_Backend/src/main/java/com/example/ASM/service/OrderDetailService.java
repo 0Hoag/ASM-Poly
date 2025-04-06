@@ -32,8 +32,8 @@ public class OrderDetailService {
      * Lấy danh sách OrderDetail theo OrderId
      */
     public List<OrderDetailResponse> getByOrderId(int orderId) {
-        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
-        return orderDetails.stream()
+        return orderDetailRepository.findByOrderId(orderId)
+                .stream()
                 .map(orderDetailMapper::toOrderDetailResponse)
                 .collect(Collectors.toList());
     }
@@ -42,8 +42,8 @@ public class OrderDetailService {
      * Lấy toàn bộ OrderDetail
      */
     public List<OrderDetailResponse> getAllOrderDetails() {
-        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
-        return orderDetails.stream()
+        return orderDetailRepository.findAll()
+                .stream()
                 .map(orderDetailMapper::toOrderDetailResponse)
                 .collect(Collectors.toList());
     }
@@ -58,27 +58,31 @@ public class OrderDetailService {
     }
 
     /**
-     * Thêm OrderDetail vào một đơn hàng (Nếu đã có, cộng dồn số lượng)
+     * Thêm OrderDetail vào đơn hàng: nếu đã có -> cộng dồn số lượng, nếu chưa có -> thêm mới
      */
     @Transactional
     public OrderDetailResponse createOrderDetail(int orderId, OrderDetailRequest request) {
+        // Kiểm tra đơn hàng
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
 
+        // Kiểm tra sản phẩm
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        // Kiểm tra xem sản phẩm đã có trong OrderDetail chưa
-        Optional<OrderDetail> existingDetail = orderDetailRepository.findByOrderIdAndProductId(orderId, request.getProductId());
+        // Kiểm tra OrderDetail đã tồn tại chưa
+        Optional<OrderDetail> existingDetail = orderDetailRepository
+                .findByOrderIdAndProductId(orderId, request.getProductId());
+
         if (existingDetail.isPresent()) {
-            // Nếu tồn tại, cộng dồn số lượng
+            // Nếu đã tồn tại -> cộng dồn số lượng
             OrderDetail orderDetail = existingDetail.get();
             orderDetail.setQuantity(orderDetail.getQuantity() + request.getQuantity());
             orderDetailRepository.save(orderDetail);
             return orderDetailMapper.toOrderDetailResponse(orderDetail);
         }
 
-        // Nếu chưa có, tạo OrderDetail mới
+        // Nếu chưa có -> tạo mới
         OrderDetail newOrderDetail = new OrderDetail();
         newOrderDetail.setOrder(order);
         newOrderDetail.setProduct(product);
@@ -90,14 +94,13 @@ public class OrderDetailService {
     }
 
     /**
-     * Cập nhật OrderDetail (Chỉ cho phép cập nhật số lượng)
+     * Cập nhật số lượng của OrderDetail
      */
     @Transactional
     public OrderDetailResponse updateOrderDetail(int orderDetailId, OrderDetailUpdateRequest request) {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
 
-        // Đảm bảo số lượng mới hợp lệ
         if (request.getQuantity() <= 0) {
             throw new AppException(ErrorCode.INVALID_QUANTITY);
         }
@@ -108,7 +111,7 @@ public class OrderDetailService {
     }
 
     /**
-     * Xóa OrderDetail theo ID
+     * Xoá OrderDetail theo ID
      */
     @Transactional
     public void deleteOrderDetail(int orderDetailId) {
