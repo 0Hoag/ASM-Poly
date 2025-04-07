@@ -5,7 +5,7 @@ import org.mapstruct.MappingTarget;
 
 import com.example.ASM.dto.request.OrderStatus.OrderStatusRequest;
 import com.example.ASM.dto.request.OrderStatus.OrderStatusUpdateRequest;
-import com.example.ASM.dto.response.OrderStatusResponse;
+import com.example.ASM.dto.response.order.OrderStatusResponse;
 import com.example.ASM.entity.OrderStatus;
 
 @Mapper(componentModel = "spring")

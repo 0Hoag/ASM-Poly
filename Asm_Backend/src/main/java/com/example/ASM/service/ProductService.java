@@ -1,8 +1,12 @@
 package com.example.ASM.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.example.ASM.dto.request.Product.ProductGetRequest;
+import com.example.ASM.entity.Product;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Product.ProductRequest;
 import com.example.ASM.dto.request.Product.ProductUpdateRequest;
-import com.example.ASM.dto.response.ProductResponse;
+import com.example.ASM.dto.response.product.ProductResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductMapper;
@@ -71,6 +75,16 @@ public class ProductService {
                 .totalElements(pageData.getTotalElements())
                 .data(data)
                 .build();
+    }
+
+    public List<ProductResponse> GetMany(ProductGetRequest request) {
+        List<ProductResponse> productResponses = request.getProductIDs()
+                .stream().map(id -> {
+                    var product = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+                    return mapper.toProductResponse(product);
+                }).collect(Collectors.toList());
+
+        return productResponses;
     }
 
     public ProductResponse Update(int id, ProductUpdateRequest request) {

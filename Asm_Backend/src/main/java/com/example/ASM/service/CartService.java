@@ -1,5 +1,6 @@
 package com.example.ASM.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Cart.CartRequest;
-import com.example.ASM.dto.response.CartResponse;
+import com.example.ASM.dto.response.cart.CartResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CartMapper;
@@ -39,7 +40,9 @@ public class CartService {
         userRepository.findById(request.getUser()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         try {
-            repo.save(mapper.toCart(request));
+            var cart = mapper.toCart(request);
+            cart.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            repo.save(cart);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }

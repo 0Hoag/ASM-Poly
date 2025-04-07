@@ -8,7 +8,7 @@ import org.mapstruct.*;
 
 import com.example.ASM.dto.request.Category.CategoryRequest;
 import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
-import com.example.ASM.dto.response.CategoryResponse;
+import com.example.ASM.dto.response.product.CategoryResponse;
 import com.example.ASM.entity.Category;
 import com.example.ASM.entity.Product;
 

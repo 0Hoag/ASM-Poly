@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.CartDetail.CartDetailRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
 import com.example.ASM.service.CartDetailService;
 
 import lombok.AccessLevel;

@@ -24,7 +24,7 @@ public class Address {
     private String address;
 
     @Column(name = "IsDefault")
-    private boolean isDefault;
+    private boolean defaultAddress;
 
     @Column(name = "PhoneNumber")
     private String phoneNumber;

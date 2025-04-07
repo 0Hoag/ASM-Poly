@@ -10,7 +10,7 @@ import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeRequest;
 import com.example.ASM.dto.request.SpecificationType.SpecificationTypeUpdateRequest;
-import com.example.ASM.dto.response.SpecificationTypeResponse;
+import com.example.ASM.dto.response.product.SpecificationTypeResponse;
 import com.example.ASM.service.SpecificationTypeService;
 
 import lombok.AccessLevel;

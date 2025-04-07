@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.ProductType.ProductTypeRequest;
-import com.example.ASM.dto.response.ProductTypeResponse;
+import com.example.ASM.dto.response.product.ProductTypeResponse;
 import com.example.ASM.entity.Product;
 import com.example.ASM.entity.ProductType;
 import com.example.ASM.entity.SpecificationType;

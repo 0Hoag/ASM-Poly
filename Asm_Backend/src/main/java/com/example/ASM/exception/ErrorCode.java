@@ -23,6 +23,7 @@ public enum ErrorCode {
     UN_AUTHORIZATION(1008, "YOU DO NOT HAVE PERMISSION", HttpStatus.FORBIDDEN),
     INVALID_DOB(1009, "YOU AGE MUST BE AT least {min}", HttpStatus.BAD_REQUEST),
     PASSWORD_EXISTED(1010, "PASSWORD_EXISTED", HttpStatus.BAD_REQUEST),
+    PASSWORD_INCORRECT(1011, "PASSWORD INCORRECT", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_FOUND(1011, "PERMISSION_NOT_FOUND", HttpStatus.BAD_REQUEST),
     CART_ITEM_EXISTED(1012, "CART_ITEM_EXISTED", HttpStatus.BAD_REQUEST),
     ORDERS_NOT_EXISTED(1013, "ORDERS_NOT_EXISTED", HttpStatus.BAD_REQUEST),
@@ -62,6 +63,18 @@ public enum ErrorCode {
     ADDRESS_NOT_EXISTED(1038, "Address not existed", HttpStatus.BAD_REQUEST),
     ADDRESS_EXISTED(1039, "Address existed", HttpStatus.BAD_REQUEST),
     ADDRESS_NAME_EXISTED(1040, "Address name existed", HttpStatus.CONFLICT),
+
+    SPECIFICATION_NOT_FOUND(1041, "Specification not found", HttpStatus.NOT_FOUND),
+    SPECIFICATION_EXISTED(1042, "Specification existed", HttpStatus.BAD_REQUEST),
+    SPECIFICATION_NAME_EXISTED(1043, "Specification name existed", HttpStatus.CONFLICT),
+
+    ORDER_DETAIL_NOT_FOUND(1044, "Order detail not found", HttpStatus.BAD_REQUEST),
+    INVALID_QUANTITY(1045, "Invalid quantity", HttpStatus.BAD_REQUEST),
+
+    SEND_EMAIL_ERROR(1046, "Send email error", HttpStatus.BAD_REQUEST),
+
+    EMAIL_OR_PHONE_REQUIRED(1040, "EMAIL OR PHONE NUMBER CANNOT BE EMPTY", HttpStatus.BAD_REQUEST),
+    ACCOUNT_OR_PASSWORD_EMPTY(1050, "ACCOUNT OR PASSWORD CANNOT BE EMPTY", HttpStatus.BAD_REQUEST);
     ;
 
     private int code;

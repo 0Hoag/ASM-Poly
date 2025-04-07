@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.CartDetail.CartDetailRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.CartDetailMapper;

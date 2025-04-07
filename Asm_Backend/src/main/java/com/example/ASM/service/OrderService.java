@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.response.OrderResponse;
+import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.OrderMapper;
@@ -87,5 +87,21 @@ public class OrderService {
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
+    }
+
+    public PageResponse<OrderResponse> getOrdersByUserId(int userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page -1, size);
+        var pageData = repo.findByUserId(userId, pageable);
+
+        var data = pageData.getContent().stream()
+                .map(mapper::toOrderResponse)
+                .collect(Collectors.toList());
+        return PageResponse.<OrderResponse>builder()
+                .currentPage(page)
+                .totalPages(pageData.getTotalPages())
+                .pageSize(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .data(data)
+                .build();
     }
 }

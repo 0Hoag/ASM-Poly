@@ -10,7 +10,7 @@ import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.response.OrderResponse;
+import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.service.OrderService;
 
 import lombok.AccessLevel;

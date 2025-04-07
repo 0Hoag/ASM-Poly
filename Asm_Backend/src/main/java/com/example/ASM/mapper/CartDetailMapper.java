@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.CartDetail.CartDetailRequest;
-import com.example.ASM.dto.response.CartDetailResponse;
+import com.example.ASM.dto.response.cart.CartDetailResponse;
 import com.example.ASM.entity.Cart;
 import com.example.ASM.entity.CartDetail;
 import com.example.ASM.entity.Product;
