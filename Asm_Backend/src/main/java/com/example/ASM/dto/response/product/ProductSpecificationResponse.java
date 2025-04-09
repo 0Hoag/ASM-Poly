@@ -13,4 +13,5 @@ public class ProductSpecificationResponse {
     private String name;
     private String value;
     private String specificationTypeName; // specification
+    private String productID;
 }

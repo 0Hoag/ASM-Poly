@@ -20,4 +20,7 @@ public class ProductSpecificationRequest {
 
     @NotNull(message = "SpecificationType không được để trống")
     private Integer specificationTypeId;
+
+    @NotNull(message = "Product không được để trống")
+    private Integer productID;
 }

@@ -58,6 +58,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductSpecification> productSpecifications;
+
     // Liên kết nhiều-đến-một với Category
     @ManyToOne
     @JoinColumn(name = "CategoryId", nullable = false)
@@ -70,20 +73,22 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "id="
-                + id + ", createdAt='"
-                + createdAt + '\'' + ", description='"
-                + description + '\'' + ", price="
-                + price + ", productName='"
-                + productName + '\'' + ", salePrice="
-                + salePrice + ", soldQuantity="
-                + soldQuantity + ", stockQuantity="
-                + stockQuantity + ", cartDetailsCount="
-                + (cartDetails != null ? cartDetails.size() : 0) + ", favoriteProductsCount="
-                + (favoriteProducts != null ? favoriteProducts.size() : 0) + ", imagesCount="
-                + (images != null ? images.size() : 0) + ", orderDetailsCount="
-                + (orderDetails != null ? orderDetails.size() : 0) + ", category="
-                + (category != null ? category.getId() : null) + ", productType="
-                + (productType != null ? productType.getId() : null) + '}';
+        return "Product{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", productName='" + productName + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", salePrice=" + salePrice +
+                ", soldQuantity=" + soldQuantity +
+                ", stockQuantity=" + stockQuantity +
+                ", cartDetailsCount=" + (cartDetails != null ? cartDetails.size() : 0) +
+                ", favoriteProductsCount=" + (favoriteProducts != null ? favoriteProducts.size() : 0) +
+                ", imagesCount=" + (images != null ? images.size() : 0) +
+                ", orderDetailsCount=" + (orderDetails != null ? orderDetails.size() : 0) +
+                ", productSpecificationsCount=" + (productSpecifications != null ? productSpecifications.size() : 0) +
+                ", categoryId=" + (category != null ? category.getId() : null) +
+                ", productTypeId=" + (productType != null ? productType.getId() : null) +
+                '}';
     }
 }
