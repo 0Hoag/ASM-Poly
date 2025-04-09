@@ -90,12 +90,10 @@ public class OrderService {
     }
 
     public PageResponse<OrderResponse> getOrdersByUserId(int userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page -1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         var pageData = repo.findByUserId(userId, pageable);
 
-        var data = pageData.getContent().stream()
-                .map(mapper::toOrderResponse)
-                .collect(Collectors.toList());
+        var data = pageData.getContent().stream().map(mapper::toOrderResponse).collect(Collectors.toList());
         return PageResponse.<OrderResponse>builder()
                 .currentPage(page)
                 .totalPages(pageData.getTotalPages())

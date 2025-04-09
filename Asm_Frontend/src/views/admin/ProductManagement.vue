@@ -69,7 +69,7 @@
               </td>
               <td>{{ (currentPage - 1) * limit + index + 1 }}</td>
               <td>
-                <img :src="product.images[0]" class="product-image" :alt="product.title" width="100" />
+                <img :src="product.images[0].url" class="product-image" :alt="product.title" width="100" />
               </td>
               <td>{{ product.productName }}</td>
               <td>{{ product.category }}</td>

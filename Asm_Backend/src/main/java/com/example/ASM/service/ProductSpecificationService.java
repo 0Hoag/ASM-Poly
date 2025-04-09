@@ -1,5 +1,12 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
@@ -10,17 +17,11 @@ import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
 import com.example.ASM.repository.ProductSpecificationRepository;
 import com.example.ASM.service.build.ProductSpecificationBuilder;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,8 +45,8 @@ public class ProductSpecificationService {
     }
 
     public ProductSpecificationResponse Detail(int id) {
-        var productSpecification = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
+        var productSpecification =
+                repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
         return mapper.toProductSpecificationResponse(productSpecification);
     }
 
@@ -78,8 +79,8 @@ public class ProductSpecificationService {
     }
 
     public ProductSpecificationResponse Update(int id, ProductSpecificationUpdateRequest request) {
-        var productSpecification = repo.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
+        var productSpecification =
+                repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
         builder.processUpdateRequest(request);
         mapper.updateProductSpecification(productSpecification, request);
         return mapper.toProductSpecificationResponse(repo.save(productSpecification));

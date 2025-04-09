@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,17 +15,17 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRequest {
     @NotEmpty(message = "Full name cannot be empty")
-	String fullName;
-    
+    String fullName;
+
     @Email(message = "Invalid email format")
-	String email;
-    
+    String email;
+
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number format")
-	String phoneNumber;
-	
-	@NotEmpty(message = "Password cannot be empty")
+    String phoneNumber;
+
+    @NotEmpty(message = "Password cannot be empty")
     @Size(min = 8, message = "Password must be at least 8 characters")
-	String password;
-	
-	boolean role;
+    String password;
+
+    boolean role;
 }

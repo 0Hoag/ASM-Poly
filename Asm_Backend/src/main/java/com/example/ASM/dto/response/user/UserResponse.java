@@ -1,6 +1,5 @@
 package com.example.ASM.dto.response.user;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,10 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-	int id;
-	String fullName;
-	String phoneNumber;
-	String email;
-	boolean role;
-	
+    int id;
+    String fullName;
+    String phoneNumber;
+    String email;
+    boolean role;
 }

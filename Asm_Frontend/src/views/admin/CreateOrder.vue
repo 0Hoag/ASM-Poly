@@ -202,6 +202,24 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+// khai báo biến
+// methods
 
+// get
+
+// create
+
+// update
+
+// delete
+
+// pagination
+
+// search
+
+// computed
+// watch
+// mounted
+</script>
 <style lang="scss" scoped></style>

@@ -1,22 +1,22 @@
 package com.example.ASM.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
-import com.example.ASM.dto.request.Order.OrderRequest;
-import com.example.ASM.dto.request.Order.OrderUpdateRequest;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailUpdateRequest;
 import com.example.ASM.dto.response.order.OrderDetailResponse;
-import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.service.OrderDetailService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders-detail")
@@ -80,9 +80,6 @@ public class OrderDetailController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") int id) {
         orderDetailService.Delete(id);
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Delete success!")
-                .build();
+        return ApiResponse.<Void>builder().code(1000).message("Delete success!").build();
     }
 }

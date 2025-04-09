@@ -1,23 +1,12 @@
 <template>
-  <div
-    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-  >
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Trạng Thái Đơn Hàng</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-file-earmark-excel"></i> Xuất báo cáo
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-printer"></i> In báo cáo
-        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-excel"></i> Xuất báo cáo</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i> In báo cáo</button>
       </div>
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-primary dropdown-toggle"
-      >
-        <i class="bi bi-calendar3"></i> Tuần này
-      </button>
+      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"><i class="bi bi-calendar3"></i> Tuần này</button>
     </div>
   </div>
 
@@ -26,9 +15,7 @@
     <div class="col-md-4 col-lg-2 mb-3">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-secondary bg-opacity-10 text-secondary mx-auto mb-2"
-          >
+          <div class="status-icon bg-secondary bg-opacity-10 text-secondary mx-auto mb-2">
             <i class="bi bi-hourglass-split"></i>
           </div>
           <h5 class="card-title">Chờ xác nhận</h5>
@@ -52,9 +39,7 @@
     <div class="col-md-4 col-lg-2 mb-3">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-primary bg-opacity-10 text-primary mx-auto mb-2"
-          >
+          <div class="status-icon bg-primary bg-opacity-10 text-primary mx-auto mb-2">
             <i class="bi bi-box-seam"></i>
           </div>
           <h5 class="card-title">Đang chuẩn bị</h5>
@@ -66,9 +51,7 @@
     <div class="col-md-4 col-lg-2 mb-3">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-warning bg-opacity-10 text-warning mx-auto mb-2"
-          >
+          <div class="status-icon bg-warning bg-opacity-10 text-warning mx-auto mb-2">
             <i class="bi bi-truck"></i>
           </div>
           <h5 class="card-title">Đang giao</h5>
@@ -80,9 +63,7 @@
     <div class="col-md-4 col-lg-2 mb-3">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-success bg-opacity-10 text-success mx-auto mb-2"
-          >
+          <div class="status-icon bg-success bg-opacity-10 text-success mx-auto mb-2">
             <i class="bi bi-check2-all"></i>
           </div>
           <h5 class="card-title">Hoàn thành</h5>
@@ -94,9 +75,7 @@
     <div class="col-md-4 col-lg-2 mb-3">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-danger bg-opacity-10 text-danger mx-auto mb-2"
-          >
+          <div class="status-icon bg-danger bg-opacity-10 text-danger mx-auto mb-2">
             <i class="bi bi-x-circle"></i>
           </div>
           <h5 class="card-title">Đã hủy</h5>
@@ -132,61 +111,25 @@
                 <td>Nguyễn Văn X</td>
                 <td>
                   <div class="dropdown">
-                    <button
-                      class="btn btn-sm dropdown-toggle badge bg-secondary"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Chờ xác nhận
-                    </button>
+                    <button class="btn btn-sm dropdown-toggle badge bg-secondary" type="button" data-bs-toggle="dropdown">Chờ xác nhận</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')"
-                        >
-                          Chờ xác nhận
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')">Chờ xác nhận</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')"
-                        >
-                          Đã xác nhận
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')">Đã xác nhận</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')"
-                        >
-                          Đang chuẩn bị
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')">Đang chuẩn bị</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang giao', 'bg-warning')"
-                        >
-                          Đang giao
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang giao', 'bg-warning')">Đang giao</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Hoàn thành', 'bg-success')"
-                        >
-                          Hoàn thành
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Hoàn thành', 'bg-success')">Hoàn thành</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã hủy', 'bg-danger')"
-                        >
-                          Đã hủy
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã hủy', 'bg-danger')">Đã hủy</button>
                       </li>
                     </ul>
                   </div>
@@ -194,23 +137,13 @@
                 <td>30/03/2023</td>
                 <td>
                   <div class="dropdown">
-                    <button
-                      class="btn btn-sm btn-outline-primary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Cập nhật
-                    </button>
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Cập nhật</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-check-circle"></i> Xác nhận</a
-                        >
+                        <a class="dropdown-item" href="#"><i class="bi bi-check-circle"></i> Xác nhận</a>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-x-circle"></i> Hủy</a
-                        >
+                        <a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Hủy</a>
                       </li>
                     </ul>
                   </div>
@@ -221,61 +154,25 @@
                 <td>Trần Thị Y</td>
                 <td>
                   <div class="dropdown">
-                    <button
-                      class="btn btn-sm dropdown-toggle badge bg-info"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Đã xác nhận
-                    </button>
+                    <button class="btn btn-sm dropdown-toggle badge bg-info" type="button" data-bs-toggle="dropdown">Đã xác nhận</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')"
-                        >
-                          Chờ xác nhận
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')">Chờ xác nhận</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')"
-                        >
-                          Đã xác nhận
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')">Đã xác nhận</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')"
-                        >
-                          Đang chuẩn bị
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')">Đang chuẩn bị</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang giao', 'bg-warning')"
-                        >
-                          Đang giao
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang giao', 'bg-warning')">Đang giao</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Hoàn thành', 'bg-success')"
-                        >
-                          Hoàn thành
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Hoàn thành', 'bg-success')">Hoàn thành</button>
                       </li>
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã hủy', 'bg-danger')"
-                        >
-                          Đã hủy
-                        </button>
+                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã hủy', 'bg-danger')">Đã hủy</button>
                       </li>
                     </ul>
                   </div>
@@ -283,23 +180,13 @@
                 <td>29/03/2023</td>
                 <td>
                   <div class="dropdown">
-                    <button
-                      class="btn btn-sm btn-outline-primary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Cập nhật
-                    </button>
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Cập nhật</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-box-seam"></i> Đang chuẩn bị</a
-                        >
+                        <a class="dropdown-item" href="#"><i class="bi bi-box-seam"></i> Đang chuẩn bị</a>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-x-circle"></i> Hủy</a
-                        >
+                        <a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Hủy</a>
                       </li>
                     </ul>
                   </div>
@@ -385,7 +272,26 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+// khai báo biến
+// methods
+
+// get
+
+// create
+
+// update
+
+// delete
+
+// pagination
+
+// search
+
+// computed
+// watch
+// mounted
+</script>
 <style scoped>
 .status-icon {
   width: 32px;

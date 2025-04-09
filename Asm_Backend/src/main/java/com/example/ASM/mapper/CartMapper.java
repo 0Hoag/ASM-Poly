@@ -3,7 +3,6 @@ package com.example.ASM.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.ASM.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,6 +12,7 @@ import com.example.ASM.dto.response.cart.CartDetailResponse;
 import com.example.ASM.dto.response.cart.CartResponse;
 import com.example.ASM.entity.Cart;
 import com.example.ASM.entity.CartDetail;
+import com.example.ASM.entity.Product;
 import com.example.ASM.entity.User;
 
 @Mapper(componentModel = "spring")

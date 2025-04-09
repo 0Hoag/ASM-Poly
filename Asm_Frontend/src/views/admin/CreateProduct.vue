@@ -77,10 +77,10 @@
           </div>
 
           <!-- Tên của thông số kỹ thuật -->
-          <div class="bg-light my-3 p-3" v-for="(group, index) in specGroups" :key="index">
+          <div class="bg-light my-3 p-3" v-if="specGroupByProductType.length > 0" v-for="(group, index) in specGroupByProductType" :key="index">
             <div class="row">
               <div class="col-8">
-                <input type="text" v-model="group.title" class="form-control spec-title" placeholder="Tên thông số (VD: Cấu hình & Bộ nhớ)" />
+                <input type="text" v-model="group.specName" class="form-control spec-title" placeholder="Tên thông số (VD: Cấu hình & Bộ nhớ)" />
               </div>
               <div class="col-4">
                 <button type="button" class="btn btn-danger btn-remove-group" @click="removeSpecGroup(index)">Xóa nhóm</button>
@@ -88,7 +88,7 @@
             </div>
             <!-- Danh sách thuộc tính -->
             <div class="mt-2">
-              <div class="row my-2" v-for="(attr, attrIndex) in group.attributes" :key="attrIndex">
+              <div class="row my-2" v-for="(attr, attrIndex) in group.attribute" :key="attrIndex">
                 <div class="col-4">
                   <input type="text" class="form-control attr-name" placeholder="Tên thuộc tính (VD: RAM)" v-model="attr.name" />
                 </div>
@@ -145,7 +145,7 @@
 
 <script setup>
 import axios from "axios";
-import { computed, onBeforeMount, onMounted, onUnmounted, ref } from "vue";
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // khai báo biến
@@ -159,6 +159,7 @@ const specGroups = ref([
     productSpecifications: [],
   },
 ]);
+const specGroupByProductType = ref([]);
 
 const product = ref({
   category: {
@@ -166,6 +167,8 @@ const product = ref({
   },
   images: [],
 });
+const productSpecifications = ref([]);
+const productSpecBySpecGroup = ref([]);
 const categories = ref({});
 const isEdit = ref(false);
 const fileInput = ref(null);
@@ -173,35 +176,133 @@ const deletedImg = ref([]);
 
 // methods
 
+// form
+
+// Lấy sản phẩm theo id
+const getProductById = async () => {
+  try {
+    const resp = await axios.get(`http://localhost:8080/asm/api/v1/product/${route.params.idProduct}`);
+    product.value = resp.data.result;
+
+    const categoryId = categories.value.find((category) => category.categoryName === product.value.category);
+    const producTypeId = productTypes.value.find((productType) => productType.nameType === product.value.productType);
+    if (!categoryId) {
+      console.log("Category not found for this product.");
+      return;
+    }
+    if (!producTypeId) {
+      console.log("Product type not found for this product.");
+      return;
+    }
+
+    product.value.category = categoryId.id;
+    product.value.productType = producTypeId.id;
+    console.log(product.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+// Lấy danh mục sản phẩm
+const getAllCategory = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/category/List");
+    categories.value = resp.data.result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getAllSpec = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
+    specGroups.value = resp.data.result;
+    console.log(specGroups.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllProducType = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/productType/List");
+    productTypes.value = resp.data.result;
+    console.log(productTypes.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getAllProducSpec = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/product-specification/List");
+    productSpecifications.value = resp.data.result;
+    console.log("productSpec", productSpecifications.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 const categoryChange = () => {
   console.log(product.value);
 };
-// Xóa sản phẩm
-//
+
+// update sản phẩm
+const updateProduct = async () => {
+  if (deletedImg.value.length) {
+    deleteImage();
+  }
+  if (fileInput.value.files.length) {
+    saveImage();
+  }
+  console.log("update thanh cong");
+};
+// Tạo sản phẩm
+const saveProduct = async () => {
+  try {
+    let resp;
+    if (isEdit.value) {
+      resp = await axios.put("https://localhost:8080/asm/api/v1/product/" + route.params.idProduct, product.value);
+
+      alert("Sản phẩm đã update:");
+      console.log("Sản phẩm đã update:", resp.data);
+      router.push(`/admin/products/form/${resp.data.id}`);
+    } else {
+      resp = await axios.post("https://localhost:8080/asm/api/v1/product/", product.value);
+
+      alert("Sản phẩm đã thêm:");
+      console.log("Sản phẩm đã thêm:", resp.data);
+      router.push(`/admin/products/form/${resp.data.id}`);
+    }
+    // Log dữ liệu phản hồi để kiểm tra
+  } catch (error) {
+    console.error("Lỗi khi thêm sản phẩm:", error.response?.data || error.message);
+  }
+};
+// Spec Group
 const addSpecGroup = () => {
-  specGroups.value.push({
-    title: "",
-    attributes: [{ name: "", value: "" }],
+  specGroupByProductType.value.push({
+    id: null,
+    isDelete: false,
+    specName: "",
+    productSpecifications: [],
   });
-  console.log(specGroups.value);
+  console.log("specgroup", specGroupByProductType.value);
 };
 
 // Xóa nhóm
 const removeSpecGroup = (index) => {
   specGroups.value.splice(index, 1);
 };
+// Prodcut Spec
 
 // Thêm thuộc tính vào nhóm
 const addAttribute = (group) => {
-  group.attributes.push({ name: "", value: "" });
+  productSpecBySpecGroup.attributes.push({ id: null, isDelete: false, value: "", name: "", specificationTypeName: "" });
 };
 
 // Xóa thuộc tính
 const removeAttribute = (group, attrIndex) => {
   group.attributes.splice(attrIndex, 1);
 };
-
-const objectURLs = ref([]); // Lưu danh sách URL để giải phóng sau này
+// Image
 
 const previewImage = (event) => {
   const files = event.target.files;
@@ -262,104 +363,42 @@ const deleteImage = async () => {
   }
 };
 
-// update sản phẩm
-const updateProduct = async () => {
-  if (deletedImg.value.length) {
-    deleteImage();
-  }
-  if (fileInput.value.files.length) {
-    saveImage();
-  }
-  console.log("update thanh cong");
-};
-// Tạo sản phẩm
-const saveProduct = async () => {
-  try {
-    let resp;
-    if (isEdit.value) {
-      resp = await axios.put("https://localhost:8080/asm/api/v1/product/" + route.params.idProduct, product.value);
-
-      alert("Sản phẩm đã update:");
-      console.log("Sản phẩm đã update:", resp.data);
-      router.push(`/admin/products/form/${resp.data.id}`);
-    } else {
-      resp = await axios.post("https://localhost:8080/asm/api/v1/product/", product.value);
-
-      alert("Sản phẩm đã thêm:");
-      console.log("Sản phẩm đã thêm:", resp.data);
-      router.push(`/admin/products/form/${resp.data.id}`);
-    }
-    // Log dữ liệu phản hồi để kiểm tra
-  } catch (error) {
-    console.error("Lỗi khi thêm sản phẩm:", error.response?.data || error.message);
-  }
-};
-
-// Lấy sản phẩm theo id
-const getProductById = async () => {
-  try {
-    const resp = await axios.get(`http://localhost:8080/asm/api/v1/product/${route.params.idProduct}`);
-    product.value = resp.data.result;
-
-    const categoryId = categories.value.find((category) => category.categoryName === product.value.category);
-    const producTypeId = productTypes.value.find((productType) => productType.nameType === product.value.productType);
-    if (!categoryId) {
-      console.log("Category not found for this product.");
-      return;
-    }
-    if (!producTypeId) {
-      console.log("Product type not found for this product.");
-      return;
-    }
-
-    product.value.category = categoryId.id;
-    product.value.productType = producTypeId.id;
-    console.log(product.value);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-// Lấy danh mục sản phẩm
-const getAllCategory = async () => {
-  try {
-    const resp = await axios.get("http://localhost:8080/asm/api/v1/category/List");
-    categories.value = resp.data.result;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const getAllSpec = async () => {
-  try {
-    const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
-    specGroups.value = resp.data.result;
-    console.log(specGroups.value);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-const getAllProducType = async () => {
-  try {
-    const resp = await axios.get("http://localhost:8080/asm/api/v1/productType/List");
-    productTypes.value = resp.data.result;
-    console.log(productTypes.value);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 // computed
+const producTypeSelected = computed(() => {
+  return productTypes.value.find((productType) => productType.id === product.value.productType);
+});
+
+// const changeProductTypes = () => {
+//   producTypeSelected.value;
+//   console.log("changeProductTypes", productSpecByTypeSelected.value);
+// };
 
 // Danh sách ảnh được chọn
 // const selectedImages = computed(() => product.value.images.filter((img) => img.selected));
 
 // watch
+
+watch(producTypeSelected, (type) => {
+  if (type) {
+    const specs = specGroups.value
+      .filter((group) => group.productTypeName === type.nameType)
+      .map((specGroup) => ({
+        ...specGroup,
+        attribute: productSpecifications.value.filter((ps) => ps.specificationTypeName === specGroup.specName),
+      }));
+
+    specGroupByProductType.value = specs;
+  } else {
+    specGroupByProductType.value = [];
+  }
+});
 // mounted
 
 onBeforeMount(async () => {
   await getAllCategory();
   await getAllSpec();
   await getAllProducType();
+  await getAllProducSpec();
   if (route.params.idProduct) {
     isEdit.value = true;
     await getProductById();

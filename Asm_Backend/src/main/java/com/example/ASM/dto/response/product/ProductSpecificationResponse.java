@@ -14,4 +14,3 @@ public class ProductSpecificationResponse {
     private String value;
     private String specificationTypeName; // specification
 }
-

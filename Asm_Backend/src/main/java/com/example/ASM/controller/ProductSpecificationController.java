@@ -1,19 +1,22 @@
 package com.example.ASM.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.example.ASM.dto.ApiResponse;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationRequest;
 import com.example.ASM.dto.request.ProductSpecification.ProductSpecificationUpdateRequest;
 import com.example.ASM.dto.response.product.ProductSpecificationResponse;
 import com.example.ASM.service.ProductSpecificationService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/product-specification")
@@ -58,8 +61,7 @@ public class ProductSpecificationController {
     @GetMapping("/Get")
     public ApiResponse<PageResponse<ProductSpecificationResponse>> getPaged(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
-    ) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         return ApiResponse.<PageResponse<ProductSpecificationResponse>>builder()
                 .code(1000)
                 .result(productSpecificationService.Get(page, size))
@@ -67,7 +69,8 @@ public class ProductSpecificationController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<ProductSpecificationResponse> update(@PathVariable("id") int id, @RequestBody ProductSpecificationUpdateRequest request) {
+    public ApiResponse<ProductSpecificationResponse> update(
+            @PathVariable("id") int id, @RequestBody ProductSpecificationUpdateRequest request) {
         return ApiResponse.<ProductSpecificationResponse>builder()
                 .code(1000)
                 .result(productSpecificationService.Update(id, request))
@@ -77,9 +80,6 @@ public class ProductSpecificationController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable("id") int id) {
         productSpecificationService.Delete(id);
-        return ApiResponse.<Void>builder()
-                .code(1000)
-                .message("Delete success!")
-                .build();
+        return ApiResponse.<Void>builder().code(1000).message("Delete success!").build();
     }
 }

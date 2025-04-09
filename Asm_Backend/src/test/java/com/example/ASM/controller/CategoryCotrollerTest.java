@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Category.CategoryRequest;
+import com.example.ASM.dto.request.Category.CategoryUpdateRequest;
 import com.example.ASM.dto.response.product.CategoryResponse;
 import com.example.ASM.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -153,7 +153,8 @@ class CategoryCotrollerTest {
 
         Mockito.when(categoryService.Update(id, updateRequest)).thenReturn(categoryResponse);
 
-        mockMvc.perform(delete("/category/" + id).contentType(MediaType.APPLICATION_JSON_VALUE)
+        mockMvc.perform(delete("/category/" + id)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(new ObjectMapper().writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(1000))
