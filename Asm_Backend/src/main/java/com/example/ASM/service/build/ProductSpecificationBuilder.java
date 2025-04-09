@@ -7,6 +7,7 @@ import com.example.ASM.entity.SpecificationType;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.ProductSpecificationMapper;
+import com.example.ASM.repository.ProductRepository;
 import com.example.ASM.repository.SpecificationTypeRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true)
 public class ProductSpecificationBuilder {
     SpecificationTypeRepository specificationTypeRepository;
+    ProductRepository productRepository;
     ProductSpecificationMapper productSpecificationMapper;
 
     public void processRequest(ProductSpecificationRequest request) {
@@ -33,6 +35,10 @@ public class ProductSpecificationBuilder {
         if (!specificationTypeRepository.existsById(request.getSpecificationTypeId())) {
             throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
         }
+
+        if (!productRepository.existsById(request.getProductID())) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }
     }
 
     public void processUpdateRequest(ProductSpecificationUpdateRequest request) {
@@ -42,6 +48,10 @@ public class ProductSpecificationBuilder {
 
         if (!specificationTypeRepository.existsById(request.getSpecificationTypeId())) {
             throw new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED);
+        }
+
+        if (!productRepository.existsById(request.getProductID())) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
     }
 }

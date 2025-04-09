@@ -28,4 +28,8 @@ public class ProductSpecification {
     @ManyToOne
     @JoinColumn(name = "SpecTypeId", nullable = false)
     private SpecificationType specificationType;
+
+    @ManyToOne
+    @JoinColumn(name = "ProductId", nullable = false)
+    private Product product;
 }
