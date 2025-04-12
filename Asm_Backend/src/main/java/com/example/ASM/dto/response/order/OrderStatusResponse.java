@@ -15,5 +15,5 @@ import lombok.experimental.FieldDefaults;
 public class OrderStatusResponse {
     int id;
     String statusName;
-    List<Order> orders;
+    List<OrderResponse> orders;
 }

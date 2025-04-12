@@ -28,8 +28,8 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/")
-    public ApiResponse<Boolean> create(@RequestBody @Valid ProductRequest request) {
-        return ApiResponse.<Boolean>builder()
+    public ApiResponse<ProductResponse> create(@RequestBody @Valid ProductRequest request) {
+        return ApiResponse.<ProductResponse>builder()
                 .code(1000)
                 .result(productService.Create(request))
                 .build();

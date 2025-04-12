@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Tạo Đơn Hàng Mới</h1>
+    <h1 class="h2">{{ isEdit ? "Chi tiết đơn hàng" : "Tạo đơn hàng mới" }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <a href="order-management.html" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left"></i> Quay lại </a>
     </div>
@@ -8,31 +8,17 @@
 
   <div class="card mb-4">
     <div class="card-body">
-      <form>
+      <div>
         <div class="row mb-3">
           <div class="col-md-12">
             <h6 class="fw-bold">Thông tin khách hàng</h6>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="mb-3">
-              <label for="customerName" class="form-label">Họ tên <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="customerName" required />
-            </div>
-            <div class="mb-3">
-              <label for="customerEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" id="customerEmail" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="customerPhone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-              <input type="tel" class="form-control" id="customerPhone" required />
-            </div>
-            <div class="mb-3">
-              <label for="customerType" class="form-label">Loại khách hàng</label>
-              <select class="form-select" id="customerType">
-                <option value="new">Khách hàng mới</option>
-                <option value="existing">Khách hàng hiện có</option>
+              <label for="customerType" class="form-label">Chọn khách hàng</label>
+              <select class="form-select" id="customerType" v-model="formOrder.user">
+                <option value="">Khách hàng mới</option>
+                <option v-for="u in listCustomer" :key="u.id" :value="u.id">{{ u.fullName }} - {{ u.email }} - {{ u.phoneNumber }}</option>
               </select>
             </div>
           </div>
@@ -45,7 +31,10 @@
           <div class="col-md-12">
             <div class="mb-3">
               <label for="shippingAddress" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="shippingAddress" required />
+              <select class="form-select" v-model="formOrder.address">
+                <option value="">Chọn địa chỉ</option>
+                <option v-for="address in listAddress" :key="address.id" :value="address.id">{{ address.username }} - {{ address.phoneNumber }} - {{ address.address }}</option>
+              </select>
             </div>
           </div>
         </div>
@@ -64,10 +53,19 @@
                       <th>Giá</th>
                       <th>Số lượng</th>
                       <th>Thành tiền</th>
-                      <th width="50"></th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody id="selectedProductsTable">
+                    <tr v-for="p in cart.filter((p) => !p.isDelete)" :key="p.id">
+                      <td>{{ p.productName }}</td>
+                      <td>{{ p.currentPrice }} đ</td>
+                      <td><input type="number" class="form-control w-50" min="1" v-model="p.quantity" @change="checkQuantity(p, p.stockQuantity)" /></td>
+                      <td>{{ p.currentPrice * p.quantity }}</td>
+                      <td>
+                        <button class="btn btn-danger" @click="removeFromCart(p)"><i class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
                     <!-- Sản phẩm đã chọn sẽ được thêm vào đây bằng JavaScript -->
                   </tbody>
                   <tfoot>
@@ -76,7 +74,7 @@
                         <strong>Tổng tiền</strong>
                       </td>
                       <td>
-                        <strong class="text-danger" id="totalAmount">0đ</strong>
+                        <strong class="text-danger" id="totalAmount">{{ totalAmount }}</strong>
                       </td>
                       <td></td>
                     </tr>
@@ -90,56 +88,17 @@
             <div class="card">
               <div class="card-header bg-light">Danh sách sản phẩm</div>
               <div class="card-body">
-                <div class="row" id="productList">
+                <div class="row overflow-auto" id="productList">
                   <!-- Sản phẩm 1 -->
-                  <div class="col-md-3 mb-3">
+                  <div class="col-md-2 mb-3" v-for="product in listProduct" :key="product.id">
                     <div class="card h-100">
-                      <img src="https://via.placeholder.com/150" class="card-img-top" alt="iPhone 14 Pro Max" />
+                      <img :src="product.images[0]?.url" class="card-img-top" alt="img" style="object-fit: contain; max-height: 100px" />
                       <div class="card-body">
-                        <h6 class="card-title">iPhone 14 Pro Max</h6>
-                        <p class="card-text text-decoration-line-through">28,999,999đ</p>
-                        <p class="card-text fw-bold text-danger">10,000,000đ</p>
-                        <p class="card-text small">Còn lại: 86</p>
-                        <button type="button" class="btn btn-primary w-100 add-product-btn" data-product-id="1" data-product-name="iPhone 14 Pro Max" data-product-price="10000000">Thêm</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Sản phẩm 2 -->
-                  <div class="col-md-3 mb-3">
-                    <div class="card h-100">
-                      <img src="https://via.placeholder.com/150" class="card-img-top" alt="Samsung Galaxy S23 Ultra" />
-                      <div class="card-body">
-                        <h6 class="card-title">Samsung Galaxy S23 Ultra</h6>
-                        <p class="card-text fw-bold text-danger">25,990,000đ</p>
-                        <p class="card-text small">Còn lại: 85</p>
-                        <button type="button" class="btn btn-primary w-100 add-product-btn" data-product-id="2" data-product-name="Samsung Galaxy S23 Ultra" data-product-price="25990000">Thêm</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Sản phẩm 3 -->
-                  <div class="col-md-3 mb-3">
-                    <div class="card h-100">
-                      <img src="https://via.placeholder.com/150" class="card-img-top" alt="Xiaomi 13 Pro" />
-                      <div class="card-body">
-                        <h6 class="card-title">Xiaomi 13 Pro</h6>
-                        <p class="card-text fw-bold text-danger">22,990,000đ</p>
-                        <p class="card-text small">Còn lại: 96</p>
-                        <button type="button" class="btn btn-primary w-100 add-product-btn" data-product-id="3" data-product-name="Xiaomi 13 Pro" data-product-price="22990000">Thêm</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Sản phẩm 4 -->
-                  <div class="col-md-3 mb-3">
-                    <div class="card h-100">
-                      <img src="https://via.placeholder.com/150" class="card-img-top" alt="MacBook Pro 14" />
-                      <div class="card-body">
-                        <h6 class="card-title">MacBook Pro 14</h6>
-                        <p class="card-text fw-bold text-danger">45,990,000đ</p>
-                        <p class="card-text small">Còn lại: 58</p>
-                        <button type="button" class="btn btn-primary w-100 add-product-btn" data-product-id="4" data-product-name="MacBook Pro 14" data-product-price="45990000">Thêm</button>
+                        <h6 class="card-title">{{ product.productName }}</h6>
+                        <p class="card-text fw-bold text-danger" v-if="product.salePrice">{{ product.salePrice }} đ</p>
+                        <p class="card-text fw-bold text-danger" v-else>{{ product.price }} đ</p>
+                        <p class="card-text small">Còn lại: {{ product.stockQuantity }}</p>
+                        <button type="button" class="btn btn-primary w-100 add-product-btn" @click="addToCart(product)">Thêm</button>
                       </div>
                     </div>
                   </div>
@@ -148,25 +107,9 @@
             </div>
           </div>
         </div>
-
+        <!-- 
         <div class="row p-3">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="paymentMethod" class="form-label">Phương thức thanh toán <span class="text-danger">*</span></label>
-              <select class="form-select" id="paymentMethod" required>
-                <option value="">Chọn phương thức thanh toán</option>
-                <option value="cod">Thanh toán khi nhận hàng</option>
-                <option value="bank">Chuyển khoản ngân hàng</option>
-                <option value="card">Thẻ tín dụng</option>
-                <option value="ewallet">Ví điện tử</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="orderNote" class="form-label">Ghi chú</label>
-              <textarea class="form-control" id="orderNote" rows="3"></textarea>
-            </div>
-          </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="card">
               <div class="card-header bg-light">
                 <h6 class="mb-0">Tổng quan đơn hàng</h6>
@@ -195,23 +138,232 @@
               </div>
             </div>
           </div>
-        </div>
-        <button class="btn btn-success">Tạo đơn hàng</button>
-      </form>
+        </div> -->
+        <button class="btn btn-success" @click="saveOrder">{{ isEdit ? "Cập nhật" : "Tạo mới" }}</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
 // khai báo biến
+const listOrderStatus = ref([]);
+const listCustomer = ref([]);
+const listAddress = ref([]);
+const listProduct = ref([]);
+const cart = ref([]);
+const formOrder = ref({
+  user: "",
+  totalAmount: "",
+  address: "",
+  orderStatus: 1,
+});
+const router = useRouter();
+const route = useRoute();
+const isEdit = ref(false);
 // methods
+const getAllCustomer = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/user/List");
+    listCustomer.value = Array.from(resp.data.result).filter((user) => user.role === false);
+    console.log(listCustomer.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getAddressByUser = async () => {
+  try {
+    const userId = formOrder.value.user;
+    console.log(userId);
+    if (!userId) return;
+
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/address/" + userId);
+    listAddress.value = resp.data.result.data;
+    console.log("addrss", listAddress.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllProduct = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/product/List");
+    listProduct.value = resp.data.result;
+    console.log("product", listProduct.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getOrderDetailById = async (idOrder) => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/orders-detail/GetByOrderId/" + idOrder);
+    cart.value = resp.data.result.map((item) => {
+      const matchingProduct = listProduct.value.find((product) => product.productName === item.productName);
+      return {
+        ...item,
+        productId: matchingProduct ? matchingProduct.id : null,
+        isDelete: false,
+        isCreate: false,
+      };
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getOrderById = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/orders/" + route.params.idOrder);
+    formOrder.value = {
+      id: resp.data.result.id,
+      user: resp.data.result.user,
+      totalAmount: resp.data.result.totalAmount,
+      address: resp.data.result.address,
+      orderStatus: resp.data.result.orderStatus,
+      orderDetails: cart.value,
+    };
+    console.log("order by id", formOrder.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrderStatus = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/order-status/List");
+    listOrderStatus.value = resp.data.result.map((item) => ({
+      id: item.id,
+      statusName: item.statusName,
+    }));
+    console.log("order status", listOrderStatus.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const checkQuantity = (item, stockQuantity) => {
+  if (item.quantity > stockQuantity) {
+    alert(`Chỉ còn ${stockQuantity} sản phẩm trong kho`);
+    item.quantity = stockQuantity;
+  }
+
+  if (item.quantity < 1 || !item.quantity) {
+    item.quantity = 1;
+  }
+};
 
 // get
 
 // create
+const addToCart = (product) => {
+  const index = cart.value.findIndex((item) => item.productId === product.id);
 
+  if (product.stockQuantity === 0) {
+    alert("Không còn hàng hóa nây trong kho");
+    return;
+  }
+
+  if (index !== -1) {
+    cart.value[index].quantity += 1;
+    cart.value[index].isDelete = false;
+    checkQuantity(cart.value[index], product.stockQuantity);
+    console.log("cart", cart.value);
+    return;
+  }
+
+  cart.value.push({
+    currentPrice: product.price ? product.price : product.salePrice,
+    productId: product.id,
+    productName: product.productName,
+    quantity: 1,
+    stockQuantity: product.stockQuantity,
+    isDelete: false,
+    isCreate: isEdit.value ? true : false,
+    orderId: isEdit ? route.params.idOrder : null,
+  });
+  console.log("cart", cart.value);
+};
+
+const removeFromCart = (product) => {
+  const index = cart.value.findIndex((item) => item.productId === product.productId);
+  if (index === -1) {
+    console.log("not found product");
+    return;
+  }
+  cart.value[index].isDelete = true;
+  cart.value[index].quantity = 0;
+};
+
+const saveOrder = async () => {
+  let resp;
+  try {
+    if (!isEdit.value) {
+      const newOrder = {
+        user: formOrder.value.user,
+        totalAmount: totalAmount.value,
+        address: formOrder.value.address,
+        orderStatus: 1,
+        orderDetails: cart.value.filter((item) => !item.isDelete),
+      };
+      console.log(newOrder);
+      resp = await axios.post("http://localhost:8080/asm/api/v1/orders/", newOrder);
+      if (resp.data.result) {
+        alert("Thành công");
+        router.replace("/admin/orders/");
+      }
+    } else {
+      const matchedStatus = listOrderStatus.value.find((item) => item.statusName === formOrder.value.orderStatus);
+      if (matchedStatus.id != 1) {
+        alert("Đơn đã được xác nhận nên không có quyền cập nhập");
+        return;
+      }
+      const updateOrder = {
+        user: formOrder.value.user,
+        totalAmount: totalAmount.value,
+        address: formOrder.value.address,
+        orderStatus: matchedStatus ? matchedStatus.id : null,
+      };
+      await axios.put(`http://localhost:8080/asm/api/v1/orders/${route.params.idOrder}`, updateOrder);
+      await updateOrderDetail();
+      console.log(updateOrder);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // update
+const updateOrderDetail = async () => {
+  try {
+    const updates = cart.value.filter((item) => !item.isDelete && item.quantity > 0 && !item.isCreate);
+    const deletes = cart.value.filter((item) => item.isDelete && item.quantity === 0);
+    const creates = cart.value.filter((item) => item.isCreate && !item.isDelete);
+    console.log("updates", updates);
+    console.log("deletes", deletes);
+    console.log("creates", creates);
 
+    if (creates.length > 0) {
+      for (let data of creates) {
+        await axios.post("http://localhost:8080/asm/api/v1/orders-detail/", data);
+      }
+    }
+
+    if (deletes.length > 0) {
+      for (let data of deletes) {
+        await axios.delete(`http://localhost:8080/asm/api/v1/orders-detail/${data.id}`);
+      }
+    }
+
+    for (let data of updates) {
+      // console.log(data);
+      await axios.put(`http://localhost:8080/asm/api/v1/orders-detail/${data.id}`, data);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // delete
 
 // pagination
@@ -219,7 +371,32 @@
 // search
 
 // computed
+const totalAmount = computed(() => {
+  return cart.value.filter((g) => !g.isDelete).reduce((total, item) => total + item.currentPrice * item.quantity, 0);
+});
 // watch
+watch(
+  () => formOrder.value.user,
+  (newUser, oldUser) => {
+    if (newUser) {
+      getAddressByUser();
+    }
+  }
+);
+
 // mounted
+onBeforeMount(async () => {
+  await getAllCustomer();
+  await getAllProduct();
+  if (route.params.idOrder) {
+    isEdit.value = true;
+    await getAllOrderStatus();
+    await getOrderDetailById(route.params.idOrder);
+    await getOrderById();
+  }
+});
+onMounted(async () => {
+  console.log("da chuyen huojg");
+});
 </script>
 <style lang="scss" scoped></style>

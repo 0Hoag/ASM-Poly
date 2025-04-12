@@ -3,6 +3,7 @@ package com.example.ASM.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.ASM.dto.response.product.ProductResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class ProductTypeService {
     ProductTypeMapper mapper;
     ProductTypeRepository repo;
 
-    public boolean Create(ProductTypeRequest request) {
+    public ProductTypeResponse Create(ProductTypeRequest request) {
         if (request.getNameType().isEmpty()) {
             throw new AppException(ErrorCode.MISSING_INPUT);
         }
@@ -39,12 +40,13 @@ public class ProductTypeService {
         }
 
         try {
-            repo.save(mapper.toProductType(request));
+            var productType = repo.save(mapper.toProductType(request));
+            return mapper.toProductTypeResponse(productType);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
 
-        return true;
+
     }
 
     public ProductTypeResponse Detail(int id) {

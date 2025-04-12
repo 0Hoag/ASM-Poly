@@ -1,27 +1,27 @@
 package com.example.ASM.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
+import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.OrderMapper;
 import com.example.ASM.repository.OrderRepository;
 import com.example.ASM.service.build.OrderBuilder;
-
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,17 +31,28 @@ public class OrderService {
     OrderRepository repo;
     OrderMapper mapper;
     OrderBuilder builder;
-
+    OrderDetailService orderDetailService;
+    @Transactional
     public Boolean Create(OrderRequest request) {
         builder.processRequest(request);
 
         try {
-            repo.save(builder.buildOrder(request));
+
+            var savedOrder = repo.save(builder.buildOrder(request));
+            if (request.getOrderDetails() != null && !request.getOrderDetails().isEmpty()) {
+                for (OrderDetailRequest detailRequest : request.getOrderDetails()) {
+                    // Gán orderId cho từng detailRequest
+                    detailRequest.setOrderId(savedOrder.getId());
+                    orderDetailService.Create(detailRequest);  // Gọi lại service bạn đã viết
+                }
+            }
+
+
+//            return mapper.toOrderResponse(savedOrder);
+            return true;
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
-
-        return true;
     }
 
     public OrderResponse Detail(int id) {

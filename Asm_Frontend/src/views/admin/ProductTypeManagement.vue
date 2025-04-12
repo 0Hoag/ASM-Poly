@@ -119,12 +119,24 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <div>
             <div class="mb-3">
               <label for="productTypeName" class="form-label">Tên loại hàng</label>
               <input type="text" class="form-control" id="productTypeName" v-model="productType.nameType" required />
             </div>
-          </form>
+            <div class="my-3">
+              <label for="editProductTypeName" class="form-label">Nhóm thông số cấu hình</label>
+              <div class="bg-light mb-3 p-3" v-for="(group, index) in specGroups.filter((g) => !g.isDelete)" :key="index">
+                <div class="">
+                  <input type="text" v-model="group.specName" class="form-control spec-title my-3" placeholder="Tên thông số (VD: Cấu hình & Bộ nhớ)" />
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-danger btn-remove-group" @click="removeSpecGroup(group)">Xóa nhóm</button>
+                </div>
+              </div>
+            </div>
+            <button @click="addSpecGroup" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm nhóm thông số</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -143,12 +155,24 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <div>
             <div class="mb-3">
               <label for="editProductTypeName" class="form-label">Tên loại hàng</label>
               <input type="text" class="form-control" id="editProductTypeName" v-model="productType.nameType" required />
             </div>
-          </form>
+            <div class="my-3">
+              <label for="editProductTypeName" class="form-label">Nhóm thông số cấu hình</label>
+              <div class="bg-light mb-3 p-3" v-for="(group, index) in specGroups.filter((g) => !g.isDelete)" :key="index">
+                <div class="">
+                  <input type="text" v-model="group.specName" class="form-control spec-title my-3" placeholder="Tên thông số (VD: Cấu hình & Bộ nhớ)" />
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-danger btn-remove-group" @click="removeSpecGroup(group)">Xóa nhóm</button>
+                </div>
+              </div>
+            </div>
+            <button @click="addSpecGroup" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm nhóm thông số</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -170,13 +194,24 @@ const limit = ref(5);
 const limits = ref([5, 10, 15, 25]);
 const currentPage = ref(1);
 const keyword = ref("");
+const isEdit = ref(false);
 const productType = ref({
   id: "",
   nameType: "",
 });
 const totalPage = ref(null);
+const allSpecGroup = ref([]);
+const specGroups = ref([{ id: null, isDelete: false, productType: null, specName: "" }]);
 // methods
-
+const getAllSpecGroup = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
+    allSpecGroup.value = resp.data.result.map((spec) => ({ ...spec, isDelete: false }));
+    console.log("spec group", allSpecGroup.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // getAllProductType
 const getAllProductType = async () => {
   try {
@@ -230,10 +265,16 @@ const createProductType = async () => {
     const newProductType = { ...productType.value };
     const resp = await axios.post("http://localhost:8080/asm/api/v1/productType/", newProductType);
     if (resp.data.result) {
+      const newSpec = specGroups.value.filter((sp) => sp.id == null && sp.specName !== "" && !sp.isDelete).map((sp) => ({ ...sp, productType: resp.data.result.id }));
+      console.log("newSpec", newSpec);
+      for (let sp of newSpec) {
+        await axios.post("http://localhost:8080/asm/api/v1/specificationType/", sp);
+      }
       await pageinatedProductType();
     }
     alert("Thêm thành công");
     productType.value = { id: "", nameType: "" };
+    specGroups.value = [{ id: "", isDelete: false, productType: null, specName: "" }];
     console.log("create", productTypes.value);
   } catch (error) {
     console.log(error.message);
@@ -241,14 +282,36 @@ const createProductType = async () => {
 };
 const openEditModal = (selectedProducType) => {
   productType.value = { ...selectedProducType };
+  const filtered = allSpecGroup.value.filter((group) => group.productTypeName === productType.value.nameType);
+  console.log("filtered", filtered);
+  if (filtered.length > 0) {
+    specGroups.value = filtered;
+    console.log("specGroups", specGroups.value);
+  } else {
+    specGroups.value = [
+      {
+        id: "",
+        isDelete: "",
+        productSpecifications: [],
+        productTypeName: productType.value.nameType || "",
+        specName: "",
+      },
+    ];
+  }
 };
 const closeEditModal = () => {
   productType.value = { id: "", categoryName: "", parentCategory: "" };
+  specGroups.value = specGroups.value.map((sp) => (sp.isDelete = false));
 };
 const editProductType = async () => {
   try {
     const { id, nameType } = { ...productType.value };
     const resp = await axios.put(`http://localhost:8080/asm/api/v1/productType/${id}`, { nameType });
+    if (resp.data.result) {
+      const specUpdate = specGroups.value.filter((sp) => sp.id != null && sp.specName !== "" && !sp.isDelete).map((sp) => ({ ...sp, productType: id }));
+      for (let sp of specUpdate) await axios.put("http://localhost:8080/asm/api/v1/specificationType/" + sp.id, sp);
+      await pageinatedProductType();
+    }
     const index = filteredProductTypes.value.findIndex((productType) => productType.id === id);
     console.log(id, index);
 
@@ -278,9 +341,9 @@ const deleteProductType = async (id) => {
       return;
     }
     await axios.delete(`http://localhost:8080/asm/api/v1/productType/${id}`);
-
-    productTypes.value = productTypes.value.filter((productType) => productType.id !== id);
-    filteredProductTypes.value = filteredProductTypes.value.filter((productType) => productType.id !== id);
+    await pageinatedProductType();
+    // productTypes.value = productTypes.value.filter((productType) => productType.id !== id);
+    // filteredProductTypes.value = filteredProductTypes.value.filter((productType) => productType.id !== id);
     alert("Xóa thành công");
   } catch (error) {
     console.log(error.message);
@@ -295,6 +358,23 @@ const findByitle = () => {
   }
   currentPage.value = 1;
 };
+
+// Spec Group
+const addSpecGroup = () => {
+  const newSpec = { id: null, specName: "", isDelete: false, productSpecifications: [] };
+  specGroups.value.push(newSpec);
+  console.log("add specGroups", specGroups.value);
+};
+
+const removeSpecGroup = (group) => {
+  console.log("group", group);
+  if (group.productSpecifications && group.productSpecifications.length > 0) {
+    alert("Nhóm thông số kỹ thuật này có chứa dữ liệu liên quan nên không thể xóa!");
+    return;
+  }
+  group.isDelete = true;
+};
+
 // computed
 
 // watch
@@ -302,11 +382,33 @@ watch([currentPage, limit], () => {
   pageinatedProductType();
 });
 
+// watch(
+//   () => productType.value.id,
+//   (typeId) => {
+//     console.log("change product type");
+//     const type = productTypes.value.find((t) => t.id === typeId);
+//     if (isEdit.value) {
+//       specGroups.value = allSpecGroup.value.filter((group) => group.productTypeName === type.nameType);
+//     } else {
+//       specGroups.value = [
+//         {
+//           id: "",
+//           isDelete: false,
+//           productTypeId: null,
+//           specName: "",
+//         },
+//       ];
+//     }
+//     console.log(specGroups.value);
+//   }
+// );
+
 // mounted
 
 onBeforeMount(async () => {
   await getAllProductType();
   await pageinatedProductType();
+  await getAllSpecGroup();
 });
 
 onMounted(async () => {

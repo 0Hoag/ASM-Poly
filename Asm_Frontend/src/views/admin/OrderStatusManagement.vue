@@ -106,12 +106,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>#ORD-0030</td>
-                <td>Nguyễn Văn X</td>
+              <tr v-for="order in listOrder" :key="order.id">
+                <td>{{ order.id }}</td>
+                <td>{{ order.fullName }}</td>
                 <td>
                   <div class="dropdown">
-                    <button class="btn btn-sm dropdown-toggle badge bg-secondary" type="button" data-bs-toggle="dropdown">Chờ xác nhận</button>
+                    <button class="btn btn-sm dropdown-toggle badge bg-secondary" type="button" data-bs-toggle="dropdown">{{ order.orderStatus }}</button>
                     <ul class="dropdown-menu">
                       <li>
                         <button class="dropdown-item" onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')">Chờ xác nhận</button>
@@ -141,49 +141,6 @@
                     <ul class="dropdown-menu">
                       <li>
                         <a class="dropdown-item" href="#"><i class="bi bi-check-circle"></i> Xác nhận</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Hủy</a>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>#ORD-0029</td>
-                <td>Trần Thị Y</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm dropdown-toggle badge bg-info" type="button" data-bs-toggle="dropdown">Đã xác nhận</button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')">Chờ xác nhận</button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')">Đã xác nhận</button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')">Đang chuẩn bị</button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Đang giao', 'bg-warning')">Đang giao</button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Hoàn thành', 'bg-success')">Hoàn thành</button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" onclick="changeStatus(this, 'Đã hủy', 'bg-danger')">Đã hủy</button>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-                <td>29/03/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Cập nhật</button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a class="dropdown-item" href="#"><i class="bi bi-box-seam"></i> Đang chuẩn bị</a>
                       </li>
                       <li>
                         <a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Hủy</a>
@@ -273,11 +230,48 @@
 </template>
 
 <script setup>
+import axios from "axios";
+import { onBeforeMount, ref } from "vue";
+
 // khai báo biến
 // methods
-
+const listOrderStatus = ref([]);
+const listOrder = ref([]);
+const listCustomer = ref([]);
 // get
+const getAllCustomer = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/user/List");
+    listCustomer.value = Array.from(resp.data.result).filter((user) => user.role === false);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrderStatus = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/order-status/List");
+    listOrderStatus.value = resp.data.result;
+    console.log("order status", listOrderStatus.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrder = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/orders/List");
+    listOrder.value = resp.data.result.map((item) => {
+      const user = listCustomer.value.find((customer) => customer.id == item.user);
 
+      return {
+        ...item,
+        fullName: user ? user.fullName : "",
+      };
+    });
+    totalPage.value = resp.data.result.totalPages;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // create
 
 // update
@@ -291,6 +285,11 @@
 // computed
 // watch
 // mounted
+onBeforeMount(async () => {
+  await getAllOrderStatus();
+  await getAllCustomer();
+  await getAllOrder();
+});
 </script>
 <style scoped>
 .status-icon {

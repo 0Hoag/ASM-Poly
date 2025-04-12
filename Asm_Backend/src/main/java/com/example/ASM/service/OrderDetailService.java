@@ -1,14 +1,5 @@
 package com.example.ASM.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailUpdateRequest;
@@ -22,8 +13,15 @@ import com.example.ASM.mapper.OrderDetailMapper;
 import com.example.ASM.repository.OrderDetailRepository;
 import com.example.ASM.repository.OrderRepository;
 import com.example.ASM.repository.ProductRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,22 +41,34 @@ public class OrderDetailService {
                 .findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
+        int quantityToAdd = request.getQuantity();
+
         Optional<OrderDetail> existingDetail =
                 repo.findByOrderIdAndProductId(request.getOrderId(), request.getProductId());
         if (existingDetail.isPresent()) {
             OrderDetail orderDetail = existingDetail.get();
-            orderDetail.setQuantity(orderDetail.getQuantity() + request.getQuantity());
+            orderDetail.setQuantity(orderDetail.getQuantity() + quantityToAdd);
             repo.save(orderDetail);
-            return true;
+        } else {
+            OrderDetail newOrderDetail = new OrderDetail();
+            newOrderDetail.setOrder(order);
+            newOrderDetail.setProduct(product);
+            newOrderDetail.setQuantity(quantityToAdd);
+            newOrderDetail.setCurrentPrice(product.getPrice());
+
+            repo.save(newOrderDetail);
         }
 
-        OrderDetail newOrderDetail = new OrderDetail();
-        newOrderDetail.setOrder(order);
-        newOrderDetail.setProduct(product);
-        newOrderDetail.setQuantity(request.getQuantity());
-        newOrderDetail.setCurrentPrice(product.getPrice());
+        // Tính số lượng sản phẩm
 
-        repo.save(newOrderDetail);
+
+        int newStock = product.getStockQuantity() - quantityToAdd;
+        if (newStock < 0) {
+            throw new AppException(ErrorCode.OUT_OF_STOCK);
+        }
+        product.setStockQuantity(newStock);
+        product.setSoldQuantity(product.getSoldQuantity() + quantityToAdd);
+        productRepository.save(product);
 
         return true;
     }
@@ -105,16 +115,53 @@ public class OrderDetailService {
             throw new AppException(ErrorCode.INVALID_QUANTITY);
         }
 
-        orderDetail.setQuantity(request.getQuantity());
+        Product product = orderDetail.getProduct();
+
+        int oldQuantity = orderDetail.getQuantity();
+        int newQuantity = request.getQuantity();
+        int difference = newQuantity - oldQuantity;
+
+        // Nếu tăng số lượng
+        if (difference > 0) {
+            if (product.getStockQuantity() < difference) {
+                throw new AppException(ErrorCode.OUT_OF_STOCK);
+            }
+            product.setStockQuantity(product.getStockQuantity() - difference);
+            product.setSoldQuantity(product.getSoldQuantity() + difference);
+        }
+
+        // Nếu giảm số lượng
+        else if (difference < 0) {
+            product.setStockQuantity(product.getStockQuantity() + Math.abs(difference));
+            product.setSoldQuantity(product.getSoldQuantity() - Math.abs(difference));
+        }
+
+        // Cập nhật lại chi tiết đơn hàng
+        orderDetail.setQuantity(newQuantity);
+
+        // Lưu lại thay đổi
+        productRepository.save(product);
         repo.save(orderDetail);
+
+//        orderDetail.setQuantity(request.getQuantity());
+//        repo.save(orderDetail);
         return mapper.toOrderDetailResponse(orderDetail);
     }
 
     @Transactional
     public void Delete(int orderDetailId) {
-        if (!repo.existsById(orderDetailId)) {
-            throw new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND);
-        }
+
+        OrderDetail orderDetail = repo.findById(orderDetailId)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
+
+        Product product = orderDetail.getProduct();
+
+        // Trả lại hàng về kho
+        product.setStockQuantity(product.getStockQuantity() + orderDetail.getQuantity());
+        product.setSoldQuantity(product.getSoldQuantity() - orderDetail.getQuantity());
+
+        // Lưu lại thay đổi
+        productRepository.save(product);
         repo.deleteById(orderDetailId);
     }
 }

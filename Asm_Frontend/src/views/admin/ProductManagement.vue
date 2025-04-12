@@ -69,7 +69,7 @@
               </td>
               <td>{{ (currentPage - 1) * limit + index + 1 }}</td>
               <td>
-                <img :src="product.images[0].url" class="product-image" :alt="product.title" width="100" />
+                <img :src="product.images[0]?.url" class="product-image" :alt="product.description" width="100" />
               </td>
               <td>{{ product.productName }}</td>
               <td>{{ product.category }}</td>
@@ -267,7 +267,7 @@ onBeforeMount(async () => {
 });
 const deleteProduct = async (id) => {
   try {
-    const resp = await axios.delete("https://api.escuelajs.co/api/v1/products/" + id);
+    const resp = await axios.delete("http://localhost:8080/asm/api/v1/product/" + id);
     products.value = products.value.filter((product) => product.id !== id);
     filteredProducts.value = filteredProducts.value.filter((product) => product.id !== id);
   } catch (error) {

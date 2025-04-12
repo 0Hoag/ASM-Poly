@@ -69,131 +69,32 @@
               <th>Khách hàng <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th>Ngày đặt <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th>Tổng tiền <i class="bi bi-arrow-down-up sort-icon"></i></th>
-              <th>
-                Phương thức thanh toán
-                <i class="bi bi-arrow-down-up sort-icon"></i>
-              </th>
               <th>Trạng thái <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th width="150">Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr v-for="order in listOrder" :key="order.id">
               <td>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" />
                 </div>
               </td>
-              <td>#ORD-0025</td>
-              <td>Nguyễn Văn A</td>
-              <td>25/03/2023</td>
-              <td>2,500,000 ₫</td>
-              <td>Thanh toán khi nhận hàng</td>
-              <td><span class="badge bg-success">Hoàn thành</span></td>
-              <td class="action-buttons">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editOrderModal">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
+              <td>{{ order.id }}</td>
+              <td>{{ order.fullName }}</td>
+              <td>{{ order.createdAt }}</td>
+              <td>{{ order.totalAmount }}</td>
               <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" />
-                </div>
+                <span class="badge bg-success">{{ order.orderStatus }}</span>
               </td>
-              <td>#ORD-0024</td>
-              <td>Trần Thị B</td>
-              <td>24/03/2023</td>
-              <td>1,800,000 ₫</td>
-              <td>Chuyển khoản ngân hàng</td>
-              <td><span class="badge bg-warning text-dark">Đang giao</span></td>
               <td class="action-buttons">
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
                   <i class="bi bi-eye"></i>
                 </button>
-                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editOrderModal">
+                <router-link :to="{ name: 'edit-order', params: { idOrder: order.id } }" class="btn btn-warning btn-sm">
                   <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" />
-                </div>
-              </td>
-              <td>#ORD-0023</td>
-              <td>Lê Văn C</td>
-              <td>23/03/2023</td>
-              <td>3,200,000 ₫</td>
-              <td>Ví điện tử</td>
-              <td><span class="badge bg-info">Đã xác nhận</span></td>
-              <td class="action-buttons">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editOrderModal">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" />
-                </div>
-              </td>
-              <td>#ORD-0022</td>
-              <td>Phạm Thị D</td>
-              <td>22/03/2023</td>
-              <td>950,000 ₫</td>
-              <td>Thẻ tín dụng</td>
-              <td><span class="badge bg-danger">Đã hủy</span></td>
-              <td class="action-buttons">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editOrderModal">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" />
-                </div>
-              </td>
-              <td>#ORD-0021</td>
-              <td>Hoàng Văn E</td>
-              <td>21/03/2023</td>
-              <td>4,500,000 ₫</td>
-              <td>Thanh toán khi nhận hàng</td>
-              <td><span class="badge bg-success">Hoàn thành</span></td>
-              <td class="action-buttons">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editOrderModal">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">
+                </router-link>
+                <button class="btn btn-danger btn-sm" @click="deleteOrder(order.id)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -205,30 +106,32 @@
       <div class="d-flex justify-content-between align-items-center mt-3">
         <div>
           <span>Hiển thị 1-5 của 25 mục</span>
-          <select class="form-select form-select-sm d-inline-block ms-2" style="width: auto">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+          <select v-model="limit" @change="changePerPage" class="form-select form-select-sm d-inline-block ms-2" style="width: auto">
+            <option :value="val" v-for="val in limits" :key="val">{{ val }}</option>
           </select>
         </div>
         <nav aria-label="Page navigation">
           <ul class="pagination">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Previous">
+            <li class="page-item">
+              <button @click="currentPage = 1" class="page-link">
                 <span aria-hidden="true">&laquo;</span>
-              </a>
+              </button>
+            </li>
+            <li class="page-item">
+              <button @click="prevPage" :disabled="currentPage === 1" class="page-link">
+                <span aria-hidden="true">&#8826;</span>
+              </button>
             </li>
             <li class="page-item active">
-              <a class="page-link" href="#">1</a>
+              <a class="page-link">{{ currentPage }} / {{ totalPage }}</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+              <button @click="nextPage" :disabled="currentPage === totalPage" class="page-link">&#8827;</button>
+            </li>
+            <li class="page-item">
+              <button @click="currentPage = totalPage" class="page-link">
                 <span aria-hidden="true">&raquo;</span>
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
@@ -238,24 +141,99 @@
 </template>
 
 <script setup>
+import axios from "axios";
+import { onBeforeMount, ref, watch } from "vue";
+
 // khai báo biến
+const listOrder = ref([]);
+const listCustomer = ref([]);
+const limits = ref([5, 10, 15, 25]);
+const limit = ref(5);
+const currentPage = ref(1);
+const totalPage = ref(null);
 // methods
 
 // get
+const getAllCustomer = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/user/List");
+    listCustomer.value = Array.from(resp.data.result).filter((user) => user.role === false);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
+const getAllOrder = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/orders/Get", {
+      params: {
+        size: limit.value,
+        page: currentPage.value,
+      },
+    });
+    listOrder.value = resp.data.result.data.map((item) => {
+      const user = listCustomer.value.find((customer) => customer.id == item.user);
+
+      return {
+        ...item,
+        fullName: user ? user.fullName : "",
+      };
+    });
+    totalPage.value = resp.data.result.totalPages;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // create
 
 // update
 
 // delete
+const deleteOrder = async (id) => {
+  try {
+    const order = listOrder.value.find((item) => item.id === id);
+    if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) {
+      const resp = await axios.delete(`http://localhost:8080/asm/api/v1/orders/${id}`);
 
+      alert("Xóa thành công");
+      await getAllOrder();
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // pagination
 
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+const nextPage = () => {
+  if (currentPage.value < totalPage.value) {
+    currentPage.value++;
+    console.log(currentPage.value);
+  }
+};
+
+const changePerPage = () => {
+  const maxPage = totalPage.value; // Tính số trang hợp lệ mới
+  if (currentPage.value > maxPage) {
+    currentPage.value = maxPage;
+  }
+};
 // search
 
 // computed
 // watch
+watch([currentPage, limit], () => {
+  getAllOrder();
+});
 // mounted
+onBeforeMount(async () => {
+  await getAllCustomer();
+  await getAllOrder();
+});
 </script>
 
 <style lang="scss" scoped></style>

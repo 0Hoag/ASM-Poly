@@ -71,24 +71,24 @@
           <div class="mb-3">
             <label for="productType" class="form-label">Loại sản phẩm</label>
             <select class="form-select" id="productType" v-model="product.productType">
-              <option value="">Chọn loại sản phẩm</option>
+              <option :value="null">Chọn loại sản phẩm</option>
               <option :value="type.id" v-for="type in productTypes" :key="type.id">{{ type.nameType }}</option>
             </select>
           </div>
 
           <!-- Tên của thông số kỹ thuật -->
-          <div class="bg-light my-3 p-3" v-if="specGroupByProductType.length > 0" v-for="(group, index) in specGroupByProductType" :key="index">
+          <div class="bg-light my-3 p-3" v-for="(group, index) in specGroups.filter((g) => !g.isDelete)" :key="index">
             <div class="row">
               <div class="col-8">
                 <input type="text" v-model="group.specName" class="form-control spec-title" placeholder="Tên thông số (VD: Cấu hình & Bộ nhớ)" />
               </div>
-              <div class="col-4">
-                <button type="button" class="btn btn-danger btn-remove-group" @click="removeSpecGroup(index)">Xóa nhóm</button>
-              </div>
+              <!-- <div class="col-4">
+                <button type="button" class="btn btn-danger btn-remove-group" @click="group.isDelete = true">Xóa nhóm</button>
+              </div> -->
             </div>
             <!-- Danh sách thuộc tính -->
             <div class="mt-2">
-              <div class="row my-2" v-for="(attr, attrIndex) in group.attribute" :key="attrIndex">
+              <div class="row my-2" v-for="(attr, attrIndex) in group.specs.filter((g) => !g.isDelete)" :key="attrIndex">
                 <div class="col-4">
                   <input type="text" class="form-control attr-name" placeholder="Tên thuộc tính (VD: RAM)" v-model="attr.name" />
                 </div>
@@ -96,15 +96,17 @@
                   <input type="text" class="form-control attr-value" placeholder="Giá trị (VD: 8GB)" v-model="attr.value" />
                 </div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-danger" @click="removeAttribute(group, attrIndex)">Xóa</button>
+                  <button type="button" class="btn btn-danger" @click="attr.isDelete = true">Xóa</button>
                 </div>
               </div>
               <!-- Nút thêm thuộc tính -->
-              <button type="button" class="btn btn-primary mt-2" @click="addAttribute(group)"><i class="bi bi-plus-circle"></i> Thêm thuộc tính</button>
+              <button type="button" class="btn btn-primary mt-2" @click="addProductSpec(group)"><i class="bi bi-plus-circle"></i> Thêm thuộc tính</button>
             </div>
           </div>
           <hr />
-          <button @click="addSpecGroup" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm nhóm thông số</button>
+          <button @click="saveProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm thuộc tính vào db</button>
+          <button @click="deleteProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Xóa thuộc tính vào db</button>
+          <button @click="updateProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Update thuộc tính vào db</button>
         </div>
         <!-- Hình ảnh -->
         <div class="mb-3">
@@ -152,27 +154,23 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const productTypes = ref([]);
-const specGroups = ref([
-  {
-    specName: "",
-    productTypeName: "",
-    productSpecifications: [],
-  },
-]);
-const specGroupByProductType = ref([]);
+const allSpecGroup = ref([]);
+const specGroups = ref([]);
 
 const product = ref({
   category: {
     id: "",
   },
   images: [],
+  productType: null,
 });
-const productSpecifications = ref([]);
-const productSpecBySpecGroup = ref([]);
+// const productSpec = ref([]);
+const productSpec = ref([]);
 const categories = ref({});
 const isEdit = ref(false);
 const fileInput = ref(null);
 const deletedImg = ref([]);
+const currentIdProduct = route.params.idProduct || null;
 
 // methods
 
@@ -197,7 +195,6 @@ const getProductById = async () => {
 
     product.value.category = categoryId.id;
     product.value.productType = producTypeId.id;
-    console.log(product.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -212,11 +209,29 @@ const getAllCategory = async () => {
   }
 };
 
-const getAllSpec = async () => {
+const getAllSpecGroup = async () => {
   try {
     const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
-    specGroups.value = resp.data.result;
-    console.log(specGroups.value);
+    allSpecGroup.value = resp.data.result.map((spec) => ({ ...spec, isDelete: false, specs: [] }));
+    console.log("spec group", allSpecGroup.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllProductSpec = async () => {
+  try {
+    const resp = await axios.get("http://localhost:8080/asm/api/v1/product-specification/List");
+    productSpec.value = resp.data.result.map((spec) => {
+      const matchingGroup = allSpecGroup.value.find((group) => group.specName === spec.specificationTypeName);
+
+      return {
+        ...spec,
+        specificationTypeId: matchingGroup ? matchingGroup.id : null,
+        isDelete: false,
+      };
+    });
+    // productSpec.value = resp.data.result.map((spec) => ({ ...spec, isDelete: false }));
+    console.log("product spec", productSpec.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -231,21 +246,12 @@ const getAllProducType = async () => {
   }
 };
 
-const getAllProducSpec = async () => {
-  try {
-    const resp = await axios.get("http://localhost:8080/asm/api/v1/product-specification/List");
-    productSpecifications.value = resp.data.result;
-    console.log("productSpec", productSpecifications.value);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 const categoryChange = () => {
   console.log(product.value);
 };
 
 // update sản phẩm
-const updateProduct = async () => {
+const updateImage = async () => {
   if (deletedImg.value.length) {
     deleteImage();
   }
@@ -258,49 +264,105 @@ const updateProduct = async () => {
 const saveProduct = async () => {
   try {
     let resp;
+
     if (isEdit.value) {
-      resp = await axios.put("https://localhost:8080/asm/api/v1/product/" + route.params.idProduct, product.value);
+      // Update sản phẩm
+      resp = await axios.put(`http://localhost:8080/asm/api/v1/product/${currentIdProduct}`, product.value);
 
-      alert("Sản phẩm đã update:");
+      // Update hình ảnh & thông số kỹ thuật
+      await updateImage();
+      await updateProductSpec();
+
+      alert("Sản phẩm đã được cập nhật thành công!");
       console.log("Sản phẩm đã update:", resp.data);
-      router.push(`/admin/products/form/${resp.data.id}`);
-    } else {
-      resp = await axios.post("https://localhost:8080/asm/api/v1/product/", product.value);
 
-      alert("Sản phẩm đã thêm:");
+      router.replace(`/admin/products/form/${currentIdProduct}`);
+    } else {
+      // Kiểm tra hình ảnh
+      if (!fileInput.value || fileInput.value.files.length === 0) {
+        alert("Vui lòng chọn ít nhất 1 hình ảnh!");
+        return;
+      }
+      const newProduct = {
+        productName: product.value.productName || "",
+        description: product.value.description || "",
+        price: product.value.price || 0,
+        salePrice: product.value.salePrice || 0,
+        soldQuantity: product.value.soldQuantity || 0,
+        stockQuantity: product.value.stockQuantity || 0,
+        category: product.value.category || null, // nếu là object
+        productType: product.value.productType || null, // nếu là object
+      };
+
+      // Tạo sản phẩm mới
+      resp = await axios.post("http://localhost:8080/asm/api/v1/product/", newProduct);
+      const idProduct = resp.data.result.id;
+      console.log("idProduct", idProduct);
+      // Gán productID cho productSpec nếu cần
+      productSpec.value = productSpec.value.map((spec) => ({
+        ...spec,
+        productID: idProduct,
+      }));
+      console.log("productSpec", productSpec.value);
+
+      // Lưu thông số kỹ thuật và ảnh
+      await saveProductSpec();
+      await saveImage(idProduct);
+
+      alert("Sản phẩm đã thêm thành công!");
       console.log("Sản phẩm đã thêm:", resp.data);
-      router.push(`/admin/products/form/${resp.data.id}`);
+
+      router.replace(`/admin/products/form/${idProduct}`);
     }
-    // Log dữ liệu phản hồi để kiểm tra
   } catch (error) {
-    console.error("Lỗi khi thêm sản phẩm:", error.response?.data || error.message);
+    console.error("❌ Lỗi khi lưu sản phẩm:", error.response?.data || error.message);
+    alert("Đã xảy ra lỗi khi lưu sản phẩm. Vui lòng thử lại. \nLỗi " + (error.response?.data.message || error.message));
   }
 };
+
 // Spec Group
-const addSpecGroup = () => {
-  specGroupByProductType.value.push({
-    id: null,
-    isDelete: false,
-    specName: "",
-    productSpecifications: [],
-  });
-  console.log("specgroup", specGroupByProductType.value);
-};
 
-// Xóa nhóm
-const removeSpecGroup = (index) => {
-  specGroups.value.splice(index, 1);
-};
 // Prodcut Spec
-
-// Thêm thuộc tính vào nhóm
-const addAttribute = (group) => {
-  productSpecBySpecGroup.attributes.push({ id: null, isDelete: false, value: "", name: "", specificationTypeName: "" });
+const addProductSpec = (group) => {
+  const newSpec = {
+    id: null,
+    name: "",
+    value: "",
+    specificationTypeName: group.specName,
+    specificationTypeId: group.id,
+    productID: currentIdProduct,
+    isDelete: false,
+  };
+  group.specs.push(newSpec);
+  productSpec.value.push(newSpec);
+  console.log("productSpec", productSpec.value);
 };
+const saveProductSpec = async () => {
+  try {
+    const dataPost = productSpec.value.filter((spec) => spec.id === null && !spec.isDelete && spec.name !== "");
+    for (let data of dataPost) {
+      if (data.value == "") data.value = "Không có";
+      const resp = await axios.post("http://localhost:8080/asm/api/v1/product-specification/", data);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const updateProductSpec = async () => {
+  try {
+    const deletes = productSpec.value.filter((spec) => spec.id != null && spec.isDelete && spec.name !== "");
+    const updates = productSpec.value.filter((spec) => spec.id != null && !spec.isDelete && spec.name !== "");
 
-// Xóa thuộc tính
-const removeAttribute = (group, attrIndex) => {
-  group.attributes.splice(attrIndex, 1);
+    for (let data of deletes) {
+      await axios.delete(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`);
+    }
+
+    for (let data of updates) {
+      await axios.put(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`, data);
+    }
+  } catch (error) {
+    console.log("Lỗi khi đồng bộ thông số kỹ thuật:", error.message);
+  }
 };
 // Image
 
@@ -317,13 +379,13 @@ const previewImage = (event) => {
   console.log(product.value.images);
 };
 
-const saveImage = async () => {
+const saveImage = async (idProduct) => {
   const formData = new FormData();
   for (let file of fileInput.value.files) {
     formData.append("file", file);
   }
   try {
-    await axios.post(`http://localhost:8080/asm/api/v1/image/${route.params.idProduct}`, formData, {
+    await axios.post(`http://localhost:8080/asm/api/v1/image/${idProduct}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     console.log("Selected files:", product.value.images);
@@ -364,9 +426,9 @@ const deleteImage = async () => {
 };
 
 // computed
-const producTypeSelected = computed(() => {
-  return productTypes.value.find((productType) => productType.id === product.value.productType);
-});
+// const producTypeSelected = computed(() => {
+//   return productTypes.value.find((productType) => productType.id === product.value.productType);
+// });
 
 // const changeProductTypes = () => {
 //   producTypeSelected.value;
@@ -377,30 +439,37 @@ const producTypeSelected = computed(() => {
 // const selectedImages = computed(() => product.value.images.filter((img) => img.selected));
 
 // watch
+watch(
+  () => product.value.productType,
+  (typeId) => {
+    const type = productTypes.value.find((t) => t.id === typeId);
+    if (!type) {
+      specGroups.value = [];
+      return;
+    }
 
-watch(producTypeSelected, (type) => {
-  if (type) {
-    const specs = specGroups.value
-      .filter((group) => group.productTypeName === type.nameType)
-      .map((specGroup) => ({
-        ...specGroup,
-        attribute: productSpecifications.value.filter((ps) => ps.specificationTypeName === specGroup.specName),
-      }));
+    const groups = allSpecGroup.value.filter((group) => group.productTypeName === type.nameType);
+    // Mỗi group thêm specs nếu đang ở chế độ edit
+    specGroups.value = groups.map((group) => ({
+      ...group,
+      specificationTypeId: group.id,
+      specs: isEdit.value ? productSpec.value.filter((spec) => spec.specificationTypeId === group.id && spec.productID === currentIdProduct) : [],
+    }));
 
-    specGroupByProductType.value = specs;
-  } else {
-    specGroupByProductType.value = [];
+    console.log("specGroups", specGroups.value);
+    console.log("isEdit", isEdit.value);
   }
-});
+);
 // mounted
 
 onBeforeMount(async () => {
   await getAllCategory();
-  await getAllSpec();
+  await getAllSpecGroup();
   await getAllProducType();
-  await getAllProducSpec();
+
   if (route.params.idProduct) {
     isEdit.value = true;
+    await getAllProductSpec();
     await getProductById();
   }
 });

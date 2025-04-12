@@ -34,7 +34,7 @@ public class ProductService {
     ProductBuild productBuild;
     ImageService imageService;
 
-    public boolean Create(ProductRequest request) {
+    public ProductResponse Create(ProductRequest request) {
         productBuild.processRequest(request);
 
         if (repo.existsByProductName(request.getProductName())) {
@@ -42,12 +42,13 @@ public class ProductService {
         }
 
         try {
-            repo.save(productBuild.buildProduct(request));
+            var product = repo.save(productBuild.buildProduct(request));
+            return mapper.toProductResponse(product);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
 
-        return true;
+//        return true;
     }
 
     public ProductResponse Detail(int id) {

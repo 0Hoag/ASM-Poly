@@ -26,8 +26,8 @@ public class ProductTypeController {
     ProductTypeService productTypeService;
 
     @PostMapping("/")
-    public ApiResponse<Boolean> Create(@RequestBody @Valid ProductTypeRequest request) {
-        return ApiResponse.<Boolean>builder()
+    public ApiResponse<ProductTypeResponse> Create(@RequestBody @Valid ProductTypeRequest request) {
+        return ApiResponse.<ProductTypeResponse>builder()
                 .code(1000)
                 .result(productTypeService.Create(request))
                 .build();

@@ -10,5 +10,6 @@ import com.example.ASM.entity.OrderDetail;
 public interface OrderDetailMapper {
     @Mapping(target = "productName", source = "product.productName") // Lấy tên sản phẩm
     @Mapping(target = "orderId", source = "order.id") // Lấy ID đơn hàng
+    @Mapping(target = "id", source = "id") // Lấy ID đơn hàng
     OrderDetailResponse toOrderDetailResponse(OrderDetail entity);
 }

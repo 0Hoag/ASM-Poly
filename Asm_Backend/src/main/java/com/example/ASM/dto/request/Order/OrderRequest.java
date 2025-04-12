@@ -1,7 +1,10 @@
 package com.example.ASM.dto.request.Order;
 
+import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -12,5 +15,6 @@ public class OrderRequest {
     double totalAmount;
     int address;
     int orderStatus;
-    int user; // chua lay duoc userID tai vi chua lam xong user
+    int user;
+    List<OrderDetailRequest> orderDetails;
 }

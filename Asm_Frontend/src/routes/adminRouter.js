@@ -41,8 +41,13 @@ const adminRouter = [
         component: OrderStatusManagement,
       },
       {
-        path: "orders/create",
+        path: "orders/form",
         name: "create-order",
+        component: CreateOrder,
+      },
+      {
+        path: "orders/form/:idOrder",
+        name: "edit-order",
         component: CreateOrder,
       },
 

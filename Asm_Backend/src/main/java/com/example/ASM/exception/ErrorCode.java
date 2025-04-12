@@ -1,9 +1,8 @@
 package com.example.ASM.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-
-import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -74,8 +73,8 @@ public enum ErrorCode {
     SEND_EMAIL_ERROR(1046, "Send email error", HttpStatus.BAD_REQUEST),
 
     EMAIL_OR_PHONE_REQUIRED(1040, "EMAIL OR PHONE NUMBER CANNOT BE EMPTY", HttpStatus.BAD_REQUEST),
-    ACCOUNT_OR_PASSWORD_EMPTY(1050, "ACCOUNT OR PASSWORD CANNOT BE EMPTY", HttpStatus.BAD_REQUEST);
-    ;
+    ACCOUNT_OR_PASSWORD_EMPTY(1050, "ACCOUNT OR PASSWORD CANNOT BE EMPTY", HttpStatus.BAD_REQUEST),
+    OUT_OF_STOCK(1051, "The product is out of stock", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
@@ -87,5 +86,6 @@ public enum ErrorCode {
         this.statusCode = statusCode;
     }
 
-    ErrorCode() {}
+    ErrorCode() {
+    }
 }
