@@ -1,10 +1,7 @@
 package com.example.ASM.dto.request.Order;
 
-import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder

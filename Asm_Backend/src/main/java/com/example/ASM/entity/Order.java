@@ -1,12 +1,13 @@
 package com.example.ASM.entity;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table(name = "Orders")

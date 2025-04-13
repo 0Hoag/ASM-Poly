@@ -206,7 +206,10 @@ const specGroups = ref([{ id: null, isDelete: false, productType: null, specName
 const getAllSpecGroup = async () => {
   try {
     const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
-    allSpecGroup.value = resp.data.result.map((spec) => ({ ...spec, isDelete: false }));
+    allSpecGroup.value = resp.data.result.map((spec) => {
+      const productType = filteredProductTypes.value.find((productType) => productType.nameType === spec.productTypeName);
+      return { ...spec, isDelete: false, productTypeId: productType.id };
+    });
     console.log("spec group", allSpecGroup.value);
   } catch (error) {
     console.log(error.message);
@@ -233,7 +236,7 @@ const pageinatedProductType = async () => {
     });
     filteredProductTypes.value = resp.data.result.data;
     totalPage.value = resp.data.result.totalPages;
-    console.log(filteredProductTypes.value);
+    console.log("paginated", filteredProductTypes.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -282,7 +285,8 @@ const createProductType = async () => {
 };
 const openEditModal = (selectedProducType) => {
   productType.value = { ...selectedProducType };
-  const filtered = allSpecGroup.value.filter((group) => group.productTypeName === productType.value.nameType);
+  console.log("openEditModal", productType.value);
+  const filtered = allSpecGroup.value.filter((group) => group.productTypeId === productType.value.id);
   console.log("filtered", filtered);
   if (filtered.length > 0) {
     specGroups.value = filtered;
@@ -342,8 +346,7 @@ const deleteProductType = async (id) => {
     }
     await axios.delete(`http://localhost:8080/asm/api/v1/productType/${id}`);
     await pageinatedProductType();
-    // productTypes.value = productTypes.value.filter((productType) => productType.id !== id);
-    // filteredProductTypes.value = filteredProductTypes.value.filter((productType) => productType.id !== id);
+
     alert("Xóa thành công");
   } catch (error) {
     console.log(error.message);

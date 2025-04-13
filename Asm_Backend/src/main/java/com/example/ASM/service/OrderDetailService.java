@@ -1,5 +1,14 @@
 package com.example.ASM.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.request.OrderDetail.OrderDetailUpdateRequest;
@@ -13,15 +22,8 @@ import com.example.ASM.mapper.OrderDetailMapper;
 import com.example.ASM.repository.OrderDetailRepository;
 import com.example.ASM.repository.OrderRepository;
 import com.example.ASM.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +62,6 @@ public class OrderDetailService {
         }
 
         // Tính số lượng sản phẩm
-
 
         int newStock = product.getStockQuantity() - quantityToAdd;
         if (newStock < 0) {
@@ -143,16 +144,16 @@ public class OrderDetailService {
         productRepository.save(product);
         repo.save(orderDetail);
 
-//        orderDetail.setQuantity(request.getQuantity());
-//        repo.save(orderDetail);
+        //        orderDetail.setQuantity(request.getQuantity());
+        //        repo.save(orderDetail);
         return mapper.toOrderDetailResponse(orderDetail);
     }
 
     @Transactional
     public void Delete(int orderDetailId) {
 
-        OrderDetail orderDetail = repo.findById(orderDetailId)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
+        OrderDetail orderDetail =
+                repo.findById(orderDetailId).orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
 
         Product product = orderDetail.getProduct();
 

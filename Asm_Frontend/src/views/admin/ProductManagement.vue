@@ -270,6 +270,7 @@ const deleteProduct = async (id) => {
     const resp = await axios.delete("http://localhost:8080/asm/api/v1/product/" + id);
     products.value = products.value.filter((product) => product.id !== id);
     filteredProducts.value = filteredProducts.value.filter((product) => product.id !== id);
+    alert("Xóa thành công");
   } catch (error) {
     console.log(error);
   }

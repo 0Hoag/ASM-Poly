@@ -1,6 +1,7 @@
 package com.example.ASM.controller;
 
-import com.cloudinary.Api;
+import java.util.List;
+
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -29,7 +28,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/List")
-    public ApiResponse<List<UserResponse>>  List(){
+    public ApiResponse<List<UserResponse>> List() {
         return ApiResponse.<List<UserResponse>>builder()
                 .code(1000)
                 .result(userService.List())

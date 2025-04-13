@@ -3,7 +3,6 @@ package com.example.ASM.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.ASM.dto.response.product.ProductResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,8 +44,6 @@ public class ProductTypeService {
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
-
-
     }
 
     public ProductTypeResponse Detail(int id) {

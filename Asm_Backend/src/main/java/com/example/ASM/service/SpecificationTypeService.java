@@ -73,7 +73,7 @@ public class SpecificationTypeService {
     public SpecificationTypeResponse Update(int id, SpecificationTypeUpdateRequest request) {
         var spec = repo.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_TYPE_NOT_EXISTED));
         builder.processUpdateRequest(request);
-        mapper.updateSpecificationType(spec,request);
+        mapper.updateSpecificationType(spec, request);
         return mapper.toSpecificationTypeResponse(repo.save(spec));
     }
 

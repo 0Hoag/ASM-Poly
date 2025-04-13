@@ -5,6 +5,7 @@ import com.example.ASM.dto.request.User.PasswordRequest;
 import com.example.ASM.dto.request.User.UpdateUserRequest;
 import com.example.ASM.dto.request.User.UserRequest;
 import com.example.ASM.dto.response.user.UserResponse;
+import com.example.ASM.entity.User;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.UserMapper;
@@ -125,5 +126,9 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPass()));
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

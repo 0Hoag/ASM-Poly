@@ -19,5 +19,4 @@ public class OrderResponse {
     int address;
     String orderStatus; // take name
     int user;
-
 }

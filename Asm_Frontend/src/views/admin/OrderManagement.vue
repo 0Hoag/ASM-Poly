@@ -82,10 +82,11 @@
               </td>
               <td>{{ order.id }}</td>
               <td>{{ order.fullName }}</td>
-              <td>{{ order.createdAt }}</td>
-              <td>{{ order.totalAmount }}</td>
+              <td>{{ new Date(order.createdAt).toLocaleString("vi-VN") }}</td>
+              <td>{{ order.totalAmount.toLocaleString("vi", { style: "currency", currency: "VND" }) }}</td>
+
               <td>
-                <span class="badge bg-success">{{ order.orderStatus }}</span>
+                <span class="badge" :class="getStatusClass(order.orderStatus)">{{ order.orderStatus }}</span>
               </td>
               <td class="action-buttons">
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
@@ -182,6 +183,22 @@ const getAllOrder = async () => {
     totalPage.value = resp.data.result.totalPages;
   } catch (error) {
     console.log(error.message);
+  }
+};
+const getStatusClass = (status) => {
+  switch (status) {
+    case "Chờ xác nhận":
+      return "bg-secondary";
+    case "Đang giao":
+      return "bg-warning";
+    case "Đã giao":
+      return "bg-success";
+    case "Đã hủy":
+      return "bg-danger";
+    case "Đã xác nhận":
+      return "bg-info";
+    default:
+      return "bg-light";
   }
 };
 // create

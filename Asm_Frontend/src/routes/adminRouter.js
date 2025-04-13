@@ -12,6 +12,7 @@ import UserManagement from "../views/admin/UserManagement.vue";
 const adminRouter = [
   {
     path: "/admin",
+    meta: { requiresAuth: true, requiresAdmin: true },
     redirect: "/admin/dashboard",
     component: AdminLayout,
     children: [

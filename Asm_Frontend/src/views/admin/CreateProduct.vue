@@ -104,9 +104,9 @@
             </div>
           </div>
           <hr />
-          <button @click="saveProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm thuộc tính vào db</button>
+          <!-- <button @click="saveProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Thêm thuộc tính vào db</button>
           <button @click="deleteProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Xóa thuộc tính vào db</button>
-          <button @click="updateProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Update thuộc tính vào db</button>
+          <button @click="updateProductSpec" type="button" class="btn btn-success mt-3" id="btn-add-spec">Update thuộc tính vào db</button> -->
         </div>
         <!-- Hình ảnh -->
         <div class="mb-3">
@@ -136,11 +136,11 @@
             </div>
           </div>
         </div>
-        <button class="btn" @click="saveImage">upload</button>
+        <!-- <button class="btn" @click="saveImage">upload</button>
         <button class="btn" @click="deleteImage">delete</button>
-        <button class="btn" @click="updateProduct">update</button>
-        <button class="btn btn-success" @click="saveProduct">{{ isEdit ? "Cập nhật" : "Thêm" }}</button>
+        <button class="btn" @click="updateProduct">update</button> -->
       </div>
+      <button class="btn btn-success my-2" @click="saveProduct">{{ isEdit ? "Cập nhật" : "Thêm" }}</button>
     </div>
   </div>
 </template>
@@ -173,7 +173,19 @@ const deletedImg = ref([]);
 const currentIdProduct = route.params.idProduct || null;
 
 // methods
-
+const validateForm = () => {
+  return (
+    product.value.productName &&
+    product.value.description &&
+    product.value.price > 0 &&
+    product.value.salePrice >= 0 &&
+    product.value.soldQuantity >= 0 &&
+    product.value.stockQuantity >= 0 &&
+    product.value.category && // kiểm tra nếu category không phải null hoặc undefined
+    product.value.productType && // kiểm tra nếu productType không phải null hoặc undefined
+    productSpec.value.length > 0
+  );
+};
 // form
 
 // Lấy sản phẩm theo id
@@ -199,6 +211,7 @@ const getProductById = async () => {
     console.log(error.message);
   }
 };
+
 // Lấy danh mục sản phẩm
 const getAllCategory = async () => {
   try {
@@ -278,11 +291,16 @@ const saveProduct = async () => {
 
       router.replace(`/admin/products/form/${currentIdProduct}`);
     } else {
-      // Kiểm tra hình ảnh
+      // Kiểm tra hình
+      if (!validateForm()) {
+        alert("Vui lòng nhập đầy đủ thống tin sản phẩm");
+        return;
+      }
       if (!fileInput.value || fileInput.value.files.length === 0) {
         alert("Vui lòng chọn ít nhất 1 hình ảnh!");
         return;
       }
+
       const newProduct = {
         productName: product.value.productName || "",
         description: product.value.description || "",
@@ -390,7 +408,6 @@ const saveImage = async (idProduct) => {
     });
     console.log("Selected files:", product.value.images);
     console.log("FormData entries:", [...formData.entries()]);
-    alert("upload success");
 
     fileInput.value.value = "";
   } catch (error) {

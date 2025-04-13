@@ -73,22 +73,21 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", productName='" + productName + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", salePrice=" + salePrice +
-                ", soldQuantity=" + soldQuantity +
-                ", stockQuantity=" + stockQuantity +
-                ", cartDetailsCount=" + (cartDetails != null ? cartDetails.size() : 0) +
-                ", favoriteProductsCount=" + (favoriteProducts != null ? favoriteProducts.size() : 0) +
-                ", imagesCount=" + (images != null ? images.size() : 0) +
-                ", orderDetailsCount=" + (orderDetails != null ? orderDetails.size() : 0) +
-                ", productSpecificationsCount=" + (productSpecifications != null ? productSpecifications.size() : 0) +
-                ", categoryId=" + (category != null ? category.getId() : null) +
-                ", productTypeId=" + (productType != null ? productType.getId() : null) +
-                '}';
+        return "Product{" + "id="
+                + id + ", createdAt="
+                + createdAt + ", productName='"
+                + productName + '\'' + ", description='"
+                + description + '\'' + ", price="
+                + price + ", salePrice="
+                + salePrice + ", soldQuantity="
+                + soldQuantity + ", stockQuantity="
+                + stockQuantity + ", cartDetailsCount="
+                + (cartDetails != null ? cartDetails.size() : 0) + ", favoriteProductsCount="
+                + (favoriteProducts != null ? favoriteProducts.size() : 0) + ", imagesCount="
+                + (images != null ? images.size() : 0) + ", orderDetailsCount="
+                + (orderDetails != null ? orderDetails.size() : 0) + ", productSpecificationsCount="
+                + (productSpecifications != null ? productSpecifications.size() : 0) + ", categoryId="
+                + (category != null ? category.getId() : null) + ", productTypeId="
+                + (productType != null ? productType.getId() : null) + '}';
     }
 }
