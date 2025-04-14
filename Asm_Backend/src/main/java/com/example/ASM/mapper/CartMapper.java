@@ -21,6 +21,7 @@ public interface CartMapper {
     Cart toCart(CartRequest request);
 
     @Mapping(target = "userName", source = "user", qualifiedByName = "mapUserName")
+    @Mapping(target = "userId", source = "user", qualifiedByName = "mapUserId")
     @Mapping(target = "cartDetails", source = "cartDetails", qualifiedByName = "mapCartDetails")
     CartResponse toCartResponse(Cart entity);
 
@@ -37,6 +38,10 @@ public interface CartMapper {
         return (user != null) ? user.getFullName() : null;
     }
 
+    @Named("mapUserId")
+    default Integer mapUseId(User user) {
+        return (user != null) ? user.getId() : null;
+    }
     @Named("mapCartDetails")
     default List<CartDetailResponse> mapCartDetails(List<CartDetail> cartDetails) {
         if (cartDetails == null) {
