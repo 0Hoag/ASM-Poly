@@ -10,6 +10,7 @@ import org.mapstruct.Named;
 
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
+import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.entity.*;
 
@@ -19,6 +20,7 @@ public interface OrderMapper {
     @Mapping(target = "address", source = "address", qualifiedByName = "mapAddress")
     @Mapping(target = "orderStatus", source = "orderStatus", qualifiedByName = "mapOrderStatus")
     @Mapping(target = "user", source = "user", qualifiedByName = "mapUser")
+    @Mapping(target = "orderDetails", ignore = true) // Loại bỏ ánh xạ OrderDetail
     Order toOrder(OrderRequest request);
 
     @Mapping(target = "address", source = "address.id")
@@ -34,6 +36,8 @@ public interface OrderMapper {
                         + orderDetail.getQuantity())
                 .collect(Collectors.toList());
     }
+
+
 
     @Mapping(target = "address", source = "address", qualifiedByName = "mapAddress")
     @Mapping(target = "orderStatus", source = "orderStatus", qualifiedByName = "mapOrderStatus")

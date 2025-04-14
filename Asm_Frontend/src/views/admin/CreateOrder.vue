@@ -282,7 +282,7 @@ const addToCart = (product) => {
     stockQuantity: product.stockQuantity,
     isDelete: false,
     isCreate: isEdit.value ? true : false,
-    orderId: isEdit ? route.params.idOrder : null,
+    orderId: isEdit.value ? route.params.idOrder : 0,
   });
   console.log("cart", cart.value);
 };
@@ -296,10 +296,31 @@ const removeFromCart = (product) => {
   cart.value[index].isDelete = true;
   cart.value[index].quantity = 0;
 };
+const validateInput = () => {
+  if (!formOrder.value.user) {
+    alert("Vui lòng chọn khách hàng");
+    return false;
+  }
+
+  if (!formOrder.value.address) {
+    alert("Vui lòng chọn địa chỉ giao hàng");
+    return false;
+  }
+
+  const validProducts = cart.value.filter((item) => !item.isDelete);
+  if (validProducts.length === 0) {
+    alert("Vui lòng thêm ít nhất một sản phẩm vào đơn hàng");
+    return false;
+  }
+
+  return true;
+};
 
 const saveOrder = async () => {
   let resp;
   try {
+    if (!validateInput()) return;
+
     if (!isEdit.value) {
       const newOrder = {
         user: formOrder.value.user,
@@ -311,7 +332,7 @@ const saveOrder = async () => {
       console.log(newOrder);
       resp = await axios.post("http://localhost:8080/asm/api/v1/orders/", newOrder);
       if (resp.data.result) {
-        alert("Thành công");
+        alert("Tạo thành công");
         router.replace("/admin/orders/");
       }
     } else {
@@ -326,9 +347,13 @@ const saveOrder = async () => {
         address: formOrder.value.address,
         orderStatus: matchedStatus ? matchedStatus.id : null,
       };
-      await axios.put(`http://localhost:8080/asm/api/v1/orders/${route.params.idOrder}`, updateOrder);
+      const resp = await axios.put(`http://localhost:8080/asm/api/v1/orders/${route.params.idOrder}`, updateOrder);
       await updateOrderDetail();
-      console.log(updateOrder);
+      if (resp.status === 200) {
+        alert("Cập nhật thành công");
+        window.location.reload();
+      }
+      console.log(resp);
     }
   } catch (error) {
     console.log(error.message);

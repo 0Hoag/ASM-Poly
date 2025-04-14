@@ -5,33 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="30c33994-1d60-4eeb-a67f-8a707792623a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/AuthSecurity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/AuthSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/AuthSecurity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/request/Order/OrderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/request/Order/OrderRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/request/Order/OrderUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/request/Order/OrderUpdateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/response/order/OrderResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/response/order/OrderResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/response/order/OrderStatusResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/dto/response/order/OrderStatusResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/ProductType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/entity/ProductType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/exception/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/exception/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderDetailMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderStatusMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/OrderStatusMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/mapper/ProductSpecificationMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/ProductTypeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/ProductTypeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/SpecificationTypeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/SpecificationTypeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/CreateProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/CreateProduct.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/OrderManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/OrderManagement.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/OrderStatusManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/OrderStatusManagement.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/CreateOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/admin/CreateOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/LoginAdmin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/LoginAdmin.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +74,8 @@
     "Maven.ASM [org.jacoco:jacoco-maven-plugin:0.8.12:report].executor": "Run",
     "Maven.asm [clean].executor": "Run",
     "Maven.asm [compile].executor": "Run",
+    "Maven.asm [install].executor": "Run",
+    "Maven.asm [verify].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "tien",
@@ -307,109 +294,27 @@
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="115" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="116" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>49</line>
-          <option name="timeStamp" value="117" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="121" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="123" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="124" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>56</line>
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java</url>
           <line>67</line>
-          <option name="timeStamp" value="129" />
+          <option name="timeStamp" value="164" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java</url>
           <line>68</line>
-          <option name="timeStamp" value="130" />
+          <option name="timeStamp" value="165" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="131" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java</url>
           <line>71</line>
-          <option name="timeStamp" value="132" />
+          <option name="timeStamp" value="174" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>69</line>
-          <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/OrderDetailService.java</url>
-          <line>73</line>
-          <option name="timeStamp" value="134" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/ASM/service/build/OrderBuilder.java</url>
+          <line>72</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="175" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

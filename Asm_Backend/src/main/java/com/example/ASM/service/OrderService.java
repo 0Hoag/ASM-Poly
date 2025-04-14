@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.Order.OrderRequest;
 import com.example.ASM.dto.request.Order.OrderUpdateRequest;
-import com.example.ASM.dto.request.OrderDetail.OrderDetailRequest;
 import com.example.ASM.dto.response.order.OrderResponse;
 import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
@@ -42,18 +41,20 @@ public class OrderService {
 
         try {
 
+            // Save order first to get the ID
             var savedOrder = repo.save(builder.buildOrder(request));
+
             if (request.getOrderDetails() != null && !request.getOrderDetails().isEmpty()) {
-                for (OrderDetailRequest detailRequest : request.getOrderDetails()) {
-                    // Gán orderId cho từng detailRequest
+                // Use OrderDetailService to create each order detail
+                request.getOrderDetails().forEach(detailRequest -> {
                     detailRequest.setOrderId(savedOrder.getId());
-                    orderDetailService.Create(detailRequest); // Gọi lại service bạn đã viết
-                }
+                    orderDetailService.Create(detailRequest);
+                });
             }
 
-            //            return mapper.toOrderResponse(savedOrder);
             return true;
         } catch (DataIntegrityViolationException e) {
+            log.error("Error creating order", e);
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
     }

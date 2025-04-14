@@ -1,5 +1,15 @@
 package com.example.ASM.service;
 
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.ASM.dto.PageResponse;
 import com.example.ASM.dto.request.User.PasswordRequest;
 import com.example.ASM.dto.request.User.UpdateUserRequest;
@@ -10,19 +20,11 @@ import com.example.ASM.exception.AppException;
 import com.example.ASM.exception.ErrorCode;
 import com.example.ASM.mapper.UserMapper;
 import com.example.ASM.repository.UserRepository;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -41,7 +43,7 @@ public class UserService {
     public Boolean Create(UserRequest request) {
         if ((request.getEmail() == null || request.getEmail().trim().isEmpty())
                 && (request.getPhoneNumber() == null
-                || request.getPhoneNumber().trim().isEmpty())) {
+                        || request.getPhoneNumber().trim().isEmpty())) {
             throw new AppException(ErrorCode.EMAIL_OR_PHONE_REQUIRED);
         }
         if (userRepository.existsByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber())) {

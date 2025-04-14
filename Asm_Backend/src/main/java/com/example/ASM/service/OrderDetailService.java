@@ -1,7 +1,6 @@
 package com.example.ASM.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -44,25 +43,7 @@ public class OrderDetailService {
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
 
         int quantityToAdd = request.getQuantity();
-
-        Optional<OrderDetail> existingDetail =
-                repo.findByOrderIdAndProductId(request.getOrderId(), request.getProductId());
-        if (existingDetail.isPresent()) {
-            OrderDetail orderDetail = existingDetail.get();
-            orderDetail.setQuantity(orderDetail.getQuantity() + quantityToAdd);
-            repo.save(orderDetail);
-        } else {
-            OrderDetail newOrderDetail = new OrderDetail();
-            newOrderDetail.setOrder(order);
-            newOrderDetail.setProduct(product);
-            newOrderDetail.setQuantity(quantityToAdd);
-            newOrderDetail.setCurrentPrice(product.getPrice());
-
-            repo.save(newOrderDetail);
-        }
-
-        // Tính số lượng sản phẩm
-
+        // Kiểm tra tồn kho
         int newStock = product.getStockQuantity() - quantityToAdd;
         if (newStock < 0) {
             throw new AppException(ErrorCode.OUT_OF_STOCK);
@@ -70,6 +51,16 @@ public class OrderDetailService {
         product.setStockQuantity(newStock);
         product.setSoldQuantity(product.getSoldQuantity() + quantityToAdd);
         productRepository.save(product);
+
+        // Tạo OrderDetail mới
+        OrderDetail newOrderDetail = new OrderDetail();
+        newOrderDetail.setOrder(order);
+        newOrderDetail.setProduct(product);
+        newOrderDetail.setQuantity(quantityToAdd);
+        newOrderDetail.setCurrentPrice(request.getCurrentPrice()); // Sử dụng giá từ request
+
+        // Lưu OrderDetail vào DB
+        repo.save(newOrderDetail);
 
         return true;
     }
@@ -144,8 +135,8 @@ public class OrderDetailService {
         productRepository.save(product);
         repo.save(orderDetail);
 
-        //        orderDetail.setQuantity(request.getQuantity());
-        //        repo.save(orderDetail);
+        // orderDetail.setQuantity(request.getQuantity());
+        // repo.save(orderDetail);
         return mapper.toOrderDetailResponse(orderDetail);
     }
 

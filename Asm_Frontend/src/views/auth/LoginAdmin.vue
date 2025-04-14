@@ -62,7 +62,7 @@ const login = async () => {
         alert("Vui lòng đăng nhập với quyền admin");
         return;
       }
-      router.push("/admin/dashboard");
+      router.replace("/admin/dashboard");
       return;
     }
   } catch (error) {

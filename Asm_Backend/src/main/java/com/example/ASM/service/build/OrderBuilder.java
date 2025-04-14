@@ -67,6 +67,12 @@ public class OrderBuilder {
     public Order buildOrder(OrderRequest request) {
         Order order = mapper.toOrder(request);
         order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        // Set up relationships for OrderDetails
+        if (order.getOrderDetails() != null) {
+            order.getOrderDetails().forEach(detail -> detail.setOrder(order));
+        }
+
         return order;
     }
 }
