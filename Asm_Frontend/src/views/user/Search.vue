@@ -20,128 +20,183 @@
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Product Card 1 -->
         <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/ip14.png"
-              class="card-img-top"
-              alt="iPhone 14 Pro"
-            />
-            <div class="card-body">
-              <h5 class="card-title">iPhone 14 Pro</h5>
-              <p class="card-text price-sale">27.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>29.990.000₫</del> -6%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
+        <div class="card product-card">
+          <img
+            src="../../assets/img/ip15hong.jpg"
+            class="card-img-top product-image"
+            alt="Sản phẩm 1"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
           </div>
         </div>
+      </div>
 
-        <!-- Product Card 2 -->
-        <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/image5.png"
-              class="card-img-top"
-              alt="Samsung Galaxy S23"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Samsung Galaxy S23</h5>
-              <p class="card-text price-sale">21.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>23.990.000₫</del> -8%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt2.png"
+            class="card-img-top product-image"
+            alt="Sản phẩm 2"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
           </div>
         </div>
+      </div>
 
-        <!-- Product Card 3 -->
-        <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/image6.png"
-              class="card-img-top"
-              alt="Xiaomi 13"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Xiaomi 13</h5>
-              <p class="card-text price-sale">18.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>20.990.000₫</del> -9%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt3.png"
+            class="card-img-top product-image"
+            alt="Sản phẩm 3"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
           </div>
         </div>
+      </div>
 
-        <!-- Product Card 4 -->
-        <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/image7.png"
-              class="card-img-top"
-              alt="OPPO Find X5 Pro"
-            />
-            <div class="card-body">
-              <h5 class="card-title">OPPO Find X5 Pro</h5>
-              <p class="card-text price-sale">19.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt4.jpg"
+            class="card-img-top product-image"
+            alt="Sản phẩm 4"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
           </div>
         </div>
-        <!-- Product Card 4 -->
-        <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/image7.png"
-              class="card-img-top"
-              alt="OPPO Find X5 Pro"
-            />
-            <div class="card-body">
-              <h5 class="card-title">OPPO Find X5 Pro</h5>
-              <p class="card-text price-sale">19.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
-          </div>
-        </div>
-        <!-- Product Card 4 -->
-        <div class="col">
-          <div class="card h-100 product-card">
-            <img
-              src="../../assets/img/image7.png"
-              class="card-img-top"
-              alt="OPPO Find X5 Pro"
-            />
-            <div class="card-body">
-              <h5 class="card-title">OPPO Find X5 Pro</h5>
-              <p class="card-text price-sale">19.990.000₫</p>
-              <p class="card-text">
-                <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-              </p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-            </div>
-          </div>
-        </div>
+      </div>
 
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt5.webp"
+            class="card-img-top product-image"
+            alt="Sản phẩm 5"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/ip15hong.jpg"
+            class="card-img-top product-image"
+            alt="Sản phẩm 1"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt2.png"
+            class="card-img-top product-image"
+            alt="Sản phẩm 2"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt3.png"
+            class="card-img-top product-image"
+            alt="Sản phẩm 3"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card product-card">
+          <img
+            src="../../assets/img/dt4.jpg"
+            class="card-img-top product-image"
+            alt="Sản phẩm 4"
+          />
+          <div class="card-body text-center">
+            <h5 class="product-title">Iphone 15</h5>
+            <p class="product-price">20,000,000₫</p>
+            <router-link
+              to="/category/product"
+              class="btn btn-add-to-cart btn-success w-100"
+            >
+              Xem sản phẩm
+            </router-link>
+          </div>
+        </div>
+      </div>
         <!-- Thêm các Product Card khác tương tự ở đây -->
       </div>
 
@@ -169,4 +224,36 @@
 
 <script setup></script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>
+<style>
+.pagination .page-item .page-link {
+    color: #333; /* Màu chữ */
+    background-color: #f8f9fa; /* Màu nền */
+    border: 1px solid #ddd; /* Viền nhẹ */
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 8px; /* Bo góc */
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #02571a; /* Màu xanh chủ đạo */
+    color: white;
+    border-color: #00ff22;
+    font-weight: bold;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #ae2004; /* Hiệu ứng hover */
+    color: white;
+    border-color: #ab1a01;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #ccc;
+    background-color: #eee;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+</style>

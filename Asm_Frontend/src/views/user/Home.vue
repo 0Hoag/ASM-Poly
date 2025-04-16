@@ -1,4 +1,94 @@
 <template>
+  <!-- banner -->
+<div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="..//..//assets/img/banner1.png" class="d-block w-100" alt="Quảng cáo 1">
+        </div>
+        <div class="carousel-item">
+          <img src="..//..//assets/img/banner2.png" class="d-block w-100" alt="Quảng cáo 2">
+        </div>
+        <div class="carousel-item">
+          <img src="..//..//assets/img/banner3.png" class="d-block w-100" alt="Quảng cáo 3">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+<!-- sale -->
+  <div class="hot-sale-bar">
+    <div class="marquee">
+        🔥 SIÊU SALE HÔM NAY - GIẢM GIÁ LÊN ĐẾN 70% - NHANH TAY SĂN DEAL HOT 🔥 
+        🚀 FREESHIP TOÀN QUỐC 🚀 
+        🎁 TẶNG QUÀ HẤP DẪN KHI MUA HÀNG 🎁
+    </div>
+</div>
+<!-- Item Sale -->
+<div class="sale-section py-4">
+    <div class="container">
+        <h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold; color: #ff4500; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+            🔥 SALE SỐC - GIẢM GIÁ LỚN 🔥
+        </h2>  
+        <div id="saleCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <!-- Slide 1 -->
+    <div class="carousel-item active">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <div class="col" v-for="product in products.slice(4, 8)" :key="product.id">
+          <div class="card product-card border-0 shadow-sm text-center h-100">
+            <div class="product-image position-relative">
+              <img
+                :src="product.images.length ? product.images[0].url : '/default.jpg'"
+                class="card-img-top"
+                style="height: 200px; object-fit: cover"
+                :alt="product.productName"
+              />
+              <span
+                v-if="product.originalPrice && product.salePrice"
+                class="sale-badge position-absolute top-0 start-0 bg-danger text-white px-2 py-1"
+              >
+                -{{ Math.round(100 - (product.salePrice / product.originalPrice) * 100) }}%
+              </span>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ product.productName }}</h5>
+              <p
+                v-if="product.originalPrice"
+                class="text-muted text-decoration-line-through mb-1"
+              >
+                {{ formatPrice(product.originalPrice) }}
+              </p>
+              <p class="text-danger fw-bold fs-5">
+                {{ formatPrice(product.salePrice) }}
+              </p>
+              <router-link
+              :to="`/category/product/${product.id}`"
+              class="btn btn-danger w-50 fw-bold"
+              >
+                Mua ngay
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nút điều hướng -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#saleCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon btn-danger" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#saleCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon btn-danger" aria-hidden="true"></span>
+  </button>
+</div>
+
+    </div>
+</div>
   <!-- SP nổi bật -->
   <div class="container my-5">
     <h2
@@ -13,85 +103,25 @@
       <i class="fa-solid fa-phone" style="color: #d81515"></i> SẢN PHẨM NỔI BẬT
     </h2>
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15xanh.jpeg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 1"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">iPhone 15 Pro Max</h5>
-            <p class="product-price">35,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
+      
+      <div class="col" v-for="(product, index) in products.slice(5, 9)"      >
+      <div class="card product-card">
+        <img
+          :src="product.images.length ? product.images[0].url : '/default.jpg'"
+          class="card-img-top product-image" style="width: 100%; height: 100%;"
+          :alt="product.productName"
+        />
+        <div class="card-body text-center">
+          <h5 class="product-title">{{ product.productName }}</h5>
+          <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+          <router-link             
+          :to="`/category/product/${product.id}`" 
+          class="btn btn-add-to-cart btn-success w-100">
+            Xem sản phẩm
+          </router-link>
         </div>
       </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15xanh.jpeg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 2"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Samsung Galaxy S24</h5>
-            <p class="product-price">30,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15xanh.jpeg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 3"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Xiaomi 13T Pro</h5>
-            <p class="product-price">15,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15xanh.jpeg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 4"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Iphone 15</h5>
-            <p class="product-price">20,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
+    </div>
     </div>
   </div>
   <!-- san pham moi ra mat -->
@@ -105,94 +135,97 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
       "
     >
-      <i class="fa-solid fa-phone" style="color: #f51e0f"></i> SẢN PHẨM MỚI RA
-      MẮT
+      <i class="fa-solid fa-phone" style="color: #f51e0f"></i> SẢN PHẨM MỚI RA MẮT
     </h2>
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15hong.jpg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 4"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Iphone 15</h5>
-            <p class="product-price">20,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15hong.jpg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 4"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Iphone 15</h5>
-            <p class="product-price">20,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15hong.jpg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 4"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Iphone 15</h5>
-            <p class="product-price">20,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="card product-card">
-          <img
-            src="../../assets/img/ip15hong.jpg"
-            class="card-img-top product-image"
-            alt="Sản phẩm 4"
-          />
-          <div class="card-body text-center">
-            <h5 class="product-title">Iphone 15</h5>
-            <p class="product-price">20,000,000₫</p>
-            <router-link
-              to="/category/product"
-              class="btn btn-add-to-cart btn-success w-100"
-            >
-              Xem sản phẩm
-            </router-link>
-          </div>
+      
+      <div class="col" v-for="(product, index) in products.slice(1, 5)"      >
+      <div class="card product-card">
+        <img
+          :src="product.images.length ? product.images[0].url : '/default.jpg'"
+          class="card-img-top product-image" style="width: 100%; height: 100%;"
+          :alt="product.productName"
+        />
+        <div class="card-body text-center">
+          <h5 class="product-title">{{ product.productName }}</h5>
+          <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+          <router-link
+          :to="`/category/product/${product.id}`"
+          class="btn btn-add-to-cart btn-success w-100"
+          >
+            Xem sản phẩm
+          </router-link>
         </div>
       </div>
     </div>
+    </div>
+    
   </div>
+<!-- Danh Sách sản phẩm -->
+<div class="container my-5">
+  <h2
+    class="text-center mb-4" style="font-size: 2rem; font-weight: bold; color: #ff4500; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+    <i class="fa-solid fa-phone" style="color: #f51e0f"></i> ĐIỆN THOẠI CHÍNH HÃNG GIÁ TỐT </h2>
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+    
+    <div class="col" v-for="product in products" :key="product.id">
+      <div class="card product-card">
+        <img
+          :src="product.images.length ? product.images[0].url : '/default.jpg'"
+          class="card-img-top product-image" style="width: 100%; height: 100%;"
+          :alt="product.productName"
+        />
+        <div class="card-body text-center">
+          <h5 class="product-title">{{ product.productName }}</h5>
+          <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+          <router-link
+            :to="`/category/product/${product.id}`"
+            class="btn btn-add-to-cart btn-success w-100"
+          >
+            Xem sản phẩm
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+ <!-- end -->
+
 </template>
 <script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToDetail = (id) => {
+  router.push({ name: 'ProductDetail', params: { id } })
+}
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const products = ref([])
+
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get('/api/v1/product/Get')
+    console.log('Dữ liệu từ API:', response.data)
+    products.value = response.data.result.data
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error)
+  }
+}
+
+onMounted(() => {
+  fetchProducts()
+})
+const formatPrice = (price) => {
+  if (!price && price !== 0) return '';
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price);
+};
 </script>
 <style>
 body {
@@ -286,7 +319,7 @@ body {
 .hot-sale-bar {
   margin: 10px;
   background: linear-gradient(to right, #ff0000, #ff8800);
-  color: #fff;
+  color: #ffffff;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
@@ -297,7 +330,7 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 10px;
   overflow: hidden;
-  max-width: 300px; /* Thu nhỏ chiều rộng card */
+  max-width: 260px; /* Thu nhỏ chiều rộng card */
   padding: 10px;
   margin: auto;
 }
@@ -344,16 +377,32 @@ body {
 
 /* Nút CTA */
 .btn-danger {
-  border-radius: 5px;
+  border-radius: 10px;
   transition: background 0.3s ease;
 }
+.carousel-control-prev,
+.carousel-control-next {
+    margin-left: -80px;
+}
 
-.btn-danger:hover {
-  background: #c40000;
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1); /* Đổi màu icon thành trắng nếu cần */
+    margin-right: -80px;
 }
 .product-image img {
   width: 100%; /* Đảm bảo ảnh không bị méo */
   height: 180px; /* Giới hạn chiều cao */
   object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
+}
+.marquee {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 </style>

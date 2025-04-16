@@ -1,210 +1,130 @@
 <template>
-  <div class="bg-white rounded shadow-sm p-4">
-    <h4 class="mb-4">Đơn hàng của tôi</h4>
+  <div class="container py-4">
+    <h2 class="mb-4">Lịch sử đơn hàng</h2>
 
-    <!-- Order Tabs -->
-    <ul class="nav nav-tabs mb-4">
-      <li class="nav-item">
-        <a class="nav-link active" href="#">Tất cả</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Chờ xác nhận</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Đang giao</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Đã giao</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Đã hủy</a>
-      </li>
-    </ul>
-
-    <!-- Search Bar -->
-    <div class="mb-4">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Tìm kiếm theo mã đơn hàng hoặc tên sản phẩm"
-        />
-        <button class="btn btn-primary" type="button">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
+    <!-- Tabs lọc trạng thái -->
+    <div class="btn-group mb-3">
+      <button
+        class="btn"
+        :class="{'btn-primary': activeTab === 'all', 'btn-outline-primary': activeTab !== 'all'}"
+        @click="setTab('all')"
+      >Tất cả</button>
+      <button
+        class="btn"
+        :class="{'btn-primary': activeTab === 'pending', 'btn-outline-primary': activeTab !== 'pending'}"
+        @click="setTab('pending')"
+      >Chờ xác nhận</button>
+      <button
+        class="btn"
+        :class="{'btn-primary': activeTab === 'shipping', 'btn-outline-primary': activeTab !== 'shipping'}"
+        @click="setTab('shipping')"
+      >Đang giao</button>
+      <button
+        class="btn"
+        :class="{'btn-primary': activeTab === 'delivered', 'btn-outline-primary': activeTab !== 'delivered'}"
+        @click="setTab('delivered')"
+      >Đã giao</button>
+      <button
+        class="btn"
+        :class="{'btn-primary': activeTab === 'cancelled', 'btn-outline-primary': activeTab !== 'cancelled'}"
+        @click="setTab('cancelled')"
+      >Đã hủy</button>
     </div>
 
-    <!-- Order 1 -->
-    <div class="card mb-3 border">
+    <!-- Tìm kiếm -->
+    <div class="input-group mb-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm theo mã đơn hoặc tên sản phẩm..."
+        v-model="searchQuery"
+        @input="searchOrders"
+      />
+    </div>
+
+    <!-- Danh sách đơn hàng -->
+    <div v-if="filteredOrders.length === 0" class="text-center text-muted">
+      Không có đơn hàng nào.
+    </div>
+    <div v-else>
       <div
-        class="card-header bg-white d-flex justify-content-between align-items-center"
+        v-for="order in filteredOrders"
+        :key="order.id"
+        class="border rounded p-3 mb-3"
       >
-        <div>
-          <span class="fw-bold">Mã đơn hàng: #123456</span>
-          <span class="ms-3 text-muted small">Ngày đặt: 15/10/2023</span>
+        <div><strong>Mã đơn:</strong> #{{ order.id }}</div>
+        <div><strong>Ngày đặt:</strong> {{ new Date(order.createdAt).toLocaleString() }}</div>
+        <div><strong>Tổng tiền:</strong> {{ formatCurrency(order.totalAmount) }}</div>
+        <div><strong>Sản phẩm:</strong>
+          <ul>
+            <li v-for="item in order.orderDetails" :key="item">{{ item }}</li>
+          </ul>
         </div>
-        <span class="badge bg-success">Đã giao</span>
-      </div>
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-2">
-            <img
-              src="../../assets/img/Samsung Galaxy S21 Ultra.png"
-              class="img-fluid rounded"
-              alt="Product"
-            />
-          </div>
-          <div class="col-md-7">
-            <h6 class="mb-1">Samsung Galaxy S21 Ultra</h6>
-            <p class="text-muted mb-1 small">Phân loại: Đen, 128Gb</p>
-            <p class="mb-0 small">x1</p>
-          </div>
-          <div class="col-md-3 text-md-end">
-            <p class="text-danger mb-0">299.000₫</p>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-2">
-            <img
-              src="../../assets/img/Apple Watch Series 7 GPS 45MM Midnight.png"
-              class="img-fluid rounded"
-              alt="Product"
-            />
-          </div>
-          <div class="col-md-7">
-            <h6 class="mb-1">Apple Watch Series 7 GPS 45MM Midnight</h6>
-            <p class="text-muted mb-1 small">Phân loại: Xanh đậm</p>
-            <p class="mb-0 small">x1</p>
-          </div>
-          <div class="col-md-3 text-md-end">
-            <p class="text-danger mb-0">499.000₫</p>
-          </div>
-        </div>
-        <hr />
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <span class="text-muted">Tổng tiền:</span>
-            <span class="text-danger fw-bold ms-2">798.000₫</span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm">Mua lại</button>
-            <button class="btn btn-outline-secondary btn-sm">
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
+        <div><strong>Trạng thái:</strong> {{ order.orderStatus }}</div>
       </div>
     </div>
-
-    <!-- Order 2 -->
-    <div class="card mb-3 border">
-      <div
-        class="card-header bg-white d-flex justify-content-between align-items-center"
-      >
-        <div>
-          <span class="fw-bold">Mã đơn hàng: #123457</span>
-          <span class="ms-3 text-muted small">Ngày đặt: 10/10/2023</span>
-        </div>
-        <span class="badge bg-warning text-dark">Đang giao</span>
-      </div>
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-2">
-            <img
-              src="../../assets/img/Samsung Galaxy S21 Ultra.png"
-              class="img-fluid rounded"
-              alt="Product"
-            />
-          </div>
-          <div class="col-md-7">
-            <h6 class="mb-1">Samsung Galaxy S211 Ultra</h6>
-            <p class="text-muted mb-1 small">Phân loại: trắng, 128GB128GB</p>
-            <p class="mb-0 small">x1</p>
-          </div>
-          <div class="col-md-3 text-md-end">
-            <p class="text-danger mb-0">799.000₫</p>
-          </div>
-        </div>
-        <hr />
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <span class="text-muted">Tổng tiền:</span>
-            <span class="text-danger fw-bold ms-2">799.000₫</span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary btn-sm">
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order 3 -->
-    <div class="card mb-3 border">
-      <div
-        class="card-header bg-white d-flex justify-content-between align-items-center"
-      >
-        <div>
-          <span class="fw-bold">Mã đơn hàng: #123458</span>
-          <span class="ms-3 text-muted small">Ngày đặt: 05/10/2023</span>
-        </div>
-        <span class="badge bg-secondary">Đã hủy</span>
-      </div>
-      <div class="card-body">
-        <div class="row mb-3">
-          <div class="col-md-2">
-            <img
-              src="../../assets/img/Apple Watch Series 7 GPS 45MM Midnight.png"
-              class="img-fluid rounded"
-              alt="Product"
-            />
-          </div>
-          <div class="col-md-7">
-            <h6 class="mb-1">Apple Watch Series 66</h6>
-            <p class="text-muted mb-1 small">Phân loại: Đen</p>
-            <p class="mb-0 small">x1</p>
-          </div>
-          <div class="col-md-3 text-md-end">
-            <p class="text-danger mb-0">599.000₫</p>
-          </div>
-        </div>
-        <hr />
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <span class="text-muted">Tổng tiền:</span>
-            <span class="text-danger fw-bold ms-2">599.000₫</span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm">Mua lại</button>
-            <button class="btn btn-outline-secondary btn-sm">
-              Xem chi tiết
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center mt-4">
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
-            >Trước</a
-          >
-        </li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Sau</a>
-        </li>
-      </ul>
-    </nav>
   </div>
 </template>
 
-<script setup></script>
+<script>
+import axios from 'axios'
 
-<style lang="scss" scoped></style>
+export default {
+  data() {
+    return {
+      orders: [],
+      activeTab: 'all',
+      searchQuery: ''
+    }
+  },
+  computed: {
+    filteredOrders() {
+      return this.orders.filter(order => {
+        const matchTab =
+          this.activeTab === 'all' || this.normalize(order.orderStatus) === this.activeTab
+        const matchSearch =
+          order.id.toString().includes(this.searchQuery.toLowerCase()) ||
+          order.orderDetails.join(' ').toLowerCase().includes(this.searchQuery.toLowerCase())
+        return matchTab && matchSearch
+      })
+    }
+  },
+  methods: {
+    setTab(tab) {
+      this.activeTab = tab
+    },
+    searchOrders() {
+      // Reactive via v-model
+    },
+    normalize(status) {
+      const map = {
+        'Ðang chờ xử lí': 'pending',
+        'Đang chờ xử lí': 'pending',
+        'Đang giao': 'shipping',
+        'Đã giao': 'delivered',
+        'Đã hủy': 'cancelled'
+      }
+      return map[status] || 'other'
+    },
+    formatCurrency(value) {
+      return Number(value).toLocaleString('vi-VN') + ' đ'
+    }
+  },
+  mounted() {
+  const user = JSON.parse(localStorage.getItem('user')) // hoặc thay bằng Vuex nếu bạn dùng Vuex
+  if (!user || !user.id) {
+    console.error('Không tìm thấy thông tin người dùng')
+    return
+  }
+
+  axios.get('/api/v1/orders/List')
+  .then(res => {
+    this.orders = res.data.result.filter(order => order.user === user.id)
+  })}}
+</script>
+
+<style scoped>
+.btn-group .btn {
+  margin-right: 8px;
+}
+</style>
