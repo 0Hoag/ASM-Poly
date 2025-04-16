@@ -5,7 +5,71 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14bf6385-da36-4112-93ad-e500bc4d8125" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt17.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt18.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt19.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt20.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/configuration/AuthSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/java/com/example/ASM/configuration/AuthSecurity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/Apple Watch Series 7 GPS 45MM Midnight.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/Apple Watch Series 7 GPS 45MM Midnight.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/Samsung Galaxy S21 Ultra.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/airpods.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/airpods.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner1.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner2.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner3.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner4.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner5.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/banner6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/honor-x9c-smart-xanh-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/image1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/image5.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/image6.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/image7.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip13.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip14.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip14d.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip14t.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip14v.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip15.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip15hong.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip15trang.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip15vang.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip15xanh.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ip16xanh.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/iphone-16-pro-max-sa-mac-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/iphone-16-pro-titan-tu-nhien.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/ipse.png" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/public/images/products/dt15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/oppo-reno13-f-blue-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/realme-c75-red-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/samsung-galaxy-s25-mint-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/samsung-galaxy-s25-ultra-titan-sliver-thumb-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/vivo-y29-8gb-128gb-100225-043030-300-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/xiaomi-redmi-note-14-pro-black-thumbnew-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/assets/img/xiaomi-redmi-note-14-purple-thumbnew-600x600.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/layouts/user/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/layouts/user/Header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/routes/userRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/routes/userRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/RePassword.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/RePassword.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/Register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/auth/Register.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Address.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Address.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Cart.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Category.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Category.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ChangePassword.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ChangePassword.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ConfirmOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ConfirmOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/HistoryOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/HistoryOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ProductDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/ProductDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Profile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Search.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/src/views/user/Search.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Asm_Frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/Asm_Frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +87,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "tienvt2k5"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/0Hoag/ASM-Poly.git",
+    "accountId": "b8f51d80-b8dc-4d0b-a2f4-5222fbdd31f5"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -38,9 +114,9 @@
     "Maven.ASM [clean].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "huyhoang-dev",
+    "git-widget-placeholder": "Merging tien",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/hoag/ASM-Poly/Asm_Backend"
+    "last_opened_file_path": "D:/Study/FPT_Polytechnic/Spring_2025/SOF3061_Java6/Exercises/ASM-Poly/Asm_Frontend"
   }
 }]]></component>
   <component name="RecentsManager">

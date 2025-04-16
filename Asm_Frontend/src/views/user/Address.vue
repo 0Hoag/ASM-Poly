@@ -2,90 +2,71 @@
   <div class="bg-white rounded shadow-sm p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4 class="mb-0">Địa chỉ của tôi</h4>
-      <button
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#editCustomerInfoModal"
-      >
+      <button class="btn btn-primary" @click="openAddAddress">
         <i class="bi bi-plus-lg me-1"></i> Thêm địa chỉ mới
       </button>
     </div>
     <hr />
 
-    <!-- Address Card 1 -->
-    <div class="card mb-3 border">
+    <!-- Danh sách địa chỉ -->
+    <div
+      v-for="(address, index) in addresses"
+      :key="address.id"
+      class="card mb-3 border"
+    >
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-2">
-          <h5 class="card-title mb-0">Nguyễn Văn A</h5>
+          <h5 class="card-title mb-0">{{ address.username }}</h5>
           <div>
-            <span class="badge bg-primary me-1">Mặc định</span>
+            <span v-if="address.defaultAddress" class="badge bg-primary me-1">
+              Mặc định
+            </span>
           </div>
         </div>
         <p class="card-text mb-1">
-          <i class="bi bi-telephone me-2"></i>0912 345 678
+          <i class="bi bi-telephone me-2"></i>{{ address.phoneNumber }}
         </p>
         <p class="card-text mb-3">
-          <i class="bi bi-geo-alt me-2"></i>123 Đường Lê Lợi, Phường Bến Nghé,
-          Quận 1, TP. Hồ Chí Minh
+          <i class="bi bi-geo-alt me-2"></i>{{ address.address }}
         </p>
         <div class="d-flex gap-2">
           <button
-            class="btn btn-outline-primary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#editCustomerInfoModal"
+            class="btn btn-outline-secondary btn-sm"
+            v-if="!address.defaultAddress"
+            @click="setDefault(index)"
           >
-            Chỉnh sửa
-          </button>
-          <button class="btn btn-outline-danger btn-sm">Xóa</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Address Card 2 -->
-    <div class="card mb-3 border">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <h5 class="card-title mb-0">Nguyễn Văn A</h5>
-        </div>
-        <p class="card-text mb-1">
-          <i class="bi bi-telephone me-2"></i>0987 654 321
-        </p>
-        <p class="card-text mb-3">
-          <i class="bi bi-geo-alt me-2"></i>456 Đường Nguyễn Huệ, Phường Bến
-          Thành, Quận 1, TP. Hồ Chí Minh
-        </p>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-secondary btn-sm">
             Đặt làm mặc định
           </button>
           <button
             class="btn btn-outline-primary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#editCustomerInfoModal"
+            @click="editAddress(index)"
           >
             Chỉnh sửa
           </button>
-          <button class="btn btn-outline-danger btn-sm">Xóa</button>
+          <button
+            class="btn btn-outline-danger btn-sm"
+            @click="deleteAddress(index)"
+          >
+            Xóa
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Start modal thêm địa chỉ -->
-
-  <!-- Edit Customer Info Modal -->
+  <!-- Modal thêm/sửa địa chỉ -->
   <div
     class="modal fade"
     id="editCustomerInfoModal"
     tabindex="-1"
-    aria-labelledby="editCustomerInfoModalLabel"
     aria-hidden="true"
+    ref="modal"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editCustomerInfoModalLabel">
-            Chỉnh sửa thông tin giao hàng
+          <h5 class="modal-title">
+            {{ editingIndex === null ? 'Thêm địa chỉ mới' : 'Chỉnh sửa địa chỉ' }}
           </h5>
           <button
             type="button"
@@ -95,63 +76,111 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form id="customer-info-form">
+          <form @submit.prevent="saveCustomerInfo">
             <div class="mb-3">
-              <label for="customerName" class="form-label"
-                >Tên người nhận:</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="customerName"
-                placeholder="Cô gái mộng mơ hay khóc nhè"
-              />
+              <label for="customerName" class="form-label">Tên người nhận:</label>
+              <input v-model="form.name" type="text" class="form-control" />
             </div>
             <div class="mb-3">
               <label for="shippingAddress" class="form-label">Địa chỉ:</label>
-              <input
-                type="text"
-                class="form-control"
-                id="shippingAddress"
-                placeholder="123 Tô Đức Thắng, Tp HCM"
-              />
+              <input v-model="form.fullAddress" type="text" class="form-control" />
             </div>
             <div class="mb-3">
-              <label for="paymentMethod" class="form-label"
-                >Số điện thoại:</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="paymentMethod"
-                placeholder="+84 xxx xxx xxx"
-              />
+              <label for="phone" class="form-label">Số điện thoại:</label>
+              <input v-model="form.phone" type="text" class="form-control" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Đóng
+              </button>
+              <button type="submit" class="btn btn-primary">Lưu</button>
             </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Đóng
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            onclick="saveCustomerInfo()"
-          >
-            Lưu
-          </button>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- End modal thêm địa chỉ -->
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-<style lang="scss" scoped></style>
+// Khai báo dữ liệu ban đầu
+const addresses = ref([])
+
+// Biến lưu thông tin form
+const form = ref({
+  name: '',
+  phone: '',
+  fullAddress: '',
+})
+
+// Biến lưu thông tin đang chỉnh sửa
+const editingIndex = ref(null)
+const modal = ref(null)
+
+// Lấy dữ liệu từ API khi component được tải
+onMounted(() => {
+  loadAddresses()
+})
+
+async function loadAddresses() {
+  try {
+    const userId = 1; // Thay đổi theo userId thực tế
+    const response = await axios.get(`/api/v1/address/${userId}`) // Đảm bảo URL chính xác
+    addresses.value = response.data.result.data // Cập nhật dữ liệu trả về
+  } catch (error) {
+    console.error('Lỗi khi tải danh sách địa chỉ:', error)
+  }
+}
+
+function openAddAddress() {
+  editingIndex.value = null
+  form.value = { name: '', phone: '', fullAddress: '' }
+  showModal()
+}
+
+function editAddress(index) {
+  editingIndex.value = index
+  form.value = { ...addresses.value[index] }
+  showModal()
+}
+
+function saveCustomerInfo() {
+  if (editingIndex.value === null) {
+    // Nếu thêm mới
+    addresses.value.push({
+      ...form.value,
+      id: Date.now(),
+      defaultAddress: false,
+    })
+  } else {
+    // Nếu chỉnh sửa
+    addresses.value[editingIndex.value] = { ...form.value }
+  }
+  hideModal()
+}
+
+function deleteAddress(index) {
+  addresses.value.splice(index, 1)
+}
+
+function setDefault(index) {
+  addresses.value.forEach((addr, i) => {
+    addr.defaultAddress = i === index
+  })
+}
+
+function showModal() {
+  const modalEl = modal.value
+  const bsModal = new bootstrap.Modal(modalEl)
+  bsModal.show()
+}
+
+function hideModal() {
+  const modalEl = modal.value
+  const bsModal = bootstrap.Modal.getInstance(modalEl)
+  bsModal.hide()
+}
+</script>

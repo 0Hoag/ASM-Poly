@@ -1,7 +1,58 @@
 <template>
   <div class="container my-5">
     <h1 class="mb-4">Điện thoại di động</h1>
-
+    <div class="container my-4">
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+        <!-- Apple -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/apple.png" class="brand-logo" alt="Apple">
+                </div>
+            </a>
+        </div>
+        <!-- Samsung -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/samsung.png" class="brand-logo" alt="Samsung">
+                </div>
+            </a>
+        </div>
+        <!-- Xiaomi -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/xiaomi.png" class="brand-logo" alt="Xiaomi">
+                </div>
+            </a>
+        </div>
+        <!-- Oppo -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/oppo.png" class="brand-logo" alt="Oppo">
+                </div>
+            </a>
+        </div>
+        <!-- Realme -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/realme.png" class="brand-logo" alt="Realme">
+                </div>
+            </a>
+        </div>
+        <!-- Vivo -->
+        <div class="col">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-center p-3 brand-card">
+                    <img src="..//..//assets/img/vivo.png" class="brand-logo" alt="Vivo">
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
     <div class="row">
       <!-- Sidebar with filters -->
       <div class="col-md-3 mb-4">
@@ -71,7 +122,6 @@
       <!-- Product listing -->
       <div class="col-md-9">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <p class="mb-0">Hiển thị 1-12 trong số 36 sản phẩm</p>
           <div class="d-flex align-items-center">
             <label class="me-2">Sắp xếp theo:</label>
             <select class="form-select" style="width: auto">
@@ -84,133 +134,28 @@
           </div>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
           <!-- Product Card 1 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/ip14.png"
-                class="card-img-top"
-                alt="iPhone 14 Pro"
-              />
-              <div class="card-body">
-                <h5 class="card-title">iPhone 14 Pro</h5>
-                <p class="card-text price-sale">27.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>29.990.000₫</del> -6%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Product Card 2 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/image5.png"
-                class="card-img-top"
-                alt="Samsung Galaxy S23"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Samsung Galaxy S23</h5>
-                <p class="card-text price-sale">21.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>23.990.000₫</del> -8%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Product Card 3 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/image6.png"
-                class="card-img-top"
-                alt="Xiaomi 13"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Xiaomi 13</h5>
-                <p class="card-text price-sale">18.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>20.990.000₫</del> -9%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Product Card 4 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/image7.png"
-                class="card-img-top"
-                alt="OPPO Find X5 Pro"
-              />
-              <div class="card-body">
-                <h5 class="card-title">OPPO Find X5 Pro</h5>
-                <p class="card-text price-sale">19.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card 4 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/image7.png"
-                class="card-img-top"
-                alt="OPPO Find X5 Pro"
-              />
-              <div class="card-body">
-                <h5 class="card-title">OPPO Find X5 Pro</h5>
-                <p class="card-text price-sale">19.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card 4 -->
-          <div class="col">
-            <div class="card h-100 product-card">
-              <img
-                src="../../assets/img/image7.png"
-                class="card-img-top"
-                alt="OPPO Find X5 Pro"
-              />
-              <div class="card-body">
-                <h5 class="card-title">OPPO Find X5 Pro</h5>
-                <p class="card-text price-sale">19.990.000₫</p>
-                <p class="card-text">
-                  <small class="text-muted"><del>22.990.000₫</del> -13%</small>
-                </p>
-              </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="#" class="btn btn-primary w-100">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Thêm các Product Card khác tương tự ở đây -->
+          <div class="col" v-for="product in products" :key="product.id">
+            <div class="card product-card">
+        <img
+          :src="product.images.length ? product.images[0].url : '/default.jpg'"
+          class="card-img-top product-image" style="width: 100%; height: 100%;"
+          :alt="product.productName"
+        />
+        <div class="card-body text-center">
+          <h5 class="product-title">{{ product.productName }}</h5>
+          <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+          <router-link
+            :to="`/category/product/${product.id}`"
+            class="btn btn-add-to-cart btn-success w-100"
+          >
+            Xem sản phẩm
+          </router-link>
         </div>
+      </div>
+    </div>
+    </div>
 
         <!-- Pagination -->
         <nav aria-label="Page navigation" class="mt-4">
@@ -235,7 +180,31 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+const products = ref([])
+
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get('/api/v1/product/List')
+    console.log('Dữ liệu từ API:', response.data)
+    products.value = response.data.result
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error)
+  }
+}
+onMounted(() => {
+  fetchProducts()
+})
+const formatPrice = (price) => {
+  if (!price && price !== 0) return '';
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price);
+};
+</script>
 
 <style scoped>
 body {

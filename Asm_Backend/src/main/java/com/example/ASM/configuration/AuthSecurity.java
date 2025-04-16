@@ -1,9 +1,10 @@
 package com.example.ASM.configuration;
 
-import java.util.NoSuchElementException;
-
+import com.example.ASM.entity.User;
+import com.example.ASM.exception.AppException;
+import com.example.ASM.exception.ErrorCode;
+import com.example.ASM.service.UserService;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.example.ASM.entity.User;
-import com.example.ASM.exception.AppException;
-import com.example.ASM.exception.ErrorCode;
-import com.example.ASM.service.UserService;
+import java.util.NoSuchElementException;
 
 @Configuration
 @EnableWebSecurity
@@ -52,14 +50,14 @@ public class AuthSecurity {
                         .permitAll()
 
                         // ✅ GUEST: Auth đăng nhập
-                        .requestMatchers("/auth/**")
+                        .requestMatchers("/auth/**", "/cart/**",
+                                "/cart-detail/**")
                         .permitAll()
 
                         // ✅ USER: Profile, cart, address, order
                         .requestMatchers(
                                 "/profile/**",
-                                "/cart/**",
-                                "/cart-detail/**",
+
                                 "/address/**",
                                 "/orders/**",
                                 "/orders-detail/**",

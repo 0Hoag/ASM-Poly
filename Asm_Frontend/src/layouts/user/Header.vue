@@ -1,8 +1,6 @@
 <template>
   <header class="bg-light shadow-sm">
-    <div
-      class="container py-3 d-flex align-items-center justify-content-between"
-    >
+    <div class="container py-3 d-flex align-items-center justify-content-between">
       <router-link to="/" class="text-dark fw-bold fs-4 text-decoration-none">
         <img src="../../assets/img/logotext.PNG" alt="Logo" width="150px" />
       </router-link>
@@ -23,49 +21,44 @@
       <div class="header-icons d-flex align-items-center">
         <router-link :to="{ name: 'cart' }" class="position-relative">
           <i class="bi bi-cart2"></i>
-          <span
-            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          >
-            3
+          <span v-if="cartQuantity > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ cartQuantity }}
           </span>
         </router-link>
-        <router-link :to="{ name: 'login' }" class="d-flex align-items-center">
-          <i class="bi bi-person"></i> Đăng nhập
-        </router-link>
-        <router-link
-          :to="{ name: 'account' }"
-          class="d-flex align-items-center"
-        >
-          <i class="bi bi-person-circle"></i> Hồ sơ cá nhân
-        </router-link>
+
+        <!-- Hiển thị Đăng nhập nếu chưa đăng nhập -->
+        <template v-if="!user">
+          <router-link :to="{ name: 'login' }" class="d-flex align-items-center">
+            <i class="bi bi-person"></i> Đăng nhập
+          </router-link>
+        </template>
+
+        <!-- Hiển thị Hồ sơ cá nhân nếu đã đăng nhập -->
+        <template v-if="user">
+          <router-link :to="{ name: 'account' }" class="d-flex align-items-center">
+            <i class="bi bi-person-circle"></i>Xin chào! <span style="color: red;"> {{ user.fullName }}</span>
+          </router-link>
+          <!-- Nút đăng xuất -->
+          <button @click="handleLogout" class="btn btn-danger ms-3">
+            Đăng xuất
+          </button>
+        </template>
       </div>
     </div>
 
     <!-- Menu điều hướng -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
       <div class="container">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="collapse navbar-collapse justify-content-center"
-          id="navbarNav"
-        >
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link :to="{ name: 'category' }" class="nav-link"
-                >ĐIỆN THOẠI</router-link
-              >
+              <router-link :to="{ name: 'category' }" class="nav-link">ĐIỆN THOẠI</router-link>
             </li>
             <li class="nav-item">
-              <router-link :to="{ name: 'category' }" class="nav-link"
-                >PHỤ KIỆN</router-link
-              >
+              <router-link :to="{ name: 'category' }" class="nav-link">PHỤ KIỆN</router-link>
             </li>
           </ul>
         </div>
@@ -75,9 +68,43 @@
 </template>
 
 <script setup>
-import logo from "../../assets/img/logotext.PNG";
-</script>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+// Lấy thông tin người dùng từ localStorage
+const user = ref(null);
+const router = useRouter();
+const cartQuantity = ref(0);
+
+// Hàm xử lý đăng xuất
+const handleLogout = () => {
+  // Xóa thông tin người dùng và token khỏi localStorage
+  localStorage.removeItem('userId');
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('cartId');
+  localStorage.removeItem('cartQuantity');
+  localStorage.removeItem('user');
+  localStorage.removeItem('role');
+  
+  // Cập nhật lại trạng thái người dùng
+  user.value = null;
+
+  // Điều hướng về trang đăng nhập
+  router.push('/login');
+};
+
+// Kiểm tra trạng thái đăng nhập khi component được tải
+onMounted(() => {
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  if (storedUser) {
+    user.value = storedUser;  // Cập nhật trạng thái người dùng nếu đã đăng nhập
+  }
+
+  // Kiểm tra giỏ hàng và số lượng sản phẩm trong giỏ hàng
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cartQuantity.value = cart.reduce((sum, item) => sum + item.quantity, 0);
+});
+</script>
 <style scoped>
 body {
   font-family: "Poppins", sans-serif;
@@ -119,125 +146,5 @@ body {
 .search-box button {
   border-radius: 30px;
   padding: 5px 15px;
-}
-#bannerCarousel {
-  max-width: 100%;
-  height: 400px;
-  overflow: hidden;
-}
-/* san pham noi bat */
-#bannerCarousel .carousel-inner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.product-slider {
-  display: flex;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-  width: 100%;
-}
-
-.product-slider .slider-wrapper {
-  display: flex;
-  animation: slide 10s linear infinite;
-}
-
-.product-card {
-  flex: 0 0 25%; /* Hiển thị 4 sản phẩm cùng lúc */
-  padding: 10px;
-  transition: transform 0.3s;
-}
-
-@keyframes slide {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-/* Khi hover, dừng chuyển động */
-.product-slider:hover .slider-wrapper {
-  animation-play-state: paused;
-}
-.sale-section {
-  background: linear-gradient(to right, #ffd700, #ffc107); /* Gradient vàng */
-  padding: 40px 0;
-}
-.hot-sale-bar {
-  margin: 10px;
-  background: linear-gradient(to right, #ff0000, #ff8800);
-  color: #fff;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
-/* Card sản phẩm */
-.product-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 10px;
-  overflow: hidden;
-  max-width: 300px; /* Thu nhỏ chiều rộng card */
-  padding: 10px;
-  margin: auto;
-}
-
-.product-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Hình ảnh sản phẩm */
-.product-image {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.product-image img {
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-image img {
-  transform: scale(1.1);
-}
-
-/* Badge giảm giá */
-.sale-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: red;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-/* Giá gạch ngang */
-.text-decoration-line-through {
-  font-size: 14px;
-}
-
-/* Nút CTA */
-.btn-danger {
-  border-radius: 5px;
-  transition: background 0.3s ease;
-}
-
-.btn-danger:hover {
-  background: #c40000;
-}
-.product-image img {
-  width: 100%; /* Đảm bảo ảnh không bị méo */
-  height: 180px; /* Giới hạn chiều cao */
-  object-fit: contain; /* Giữ tỷ lệ ảnh, không bị méo */
 }
 </style>

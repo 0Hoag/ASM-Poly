@@ -12,6 +12,7 @@
             class="form-control w-100 mw-75 py-2"
             id="fullName"
             placeholder="Nguyễn Văn A"
+            v-model="user.fullName"
           />
         </div>
 
@@ -24,7 +25,8 @@
                 type="radio"
                 name="gender"
                 id="male"
-                checked
+                value="male"
+                v-model="user.gender"
               />
               <label class="form-check-label" for="male">Nam</label>
             </div>
@@ -34,17 +36,10 @@
                 type="radio"
                 name="gender"
                 id="female"
+                value="female"
+                v-model="user.gender"
               />
               <label class="form-check-label" for="female">Nữ</label>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="gender"
-                id="other"
-              />
-              <label class="form-check-label" for="other">Khác</label>
             </div>
           </div>
         </div>
@@ -56,6 +51,7 @@
             class="form-control w-100 mw-75 py-2"
             id="email"
             placeholder="email@example.com"
+            v-model="user.email"
           />
         </div>
 
@@ -66,18 +62,55 @@
             class="form-control w-100 mw-75 py-2"
             id="phone"
             placeholder="+84 xxx xxx xxx"
+            v-model="user.phoneNumber"
           />
         </div>
 
         <div class="d-flex justify-content-end gap-3 mt-4">
           <button type="button" class="btn btn-outline-secondary">Hủy</button>
-          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+          <button @click="updateUser(user)" type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </div>
       </form>
     </div>
   </div>
 </template>
 
-<script setup></script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+// biến để chứa dữ liệu
+const user = ref({
+  fullName: '',
+  email: '' 
+})
+onMounted(async () => {
+  const storedUser = JSON.parse(localStorage.getItem('user'))
+  const userId = storedUser?.id
+
+  if (userId) {
+    try {
+      const response = await axios.get(`/api/v1/profile/${userId}`)
+      user.value = response.data.result
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu người dùng:", error)
+    }
+  }
+})
+//update user
+const updateUser = async () => {
+  const userId = JSON.parse(localStorage.getItem('user')).id
+  try {
+    const response = await axios.put(`/api/v1/profile/${userId}`, user.value)
+    if (response.status === 200) {
+      alert('Cập nhật thông tin thành công!')
+    } else {
+      alert('Cập nhật thông tin thất bại!')
+    }
+  } catch (error) {
+    console.error("Có lỗi xảy ra khi cập nhật thông tin người dùng:", error)
+  }
+}
+</script>
 
 <style lang="scss" scoped></style>

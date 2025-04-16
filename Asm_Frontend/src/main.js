@@ -6,7 +6,6 @@ import "bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import router from "./routes";
-
 const app = createApp(App);
 // 👉 Cấu hình baseURL (nếu cần)
 axios.defaults.baseURL = "http://localhost:8080";
@@ -21,3 +20,13 @@ if (token) {
 app.config.globalProperties.$axios = axios;
 app.use(router);
 app.mount("#app");
+export function getUserId() {
+    const stored = localStorage.getItem('user');
+    if (!stored) return null;
+    try {
+      const user = JSON.parse(stored);
+      return user?.id || null;
+    } catch (e) {
+      return null;
+    }
+  }
