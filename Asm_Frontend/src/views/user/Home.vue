@@ -77,7 +77,7 @@
           <img :src="product.images.length ? product.images[0].url : '/default.jpg'" class="card-img-top product-image" width="100px" height="100px" :alt="product.productName" />
           <div class="card-body text-center">
             <h5 class="product-title">{{ product.productName }}</h5>
-            <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+            <p class="product-price">{{ formatPrice(product.salePrice ? product.salePrice : product.price) }}</p>
             <router-link :to="`/category/product/${product.id}`" class="btn btn-add-to-cart btn-success w-100"> Xem sản phẩm </router-link>
           </div>
         </div>
@@ -95,7 +95,7 @@
           <img :src="product.images.length ? product.images[0].url : '/default.jpg'" class="card-img-top product-image" style="width: 100%; height: 100%" :alt="product.productName" />
           <div class="card-body text-center">
             <h5 class="product-title">{{ product.productName }}</h5>
-            <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+            <p class="product-price">{{ formatPrice(product.salePrice ? product.salePrice : product.price) }}</p>
             <router-link :to="`/category/product/${product.id}`" class="btn btn-add-to-cart btn-success w-100"> Xem sản phẩm </router-link>
           </div>
         </div>
@@ -113,7 +113,7 @@
           <img :src="product.images.length ? product.images[0].url : '/default.jpg'" class="card-img-top product-image" style="width: 100%; height: 100%" :alt="product.productName" />
           <div class="card-body text-center">
             <h5 class="product-title">{{ product.productName }}</h5>
-            <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+            <p class="product-price">{{ formatPrice(product.salePrice ? product.salePrice : product.price) }}</p>
             <router-link :to="`/category/product/${product.id}`" class="btn btn-add-to-cart btn-success w-100"> Xem sản phẩm </router-link>
           </div>
         </div>
