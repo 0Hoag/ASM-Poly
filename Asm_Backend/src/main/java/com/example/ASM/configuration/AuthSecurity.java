@@ -48,7 +48,7 @@ public class AuthSecurity {
                                 "/product-specification/**",
                                 "/specification-type/**")
                         .permitAll()
-
+                        .requestMatchers(HttpMethod.POST,"/user/**").permitAll()
                         // ✅ GUEST: Auth đăng nhập
                         .requestMatchers("/auth/**", "/cart/**",
                                 "/cart-detail/**")
