@@ -35,8 +35,8 @@
         </div>
         <div class="col-md-6">
           <div class="input-group search-container ms-auto">
-            <input type="text" class="form-control" placeholder="Tìm kiếm đơn hàng..." aria-label="Tìm kiếm" />
-            <button class="btn btn-primary" type="button">
+            <input type="text" class="form-control" placeholder="Tìm kiếm đơn hàng ..." aria-label="Tìm kiếm" v-model="keyword" @keyup.enter="searchOrderById" />
+            <button class="btn btn-primary" type="button" @click="searchOrderById">
               <i class="bi bi-search"></i>
             </button>
           </div>
@@ -46,7 +46,7 @@
       <div class="row mb-3">
         <div class="col-md-12">
           <div class="btn-group" role="group" aria-label="Order filters">
-            <button type="button" class="btn btn-outline-primary active">Tất cả</button>
+            <button type="button" class="btn btn-outline-primary">Tất cả</button>
             <button type="button" class="btn btn-outline-primary">Chờ xác nhận</button>
             <button type="button" class="btn btn-outline-primary">Đã xác nhận</button>
             <button type="button" class="btn btn-outline-primary">Hoàn thành</button>
@@ -100,6 +100,9 @@
                 </button>
               </td>
             </tr>
+            <tr v-if="!listOrder.length">
+              <td colspan="7" class="text-center">Khong co du lieu</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -152,6 +155,8 @@ const limits = ref([5, 10, 15, 25]);
 const limit = ref(5);
 const currentPage = ref(1);
 const totalPage = ref(null);
+const keyword = ref("");
+const listOriginalOrder = ref([]); // Lưu danh sách gốc để sử dụng trong tìm kiếm
 // methods
 
 // get
@@ -181,6 +186,7 @@ const getAllOrder = async () => {
       };
     });
     totalPage.value = resp.data.result.totalPages;
+    console.log(listOrder.value);
   } catch (error) {
     console.log(error.message);
   }
@@ -209,6 +215,10 @@ const getStatusClass = (status) => {
 const deleteOrder = async (id) => {
   try {
     const order = listOrder.value.find((item) => item.id === id);
+    if (order.orderStatus !== "Đã hủy") {
+      alert("Đơn hàng không thể xóa!");
+      return;
+    }
     if (confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) {
       const resp = await axios.delete(`http://localhost:8080/asm/api/v1/orders/${id}`);
 
@@ -241,6 +251,14 @@ const changePerPage = () => {
 };
 // search
 
+const searchOrderById = () => {
+  if (!keyword.value.trim()) {
+    listOrder.value = [...listOriginalOrder.value]; // Giữ nguyên danh sách gốc nếu không nhập gì
+  } else {
+    listOrder.value = listOriginalOrder.value.filter((item) => item.id == keyword.value);
+  }
+  currentPage.value = 1;
+};
 // computed
 // watch
 watch([currentPage, limit], () => {
@@ -250,6 +268,7 @@ watch([currentPage, limit], () => {
 onBeforeMount(async () => {
   await getAllCustomer();
   await getAllOrder();
+  listOriginalOrder.value = [...listOrder.value]; // Lưu danh sách gốc để sử dụng trong tìm kiếm
 });
 </script>
 

@@ -41,7 +41,7 @@
                 <th>Mã đơn</th>
                 <th>Khách hàng</th>
                 <th>Trạng thái</th>
-                <th>Cập nhật</th>
+                <th>Thời gian đặt</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
@@ -61,7 +61,7 @@
                     </ul>
                   </div>
                 </td>
-                <td>30/03/2023</td>
+                <td>{{ new Date(order.createdAt).toLocaleString("vi-VN") }}</td>
                 <td>
                   <div class="dropdown" data-bs-auto-close="outside">
                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Cập nhật</button>

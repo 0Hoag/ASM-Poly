@@ -11,7 +11,7 @@
   <div class="row mb-4">
     <div class="col-md-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Tìm kiếm danh mục..." v-model="keyword" @input="findByitle" />
+        <input type="text" class="form-control" placeholder="Tìm kiếm danh mục..." v-model="keyword" @keyup.enter="findByitle" />
         <button class="btn btn-outline-secondary" type="button">
           <i class="bi bi-search"></i>
         </button>
@@ -119,7 +119,7 @@
             <div class="mb-3">
               <label for="categoryStatus" class="form-label">Danh mục cha</label>
               <select class="form-select" v-model="category.parentCategory" id="categoryStatus">
-                <option value="" selected>Chọn danh mục</option>
+                <option :value="null">Chọn danh mục</option>
                 <option :value="cat.id" v-for="cat in categories" :key="cat.id">{{ cat.categoryName }}</option>
               </select>
             </div>
@@ -150,8 +150,8 @@
             <div class="mb-3">
               <label for="editCategoryStatus" class="form-label">Danh mục cha</label>
               <select class="form-select" v-model="category.parentCategory">
-                <!-- <option value="">Chọn danh mục</option> -->
-                <option :value="cat.id" v-for="cat in categories" :key="cat.id">{{ cat.categoryName }}</option>
+                <option :value="0">Chọn danh mục</option>
+                <option :value="cat.id" v-for="cat in categories.filter((c) => !c.parentCategory)" :key="cat.id">{{ cat.categoryName }}</option>
               </select>
             </div>
             <div class="mb-3">
@@ -183,7 +183,7 @@ const keyword = ref("");
 const category = ref({
   id: "",
   categoryName: "",
-  parentCategory: "",
+  parentCategory: null,
 });
 // methods
 
@@ -216,6 +216,11 @@ const pageinatedCategories = async () => {
 const createCategory = async () => {
   try {
     const newCategory = { ...category.value };
+    if (!newCategory.categoryName) {
+      alert("Tên danh mục không được để trống!");
+      return;
+    }
+
     const resp = await axios.post("http://localhost:8080/asm/api/v1/category/", newCategory);
     if (resp.data.result) {
       // filterCategories.value.push(newCategory);
@@ -233,12 +238,22 @@ const openEditModal = (selectedCategory) => {
   category.value = { ...selectedCategory };
 };
 const closeEditModal = () => {
-  category.value = { id: "", categoryName: "", parentCategory: "" };
+  category.value = { id: "", categoryName: "", parentCategory: null };
 };
 // edit category
 const editCategory = async () => {
   try {
     const { id, categoryName, parentCategory } = { ...category.value };
+
+    if (id === category.value.parentCategory) {
+      alert("Danh mục cha không phù hợp!");
+      return;
+    }
+    if (!categoryName) {
+      alert("Tên danh mục không được để trống!");
+      return;
+    }
+
     const resp = await axios.put(`http://localhost:8080/asm/api/v1/category/${id}`, { categoryName, parentCategory });
     const index = filterCategories.value.findIndex((cat) => cat.id === id);
     if (index !== -1) {

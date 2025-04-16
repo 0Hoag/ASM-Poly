@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">{{ isEdit ? "Chi tiết đơn hàng" : "Tạo đơn hàng mới" }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <a href="order-management.html" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left"></i> Quay lại </a>
+      <router-link :to="{ name: 'order-management' }" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left"></i> Quay lại </router-link>
     </div>
   </div>
 

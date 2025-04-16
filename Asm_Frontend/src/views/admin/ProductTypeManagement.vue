@@ -10,7 +10,7 @@
   <div class="row mb-4">
     <div class="col-md-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Tìm kiếm loại hàng..." v-model="keyword" @input="findByitle" />
+        <input type="text" class="form-control" placeholder="Tìm kiếm loại hàng..." v-model="keyword" @keyup.enter="findByTitle" />
         <button class="btn btn-outline-secondary" type="button" @click="findByitle">
           <i class="bi bi-search"></i>
         </button>
@@ -51,7 +51,7 @@
           </thead>
           <tbody>
             <tr v-for="(productType, index) in filteredProductTypes" :key="productType.id">
-              <td>{{ index + 1 }}</td>
+              <td>{{ (currentPage - 1) * limit + index + 1 }}</td>
 
               <td>{{ productType.nameType }}</td>
 
@@ -207,8 +207,9 @@ const getAllSpecGroup = async () => {
   try {
     const resp = await axios.get("http://localhost:8080/asm/api/v1/specificationType/List");
     allSpecGroup.value = resp.data.result.map((spec) => {
-      const productType = filteredProductTypes.value.find((productType) => productType.nameType === spec.productTypeName);
-      return { ...spec, isDelete: false, productTypeId: productType.id };
+      const type = productTypes.value.find((productType) => productType.nameType === spec.productTypeName);
+      console.log("productType", type.id);
+      return { ...spec, isDelete: false, productTypeId: type.id };
     });
     console.log("spec group", allSpecGroup.value);
   } catch (error) {
@@ -266,6 +267,10 @@ const changePerPage = () => {
 const createProductType = async () => {
   try {
     const newProductType = { ...productType.value };
+    if (!newProductType.nameType) {
+      alert("Vui lòng nhập tên loại hàng!");
+      return;
+    }
     const resp = await axios.post("http://localhost:8080/asm/api/v1/productType/", newProductType);
     if (resp.data.result) {
       const newSpec = specGroups.value.filter((sp) => sp.id == null && sp.specName !== "" && !sp.isDelete).map((sp) => ({ ...sp, productType: resp.data.result.id }));
@@ -273,11 +278,12 @@ const createProductType = async () => {
       for (let sp of newSpec) {
         await axios.post("http://localhost:8080/asm/api/v1/specificationType/", sp);
       }
-      await pageinatedProductType();
+      // await pageinatedProductType();
     }
     alert("Thêm thành công");
     productType.value = { id: "", nameType: "" };
     specGroups.value = [{ id: "", isDelete: false, productType: null, specName: "" }];
+    window.location.reload();
     console.log("create", productTypes.value);
   } catch (error) {
     console.log(error.message);
@@ -286,7 +292,15 @@ const createProductType = async () => {
 const openEditModal = (selectedProducType) => {
   productType.value = { ...selectedProducType };
   console.log("openEditModal", productType.value);
-  const filtered = allSpecGroup.value.filter((group) => group.productTypeId === productType.value.id);
+  const filtered = allSpecGroup.value
+    .filter((group) => group.productTypeId === productType.value.id)
+    .map((group) => {
+      return {
+        ...group,
+        isDelete: false,
+        productTypeId: productType.value.id,
+      };
+    });
   console.log("filtered", filtered);
   if (filtered.length > 0) {
     specGroups.value = filtered;
@@ -294,8 +308,8 @@ const openEditModal = (selectedProducType) => {
   } else {
     specGroups.value = [
       {
-        id: "",
-        isDelete: "",
+        id: null,
+        isDelete: false,
         productSpecifications: [],
         productTypeName: productType.value.nameType || "",
         specName: "",
@@ -305,16 +319,34 @@ const openEditModal = (selectedProducType) => {
 };
 const closeEditModal = () => {
   productType.value = { id: "", categoryName: "", parentCategory: "" };
-  specGroups.value = specGroups.value.map((sp) => (sp.isDelete = false));
+  // specGroups.value = specGroups.value.map((sp) => (sp.isDelete = false));
+  specGroups.value = [{ id: null, isDelete: false, productType: null, specName: "" }];
 };
 const editProductType = async () => {
   try {
     const { id, nameType } = { ...productType.value };
+    if (!nameType) {
+      alert("Vui lòng nhập tên loại hàng!");
+      return;
+    }
     const resp = await axios.put(`http://localhost:8080/asm/api/v1/productType/${id}`, { nameType });
+
     if (resp.data.result) {
       const specUpdate = specGroups.value.filter((sp) => sp.id != null && sp.specName !== "" && !sp.isDelete).map((sp) => ({ ...sp, productType: id }));
-      for (let sp of specUpdate) await axios.put("http://localhost:8080/asm/api/v1/specificationType/" + sp.id, sp);
-      await pageinatedProductType();
+      const specCreate = specGroups.value.filter((sp) => sp.id == null && sp.specName !== "" && !sp.isDelete).map((sp) => ({ ...sp, productType: id }));
+      const specDelete = specGroups.value.filter((sp) => sp.isDelete).map((sp) => ({ ...sp, productType: id }));
+      console.log("specCreate", specCreate);
+      if (specCreate.length > 0) {
+        for (let sp of specCreate) await axios.post("http://localhost:8080/asm/api/v1/specificationType/", sp);
+      }
+      if (specUpdate.length > 0) {
+        for (let sp of specUpdate) await axios.put("http://localhost:8080/asm/api/v1/specificationType/" + sp.id, sp);
+      }
+
+      if (specDelete.length > 0) {
+        for (let sp of specDelete) await axios.delete("http://localhost:8080/asm/api/v1/specificationType/" + sp.id);
+      }
+      // await pageinatedProductType();
     }
     const index = filteredProductTypes.value.findIndex((productType) => productType.id === id);
     console.log(id, index);
@@ -324,6 +356,7 @@ const editProductType = async () => {
       console.log(filteredProductTypes.value);
       alert("Cập nhật thành công");
       productType.value = { id: "", nameType: "" };
+      window.location.reload();
     }
   } catch (error) {
     console.log(error.message);
@@ -340,7 +373,7 @@ const deleteProductType = async (id) => {
       return;
     }
 
-    if (filteredProductTypes.value[index].products.length > 0 || filteredProductTypes.value[index].specificationTypes.length > 0) {
+    if (filteredProductTypes.value[index].products.length > 0) {
       alert("Loại sản phẩm này có chứa dữ liệu liên quan nên không thể xóa!");
       return;
     }
@@ -353,7 +386,7 @@ const deleteProductType = async (id) => {
   }
 };
 
-const findByitle = () => {
+const findByTitle = () => {
   if (!keyword.value.trim()) {
     filteredProductTypes.value = [...productTypes.value]; // Giữ nguyên danh sách gốc nếu không nhập gì
   } else {
@@ -385,29 +418,6 @@ watch([currentPage, limit], () => {
   pageinatedProductType();
 });
 
-// watch(
-//   () => productType.value.id,
-//   (typeId) => {
-//     console.log("change product type");
-//     const type = productTypes.value.find((t) => t.id === typeId);
-//     if (isEdit.value) {
-//       specGroups.value = allSpecGroup.value.filter((group) => group.productTypeName === type.nameType);
-//     } else {
-//       specGroups.value = [
-//         {
-//           id: "",
-//           isDelete: false,
-//           productTypeId: null,
-//           specName: "",
-//         },
-//       ];
-//     }
-//     console.log(specGroups.value);
-//   }
-// );
-
-// mounted
-
 onBeforeMount(async () => {
   await getAllProductType();
   await pageinatedProductType();
@@ -418,6 +428,8 @@ onMounted(async () => {
   // await getAllProductType();
   // await pageinatedProductType();
   const modalEdit = document.getElementById("editProductTypeModal");
+  const modalAdd = document.getElementById("addProductTypeModal");
+  modalAdd.addEventListener("hidden.bs.modal", closeEditModal);
   modalEdit.addEventListener("hidden.bs.modal", closeEditModal);
 });
 </script>

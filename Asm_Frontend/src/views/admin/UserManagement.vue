@@ -82,6 +82,9 @@
                 </button>
               </td>
             </tr>
+            <tr v-if="!listUser.length">
+              <td colspan="7" class="text-center">Khong co du lieu</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -214,7 +217,6 @@
                 <div class="mb-3">
                   <label for="userRole" class="form-label">Vai trò <span class="text-danger">*</span></label>
                   <select class="form-select" id="userRole" required v-model="formData.role">
-                    <option :value="null">Chọn vai trò</option>
                     <option :value="true">Quản trị viên</option>
                     <option :value="false">Khách hàng</option>
                   </select>
@@ -321,7 +323,7 @@ const formData = ref({
   email: "",
   phoneNumber: "",
   password: "",
-  role: "",
+  role: false,
 });
 const limits = ref([5, 10, 15, 25]);
 const limit = ref(5);
@@ -329,8 +331,29 @@ const currentPage = ref(1);
 const totalPage = ref(null);
 const keyword = ref("");
 const listUser = ref([]);
-
+const isEdit = ref(false);
 // methods
+// validate
+const validateForm = () => {
+  if (!formData.value.fullName) {
+    alert("Vui lòng nhập họ tên");
+    return false;
+  }
+  if (!formData.value.email) {
+    alert("Vui lòng nhập email");
+    return false;
+  }
+  if (!formData.value.phoneNumber) {
+    alert("Vui lòng nhập số điện thoại");
+    return false;
+  }
+  if (!formData.value.password && !isEdit.value) {
+    alert("Vui lòng nhập mật khẩu");
+    return false;
+  }
+
+  return true;
+};
 
 // get
 const getPaginatedUser = async () => {
@@ -350,6 +373,7 @@ const getPaginatedUser = async () => {
 // create
 const addUser = async () => {
   try {
+    if (!validateForm()) return; // Validate form before sending request
     const newUser = { ...formData.value };
     const resp = await axios.post("http://localhost:8080/asm/api/v1/user/", newUser);
 
@@ -357,7 +381,7 @@ const addUser = async () => {
       alert("Thêm thành công");
       getPaginatedUser();
     }
-    formData.value = { fullName: "", email: "", phoneNumber: "", password: "", role: "" };
+    formData.value = { fullName: "", email: "", phoneNumber: "", password: "", role: false };
   } catch (error) {
     console.log(error.message);
     if (error.response.data.code === 1002) alert("Email hoặc số điện thoại đã được sử dụng");
@@ -367,14 +391,14 @@ const addUser = async () => {
 // update
 const openEditModal = (selectedProducType) => {
   formData.value = { ...selectedProducType };
-
-  console.log(formData.value);
+  isEdit.value = true;
 };
 const closeEditModal = () => {
   formData.value = { id: "", categoryName: "", parentCategory: "" };
 };
 const updateUser = async () => {
   try {
+    if (!validateForm()) return; // Validate form before sending request
     const updateUser = { ...formData.value };
     const resp = await axios.put("http://localhost:8080/asm/api/v1/user/" + updateUser.id, updateUser);
 
@@ -425,6 +449,7 @@ const changePerPage = () => {
 const search = async () => {
   try {
     if (!keyword.value.trim()) {
+      await getPaginatedUser();
       currentPage.value = 1;
       return;
     }

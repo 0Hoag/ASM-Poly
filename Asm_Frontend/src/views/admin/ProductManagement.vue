@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-6">
           <div class="input-group search-container ms-auto">
-            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." aria-label="Tìm kiếm" v-model="keyword" @input="findByitle" />
+            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." aria-label="Tìm kiếm" v-model="keyword" @keyup.enter="findByName" />
             <button class="btn btn-primary" type="button">
               <i class="bi bi-search"></i>
             </button>
@@ -55,13 +55,13 @@
               <th>Tên sản phẩm <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th>Danh mục <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th>Giá <i class="bi bi-arrow-down-up sort-icon"></i></th>
-              <th>Số lượng <i class="bi bi-arrow-down-up sort-icon"></i></th>
+              <th>Số lượng còn lại <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th>Trạng thái <i class="bi bi-arrow-down-up sort-icon"></i></th>
               <th width="150">Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="products.length" v-for="(product, index) in products" :key="product.id">
+            <tr v-if="products.length" v-for="(product, index) in filteredProducts" :key="product.id">
               <td>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" />
@@ -74,7 +74,7 @@
               <td>{{ product.productName }}</td>
               <td>{{ product.category }}</td>
               <td>{{ product.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) }}</td>
-              <td>45</td>
+              <td>{{ product.stockQuantity }}</td>
               <td>
                 <span :class="['badge', product.stockQuantity > 0 ? 'bg-success' : 'bg-danger']">{{ product.stockQuantity > 0 ? "Còn hàng" : "Hết hàng" }}</span>
               </td>
@@ -90,7 +90,7 @@
                 </button>
               </td>
             </tr>
-            <tr v-if="!products.length">
+            <tr v-if="!filteredProducts.length">
               <td colspan="9" class="text-center">Khong co du lieu</td>
             </tr>
           </tbody>
@@ -312,11 +312,12 @@ const changePerPage = () => {
   }
 };
 
-const findByitle = () => {
+const findByName = () => {
   if (!keyword.value.trim()) {
     filteredProducts.value = [...products.value]; // Giữ nguyên danh sách gốc nếu không nhập gì
   } else {
-    filteredProducts.value = products.value.filter((product) => product.title.toLowerCase().includes(keyword.value.toLowerCase()));
+    filteredProducts.value = products.value.filter((p) => p.productName.toLowerCase().includes(keyword.value.toLowerCase()));
+    console.log(filteredProducts.value);
   }
   currentPage.value = 1;
 };

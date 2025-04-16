@@ -70,7 +70,7 @@
           <!-- Loại sản phẩm -->
           <div class="mb-3">
             <label for="productType" class="form-label">Loại sản phẩm</label>
-            <select class="form-select" id="productType" v-model="product.productType">
+            <select :disabled="isEdit" class="form-select" id="productType" v-model="product.productType">
               <option :value="null">Chọn loại sản phẩm</option>
               <option :value="type.id" v-for="type in productTypes" :key="type.id">{{ type.nameType }}</option>
             </select>
@@ -273,6 +273,7 @@ const updateImage = async () => {
   }
   console.log("update thanh cong");
 };
+
 // Tạo sản phẩm
 const saveProduct = async () => {
   try {
@@ -280,16 +281,20 @@ const saveProduct = async () => {
 
     if (isEdit.value) {
       // Update sản phẩm
+      if (!validateForm()) {
+        alert("Vui lòng nhập đầy đủ thống tin sản phẩm");
+        return;
+      }
+
       resp = await axios.put(`http://localhost:8080/asm/api/v1/product/${currentIdProduct}`, product.value);
 
       // Update hình ảnh & thông số kỹ thuật
-      await updateImage();
       await updateProductSpec();
+      await updateImage();
 
       alert("Sản phẩm đã được cập nhật thành công!");
       console.log("Sản phẩm đã update:", resp.data);
-
-      router.replace(`/admin/products/form/${currentIdProduct}`);
+      window.location.reload();
     } else {
       // Kiểm tra hình
       if (!validateForm()) {
@@ -370,13 +375,27 @@ const updateProductSpec = async () => {
   try {
     const deletes = productSpec.value.filter((spec) => spec.id != null && spec.isDelete && spec.name !== "");
     const updates = productSpec.value.filter((spec) => spec.id != null && !spec.isDelete && spec.name !== "");
-
-    for (let data of deletes) {
-      await axios.delete(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`);
+    const creates = productSpec.value.filter((spec) => spec.id === null && !spec.isDelete && spec.name !== "");
+    console.log("creates", creates);
+    console.log("deletes", deletes);
+    console.log("updates", updates);
+    if (creates.length > 0) {
+      for (let data of creates) {
+        if (data.value == "") data.value = "Không có";
+        await axios.post("http://localhost:8080/asm/api/v1/product-specification/", data);
+      }
     }
 
-    for (let data of updates) {
-      await axios.put(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`, data);
+    if (deletes.length > 0) {
+      for (let data of deletes) {
+        await axios.delete(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`);
+      }
+    }
+
+    if (updates.length > 0) {
+      for (let data of updates) {
+        await axios.put(`http://localhost:8080/asm/api/v1/product-specification/${data.id}`, data);
+      }
     }
   } catch (error) {
     console.log("Lỗi khi đồng bộ thông số kỹ thuật:", error.message);
