@@ -2,118 +2,76 @@
   <div class="container my-5">
     <h1 class="mb-4">Điện thoại di động</h1>
     <div class="container my-4">
-    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+      <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
         <!-- Apple -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/apple.png" class="brand-logo" alt="Apple">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/apple.png" class="brand-logo" alt="Apple" />
+            </div>
+          </a>
         </div>
         <!-- Samsung -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/samsung.png" class="brand-logo" alt="Samsung">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/samsung.png" class="brand-logo" alt="Samsung" />
+            </div>
+          </a>
         </div>
         <!-- Xiaomi -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/xiaomi.png" class="brand-logo" alt="Xiaomi">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/xiaomi.png" class="brand-logo" alt="Xiaomi" />
+            </div>
+          </a>
         </div>
         <!-- Oppo -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/oppo.png" class="brand-logo" alt="Oppo">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/oppo.png" class="brand-logo" alt="Oppo" />
+            </div>
+          </a>
         </div>
         <!-- Realme -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/realme.png" class="brand-logo" alt="Realme">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/realme.png" class="brand-logo" alt="Realme" />
+            </div>
+          </a>
         </div>
         <!-- Vivo -->
         <div class="col">
-            <a href="#" class="text-decoration-none">
-                <div class="card text-center p-3 brand-card">
-                    <img src="..//..//assets/img/vivo.png" class="brand-logo" alt="Vivo">
-                </div>
-            </a>
+          <a href="#" class="text-decoration-none">
+            <div class="card text-center p-3 brand-card">
+              <img src="..//..//assets/img/vivo.png" class="brand-logo" alt="Vivo" />
+            </div>
+          </a>
         </div>
+      </div>
     </div>
-</div>
     <div class="row">
       <!-- Sidebar with filters -->
       <div class="col-md-3 mb-4">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Bộ lọc</h5>
-            <form>
+            <form @submit.prevent="filterByPrice">
               <div class="mb-3">
-                <label class="form-label">Hãng sản xuất</label>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="apple"
-                  />
-                  <label class="form-check-label" for="apple"> Apple </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="samsung"
-                  />
-                  <label class="form-check-label" for="samsung">
-                    Samsung
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="xiaomi"
-                  />
-                  <label class="form-check-label" for="xiaomi"> Xiaomi </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="oppo"
-                  />
-                  <label class="form-check-label" for="oppo"> OPPO </label>
+                <label class="form-label fw-semibold">Lọc theo giá</label>
+                <div class="row g-2">
+                  <div class="col">
+                    <input type="number" class="form-control" v-model="priceMin" placeholder="Giá từ" min="0" />
+                  </div>
+                  <div class="col">
+                    <input type="number" class="form-control" v-model="priceMax" placeholder="Giá đến" min="0" />
+                  </div>
                 </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Giá</label>
-                <select class="form-select">
-                  <option selected>Tất cả giá</option>
-                  <option value="1">Dưới 5 triệu</option>
-                  <option value="2">5 - 10 triệu</option>
-                  <option value="3">10 - 20 triệu</option>
-                  <option value="4">Trên 20 triệu</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">
-                Áp dụng
-              </button>
+              <button type="submit" class="btn btn-primary w-100">Áp dụng</button>
             </form>
           </div>
         </div>
@@ -138,32 +96,21 @@
           <!-- Product Card 1 -->
           <div class="col" v-for="product in products" :key="product.id">
             <div class="card product-card">
-        <img
-          :src="product.images.length ? product.images[0].url : '/default.jpg'"
-          class="card-img-top product-image" style="width: 100%; height: 100%;"
-          :alt="product.productName"
-        />
-        <div class="card-body text-center">
-          <h5 class="product-title">{{ product.productName }}</h5>
-          <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
-          <router-link
-            :to="`/category/product/${product.id}`"
-            class="btn btn-add-to-cart btn-success w-100"
-          >
-            Xem sản phẩm
-          </router-link>
+              <img :src="product.images.length ? product.images[0].url : '/default.jpg'" class="card-img-top product-image" style="width: 100%; height: 100%" :alt="product.productName" />
+              <div class="card-body text-center">
+                <h5 class="product-title">{{ product.productName }}</h5>
+                <p class="product-price">{{ formatPrice(product.salePrice) }}</p>
+                <router-link :to="`/category/product/${product.id}`" class="btn btn-add-to-cart btn-success w-100"> Xem sản phẩm </router-link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    </div>
 
         <!-- Pagination -->
         <nav aria-label="Page navigation" class="mt-4">
           <ul class="pagination justify-content-center">
             <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
-                >Trước</a
-              >
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
             </li>
             <li class="page-item active">
               <a class="page-link" href="#">1</a>
@@ -181,27 +128,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-const products = ref([])
-
+import { ref, onMounted } from "vue";
+import axios from "axios";
+const products = ref([]);
+const priceMin = ref(null);
+const priceMax = ref(null);
 const fetchProducts = async () => {
   try {
-    const response = await axios.get('/api/v1/product/List')
-    console.log('Dữ liệu từ API:', response.data)
-    products.value = response.data.result
+    const response = await axios.get("/asm/api/v1/product/List");
+    console.log("Dữ liệu từ API:", response.data);
+    products.value = response.data.result;
   } catch (error) {
-    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error)
+    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
   }
-}
+};
+const filterByPrice = () => {
+  if (priceMin.value && priceMax.value) {
+    products.value = products.value.filter((product) => product.price >= priceMin.value && product.price <= priceMax.value);
+  } else if (priceMin.value) {
+    products.value = products.value.filter((product) => product.price >= priceMin.value);
+  } else if (priceMax.value) {
+    products.value = products.value.filter((product) => product.price <= priceMax.value);
+  } else {
+    fetchProducts(); // Nếu không có giá, tải lại tất cả sản phẩm
+  }
+};
 onMounted(() => {
-  fetchProducts()
-})
+  fetchProducts();
+});
 const formatPrice = (price) => {
-  if (!price && price !== 0) return '';
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  if (!price && price !== 0) return "";
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
   }).format(price);
 };
 </script>

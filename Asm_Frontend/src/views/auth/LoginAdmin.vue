@@ -40,9 +40,10 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+const cartAll = ref([]);
 const form = ref({
   email: "",
   password: "",
@@ -54,9 +55,20 @@ const login = async () => {
     const resp = await axios.post("http://localhost:8080/asm/api/v1/auth/login", { email, password });
     if (resp.data.result) {
       // mã hóa thành base64
+      const user = resp.data.result;
       const token = btoa(`${email}:${password}`);
       localStorage.setItem("authToken", `Basic ${token}`);
       localStorage.setItem("role", resp.data.result.role);
+      localStorage.setItem("userId", String(user.id)); // Lưu userId dưới dạng chuỗi
+      localStorage.setItem("user", JSON.stringify(user)); // Lưu toàn bộ thông tin người dùng
+      const cartDetail = cartAll.value.find((cart) => cart.userId === user.id);
+      console.log("Chi tiết giỏ hàng:", cartDetail);
+      if (cartDetail) {
+        localStorage.setItem("cartId", String(cartDetail.id)); // Lưu cartId dưới dạng chuỗi
+        console.log("Cart ID đã được lưu:", cartDetail.id);
+      } else {
+        console.log("Không có giỏ hàng, cần tạo mới sau.");
+      }
       // Reload trang để axios nhận token từ main.js
       if (resp.data.result.role == false) {
         alert("Vui lòng đăng nhập với quyền admin");
@@ -70,6 +82,17 @@ const login = async () => {
     alert("Sai tài khoản hoặc mật khẩu");
   }
 };
+const getAllCart = async () => {
+  try {
+    const response = await axios.get(`/asm/api/v1/cart/List`);
+    cartAll.value = response.data.result;
+  } catch (error) {
+    console.error("Lỗi khi lấy giỏ hàng:", error);
+  }
+};
+onBeforeMount(async () => {
+  await getAllCart();
+});
 </script>
 
 <style lang="scss" scoped></style>

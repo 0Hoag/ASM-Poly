@@ -5,11 +5,7 @@
         <!-- Carousel ảnh sản phẩm -->
         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div
-              v-for="(img, index) in product.images"
-              :key="img.id"
-              :class="['carousel-item', { active: index === 0 }]"
-            >
+            <div v-for="(img, index) in product.images" :key="img.id" :class="['carousel-item', { active: index === 0 }]">
               <div class="fixed-image-frame mx-auto d-flex justify-content-center align-items-center">
                 <img :src="img.url" class="fixed-product-img" alt="Ảnh sản phẩm" />
               </div>
@@ -23,19 +19,13 @@
         <p class="text-muted">{{ product.description }}</p>
         <h4 class="text-danger">
           {{ product.salePrice.toLocaleString() }}₫
-          <small class="text-decoration-line-through text-secondary ms-2">
-            {{ product.price.toLocaleString() }}₫
-          </small>
+          <small class="text-decoration-line-through text-secondary ms-2"> {{ product.price.toLocaleString() }}₫ </small>
         </h4>
 
         <div class="mt-5">
-          <button @click="addToCart(product)" class="btn btn-outline-primary w-25 mx-2">
-            <i class="bi bi-cart-fill"></i> Thêm vào giỏ
-          </button>
+          <button @click="addToCart(product)" class="btn btn-outline-primary w-25 mx-2"><i class="bi bi-cart-fill"></i> Thêm vào giỏ</button>
           <button class="btn btn-danger w-25 mx-2">Mua ngay</button>
-          <button class="btn btn-warning w-25 d-block m-2">
-            <i class="bi bi-heart"></i> Yêu thích
-          </button>
+          <button class="btn btn-warning w-25 d-block m-2"><i class="bi bi-heart"></i> Yêu thích</button>
         </div>
       </div>
     </div>
@@ -46,84 +36,82 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import axios from "axios";
 
-const route = useRoute()
-const router = useRouter()
-const product = ref(null)
-const products = ref([])
+const route = useRoute();
+const router = useRouter();
+const product = ref(null);
+const products = ref([]);
 
 // Hàm lấy thông tin sản phẩm
 const fetchProduct = async () => {
   try {
-    const response = await axios.get(`/api/v1/product/${route.params.id}`)
-    product.value = response.data.result
+    const response = await axios.get(`/asm/api/v1/product/${route.params.id}`);
+    product.value = response.data.result;
   } catch (error) {
-    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error)
+    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
   }
-}
+};
 
 // Hàm lấy danh sách sản phẩm liên quan
 const fetchProducts = async () => {
   try {
-    const response = await axios.get('/api/v1/product/Get')
-    console.log('Dữ liệu từ API:', response.data)
-    products.value = response.data.result.data
+    const response = await axios.get("/asm/api/v1/product/Get");
+    console.log("Dữ liệu từ API:", response.data);
+    products.value = response.data.result.data;
   } catch (error) {
-    console.error('Lỗi khi lấy dữ liệu sản phẩm:', error)
+    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
   }
-}
+};
 
 // Hàm định dạng giá
 const formatPrice = (price) => {
-  if (!price && price !== 0) return ''
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(price)
-}
+  if (!price && price !== 0) return "";
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(price);
+};
 
 // Hàm thêm sản phẩm vào giỏ hàng
 const addToCart = async (product) => {
   try {
-    let cartId = localStorage.getItem('cartId');
-    console.log('cardid',cartId);
-    const userIdRaw = localStorage.getItem('userId');
+    let cartId = localStorage.getItem("cartId");
+    console.log("cardid", cartId);
+    const userIdRaw = localStorage.getItem("userId");
 
-    const userId = userIdRaw && userIdRaw !== 'undefined' && userIdRaw !== 'null'
-      ? Number(userIdRaw)
-      : null;
+    const userId = userIdRaw && userIdRaw !== "undefined" && userIdRaw !== "null" ? Number(userIdRaw) : null;
 
     if (!userId) {
-      alert('⚠️ Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng.');
+      alert("⚠️ Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng.");
       return;
     }
 
     // Nếu chưa có cartId thì lấy hoặc tạo mới
     if (!cartId) {
       try {
-        const cartRes = await axios.get(`/api/v1/cart/${userId}`);
+        const cartRes = await axios.get(`/asm/api/v1/cart/${userId}`);
         const userCart = cartRes.data.result;
 
         if (userCart && userCart.id) {
           cartId = userCart.id;
-          localStorage.setItem('cartId', cartId);
+          localStorage.setItem("cartId", cartId);
         } else {
-          const newCartRes = await axios.post(`/api/v1/cart`, { userId });
+          const newCartRes = await axios.post(`/asm/api/v1/cart`, { userId });
           const newCart = newCartRes.data.result;
 
           if (!newCart || !newCart.id) {
-            throw new Error('Không thể tạo giỏ hàng.');
+            throw new Error("Không thể tạo giỏ hàng.");
           }
 
           cartId = newCart.id;
-          localStorage.setItem('cartId', cartId);
+          localStorage.setItem("cartId", cartId);
         }
       } catch (err) {
-        console.error('❌ Lỗi lấy/tạo giỏ hàng:', err.response?.data || err);
-        alert('Không thể lấy hoặc tạo giỏ hàng. Vui lòng thử lại sau.');
+        console.error("❌ Lỗi lấy/tạo giỏ hàng:", err.response?.data || err);
+        alert("Không thể lấy hoặc tạo giỏ hàng. Vui lòng thử lại sau.");
         return;
       }
     }
@@ -134,19 +122,19 @@ const addToCart = async (product) => {
       quantity: 1,
     };
 
-    const response = await axios.post(`/api/v1/cart-detail/`, payload);
-    alert('✅ Thêm vào giỏ hàng thành công!');
+    const response = await axios.post(`/asm/api/v1/cart-detail/`, payload);
+    alert("✅ Thêm vào giỏ hàng thành công!");
   } catch (error) {
-    console.error('❌ Lỗi khi thêm vào giỏ hàng:', error.response?.data || error);
-    alert(`Thêm vào giỏ thất bại: ${error.response?.data?.message || 'Lỗi không xác định'}`);
+    console.error("❌ Lỗi khi thêm vào giỏ hàng:", error.response?.data || error);
+    alert(`Thêm vào giỏ thất bại: ${error.response?.data?.message || "Lỗi không xác định"}`);
   }
 };
 
 // Gọi các hàm khi component được mount
 onMounted(() => {
-  fetchProduct()
-  fetchProducts()
-})
+  fetchProduct();
+  fetchProducts();
+});
 </script>
 
 <style scoped>

@@ -21,12 +21,12 @@ app.config.globalProperties.$axios = axios;
 app.use(router);
 app.mount("#app");
 export function getUserId() {
-    const stored = localStorage.getItem('user');
-    if (!stored) return null;
-    try {
-      const user = JSON.parse(stored);
-      return user?.id || null;
-    } catch (e) {
-      return null;
-    }
+  const stored = localStorage.getItem("user");
+  if (!stored) return null;
+  try {
+    const user = JSON.parse(stored);
+    return user?.id || null;
+  } catch (e) {
+    return null;
   }
+}

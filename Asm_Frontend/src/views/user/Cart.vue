@@ -21,8 +21,7 @@
             <tbody>
               <tr v-for="item in cart" :key="item.cartDetailId" class="align-middle text-center">
                 <td>
-                  <input type="checkbox" class="form-check-input item-checkbox" :value="item.cartDetailId"
-                    v-model="selectedProducts" />
+                  <input type="checkbox" class="form-check-input item-checkbox" :value="item.cartDetailId" v-model="selectedProducts" />
                 </td>
                 <td>
                   <img :src="item.images[0].url" width="80" class="me-3" />
@@ -41,8 +40,7 @@
                   </p>
                 </td>
                 <td>
-                  <input type="number" min="1" class="form-control text-center" v-model="item.quantity"
-                    @change="updateQuantity(item)" />
+                  <input type="number" min="1" class="form-control text-center" v-model="item.quantity" @change="updateQuantity(item)" />
                 </td>
                 <td class="fw-bold text-danger amount">
                   {{
@@ -68,16 +66,10 @@
             Đã chọn:
             <span>{{ selectedProducts.length }}</span> sản phẩm - Tổng tiền:
             <span class="text-danger">
-              {{
-                selectedProducts.length > 0
-                  ? total.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
-                  : 0
-              }}
+              {{ selectedProducts.length > 0 ? total.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) : 0 }}
             </span>
           </p>
-          <button v-if="selectedProducts.length > 0" class="btn btn-warning w-100" @click="goToConfirmOrder">
-            Mua ngay
-          </button>
+          <button v-if="selectedProducts.length > 0" class="btn btn-warning w-100" @click="goToConfirmOrder">Mua ngay</button>
           <!-- Nếu không có sản phẩm nào được chọn, không hiển thị nút Mua ngay -->
         </div>
       </div>
@@ -86,7 +78,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -95,7 +87,7 @@ export default {
       cart: [],
       selectAll: false,
       total: 0,
-      cartId: localStorage.getItem('cartId'),
+      cartId: localStorage.getItem("cartId"),
       listProduct: [],
     };
   },
@@ -111,22 +103,20 @@ export default {
       }
 
       // Lấy sản phẩm đã chọn từ giỏ hàng
-      const selectedItems = this.cart.filter(item =>
-        this.selectedProducts.includes(item.cartDetailId)
-      );
+      const selectedItems = this.cart.filter((item) => this.selectedProducts.includes(item.cartDetailId));
 
       // Lưu vào localStorage
-      localStorage.setItem('selectedCartItems', JSON.stringify(selectedItems));
+      localStorage.setItem("selectedCartItems", JSON.stringify(selectedItems));
       console.log("Sản phẩm đã chọn:", selectedItems);
-      localStorage.setItem('selectedCartItems', JSON.stringify(selectedItems));
+      localStorage.setItem("selectedCartItems", JSON.stringify(selectedItems));
       // Điều hướng tới trang xác nhận đơn hàng
-      this.$router.push({ name: 'confirm-order' });
+      this.$router.push({ name: "confirm-order" });
     },
     // nút xóa sản phẩm
     async deleteItem(cartDetailId) {
       try {
         console.log("ID gửi đi:", cartDetailId);
-        await axios.delete(`/api/v1/cart-detail/${cartDetailId}`);
+        await axios.delete(`/asm/api/v1/cart-detail/${cartDetailId}`);
         // Xoá thành công thì reload lại giỏ hàng
         await this.getCartForUser();
       } catch (error) {
@@ -135,31 +125,27 @@ export default {
     },
     async getAllProduct() {
       try {
-        const response = await axios.get(`/api/v1/product/List`);
+        const response = await axios.get(`/asm/api/v1/product/List`);
         this.listProduct = response.data.result;
       } catch (error) {
         console.error("Lỗi khi lấy sản phẩm:", error);
       }
     },
     getUserIdFromSession() {
-      return localStorage.getItem('userId');
+      return localStorage.getItem("userId");
     },
     getCartForUser() {
       const userId = this.getUserIdFromSession();
       if (userId) {
-        fetch(`/api/v1/cart-detail/List`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(data => {
+        this.$axios
+          .get("/asm/api/v1/cart-detail/List")
+          .then((response) => {
+            const data = response.data;
             if (Array.isArray(data.result)) {
               const userCartItems = data.result
-                .filter(item => item.cart == this.cartId)
-                .map(item => {
-                  const product = this.listProduct.find(p => p.productName === item.productName);
+                .filter((item) => item.cart == this.cartId)
+                .map((item) => {
+                  const product = this.listProduct.find((p) => p.productName === item.productName);
                   return {
                     ...product,
                     quantity: item.quantity,
@@ -173,7 +159,7 @@ export default {
               console.error("Dữ liệu trả về không hợp lệ:", data);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Lỗi khi lấy giỏ hàng:", error);
           });
       } else {
@@ -182,7 +168,7 @@ export default {
     },
     calculateTotal() {
       this.total = this.selectedProducts.reduce((acc, cartDetailId) => {
-        const item = this.cart.find(i => i.cartDetailId === cartDetailId);
+        const item = this.cart.find((i) => i.cartDetailId === cartDetailId);
         if (item) {
           const price = item.priceSale ?? item.price;
           return acc + price * item.quantity;
@@ -194,14 +180,14 @@ export default {
       this.calculateTotal();
     },
     toggleSelectAll() {
-      this.selectedProducts = this.selectAll ? this.cart.map(i => i.cartDetailId) : [];
-    }
+      this.selectedProducts = this.selectAll ? this.cart.map((i) => i.cartDetailId) : [];
+    },
   },
   watch: {
     selectedProducts() {
       this.calculateTotal();
-    }
-  }
+    },
+  },
 };
 </script>
 

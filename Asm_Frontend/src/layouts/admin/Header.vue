@@ -20,7 +20,8 @@ const router = useRouter();
 const logout = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("role");
-
+  localStorage.removeItem("userId");
+  localStorage.removeItem("user");
   // Chuyển hướng về trang login
   // router.push("/admin/login");
 };

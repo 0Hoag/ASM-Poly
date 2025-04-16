@@ -5,10 +5,7 @@
         <h1 class="text-success text-center">Xác nhận đơn hàng</h1>
 
         <div class="progress mt-4">
-          <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75"
-            aria-valuemin="0" aria-valuemax="100">
-            Processing Order
-          </div>
+          <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
         </div>
         <hr />
 
@@ -19,9 +16,7 @@
             <p><strong>Địa chỉ:</strong> 123 Song Hành, Quận 12, TP.HCM</p>
             <p><strong>Số điện thoại:</strong> 0901983123</p>
           </div>
-          <router-link :to="{ name: 'address' }" class="btn btn-outline-primary">
-            <i class="bi bi-pencil me-2"></i>Chỉnh sửa
-          </router-link>
+          <router-link :to="{ name: 'address' }" class="btn btn-outline-primary"> <i class="bi bi-pencil me-2"></i>Chỉnh sửa </router-link>
         </div>
 
         <hr />
@@ -31,14 +26,14 @@
             <img :src="item.images[0]?.url || '../../assets/img/default.jpg'" alt="Product Image" />
             <div class="ms-3">
               <h6>{{ item.productName }}</h6>
-              <small>Số lượng: {{ item.quantity }}, Màu: {{ item.color || 'N/A' }}</small>
+              <small>Số lượng: {{ item.quantity }}, Màu: {{ item.color || "N/A" }}</small>
             </div>
           </div>
           <span>
             {{
-              (item.saleStatus ? item.priceSale : item.price).toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
+              (item.saleStatus ? item.priceSale : item.price).toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
               })
             }}
           </span>
@@ -49,7 +44,7 @@
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Thành tiền
-            <span>{{ totalAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) }}</span>
+            <span>{{ totalAmount.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) }}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Phí vận chuyển
@@ -60,9 +55,9 @@
             <span>
               <strong>
                 {{
-                  (totalAmount + 0).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
+                  (totalAmount + 0).toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
                   })
                 }}
               </strong>
@@ -80,24 +75,24 @@
 
   <!-- Modal Thông Báo -->
   <div v-if="showSuccessModal" class="custom-modal">
-  <div class="custom-modal-content text-center">
-    <img src="../../assets/img/success.png" alt="Success Icon" />
-    <h1 class="mt-3 text-success">Đặt hàng thành công!</h1>
-    <button class="btn btn-secondary mt-3" @click="redirectToHome">Đóng</button>
+    <div class="custom-modal-content text-center">
+      <img src="../../assets/img/success.png" alt="Success Icon" />
+      <h1 class="mt-3 text-success">Đặt hàng thành công!</h1>
+      <button class="btn btn-secondary mt-3" @click="redirectToHome">Đóng</button>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import axios from "axios";
 const showSuccessModal = ref(false); // Modal hiển thị khi true
 const selectedItems = ref([]);
 const totalAmount = ref(0);
 
 onMounted(() => {
-  const items = JSON.parse(localStorage.getItem('selectedCartItems')) || [];
-  console.log('Dữ liệu từ localStorage:', items); // Kiểm tra dữ liệu
+  const items = JSON.parse(localStorage.getItem("selectedCartItems")) || [];
+  console.log("Dữ liệu từ localStorage:", items); // Kiểm tra dữ liệu
   selectedItems.value = items;
 
   // Tính tổng tiền của các sản phẩm
@@ -108,19 +103,19 @@ onMounted(() => {
 });
 
 const redirectToHome = () => {
-  window.location.href = '/'; // Điều hướng về trang Home
+  window.location.href = "/"; // Điều hướng về trang Home
 };
 
 const placeOrder = async () => {
   try {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem("userId");
     if (!userId) {
-      alert('Bạn cần đăng nhập trước khi đặt hàng.');
+      alert("Bạn cần đăng nhập trước khi đặt hàng.");
       return;
     }
 
     if (selectedItems.value.length === 0) {
-      alert('Giỏ hàng trống.');
+      alert("Giỏ hàng trống.");
       return;
     }
 
@@ -132,7 +127,7 @@ const placeOrder = async () => {
       address: addressId,
       user: parseInt(userId),
       orderStatus: orderStatusId,
-      orderDetails: selectedItems.value.map(item => ({
+      orderDetails: selectedItems.value.map((item) => ({
         orderId: 0,
         productId: item.id,
         quantity: item.quantity,
@@ -140,31 +135,29 @@ const placeOrder = async () => {
       })),
     };
 
-    const response = await axios.post('/api/v1/orders/', orderData);
+    const response = await axios.post("/asm/api/v1/orders/", orderData);
 
     if (response.status === 200 || response.status === 201) {
       // ✅ Xoá từng sản phẩm đã đặt khỏi giỏ hàng
       for (const item of selectedItems.value) {
         try {
-          await axios.delete(`/api/v1/cart-detail/${item.cartDetailId}`);
+          await axios.delete(`/asm/api/v1/cart-detail/${item.cartDetailId}`);
         } catch (deleteErr) {
           console.error(`Không thể xoá item ID ${item.cartDetailId}`, deleteErr);
         }
       }
 
       // ✅ Xoá localStorage và hiển thị modal
-      localStorage.removeItem('selectedCartItems');
+      localStorage.removeItem("selectedCartItems");
       showSuccessModal.value = true;
     } else {
-      alert('Đặt hàng thất bại.');
+      alert("Đặt hàng thất bại.");
     }
   } catch (error) {
-    console.error('Lỗi khi đặt hàng:', error.response?.data || error.message);
-    alert('Đặt hàng thất bại. Vui lòng thử lại!');
+    console.error("Lỗi khi đặt hàng:", error.response?.data || error.message);
+    alert("Đặt hàng thất bại. Vui lòng thử lại!");
   }
 };
-
-
 </script>
 
 <style scoped>
@@ -211,5 +204,4 @@ body {
   max-width: 400px;
   width: 100%;
 }
-
 </style>

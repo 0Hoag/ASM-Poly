@@ -6,8 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="30c33994-1d60-4eeb-a67f-8a707792623a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/AuthSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ASM/configuration/AuthSecurity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/bootstrap.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/bootstrap.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/chunk-PZ5AY32C.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/chunk-PZ5AY32C.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/swiper_vue.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/swiper_vue.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/swiper_vue.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/swiper_vue.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue-router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue-router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue-router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue-router.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/node_modules/.vite/deps/vue.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/layouts/admin/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/layouts/admin/Header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/LoginAdmin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/auth/LoginAdmin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Address.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Address.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Cart.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Category.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Category.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ChangePassword.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ChangePassword.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ConfirmOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ConfirmOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/HistoryOrder.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/HistoryOrder.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ProductDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/ProductDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Profile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Search.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../Asm_Frontend/src/views/user/Search.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +95,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "tien",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Study/FPT_Polytechnic/Spring_2025/SOF3061_Java6/Exercises/ASM-Poly",
+    "last_opened_file_path": "D:/Study/FPT_Polytechnic/Spring_2025/SOF3061_Java6/Exercises/ASM-Poly/Asm_Backend",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
