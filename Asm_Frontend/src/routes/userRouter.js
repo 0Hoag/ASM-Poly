@@ -18,7 +18,7 @@ const userRouter = [
         component: () => import("../views/user/Category.vue"),
       },
       {
-        path: "category/product",
+        path: "category/product/:id",
         name: "product",
         component: () => import("../views/user/ProductDetail.vue"),
       },

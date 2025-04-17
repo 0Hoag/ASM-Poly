@@ -42,6 +42,28 @@
 
 <script setup>
 import router from "../../routes";
+
+import axios from 'axios';
+
+const changePassword = async (userId, oldPassword, newPassword, confirmPassword) => {
+  try {
+    const response = await axios.post(`/api/v1/user/changePass/${userId}`, {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    });
+
+    if (response.data.code === 1000) {
+      alert('Mật khẩu đã được thay đổi thành công!');
+    } else {
+      alert('Đổi mật khẩu thất bại!');
+    }
+  } catch (error) {
+    console.error('Lỗi khi thay đổi mật khẩu:', error.response?.data || error.message);
+    alert('Có lỗi xảy ra khi thay đổi mật khẩu!');
+  }
+};
+
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,67 +1,32 @@
 <template>
-  <div class="container my-5">
+  <div class="container my-5" v-if="product">
     <div class="row">
       <div class="col-md-6">
-        <div
-          id="productCarousel"
-          class="carousel slide"
-          data-bs-ride="carousel"
-        >
+        <!-- Carousel ảnh sản phẩm -->
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img
-                src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-den-1.png"
-                class="img-fluid"
-                alt="Tai nghe Edifier W830BT"
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-trang-1.png"
-                class="img-fluid"
-                alt="Tai nghe Edifier W830BT"
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-xanh-duong-1.png"
-                class="img-fluid"
-                alt="Tai nghe Edifier W830BT"
-              />
+            <div v-for="(img, index) in product.images" :key="img.id"
+              :class="['carousel-item', { active: index === 0 }]">
+              <div class="fixed-image-frame mx-auto d-flex justify-content-center align-items-center">
+                <img :src="img.url" class="fixed-product-img" alt="Ảnh sản phẩm" />
+              </div>
             </div>
           </div>
         </div>
-        <div class="d-flex mt-2">
-          <img
-            src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-den-1.png"
-            class="img-thumbnail me-2 thumbnail-img"
-            alt="thumb1"
-          />
-          <img
-            src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-trang-1.png"
-            class="img-thumbnail me-2 thumbnail-img"
-            alt="thumb2"
-          />
-          <img
-            src="https://cdn.hoanghamobile.com/i/previewV2/Uploads/2024/12/03/iphone-13-xanh-duong-1.png"
-            class="img-thumbnail me-2 thumbnail-img"
-            alt="thumb3"
-          />
-        </div>
       </div>
+
       <div class="col-md-6">
-        <h3>Tai nghe Edifier W830BT</h3>
-        <p><strong>Thương hiệu:</strong> Razer</p>
+        <h3>{{ product.productName }}</h3>
+        <p class="text-muted">{{ product.description }}</p>
         <h4 class="text-danger">
-          4.350.000₫
-          <small class="text-muted text-decoration-line-through"
-            >5.220.000₫</small
-          >
-          <span class="badge bg-danger">-17%</span>
+          {{ formatPrice(product.salePrice) }}
+          <small class="text-decoration-line-through text-secondary ms-2">
+            {{ formatPrice(product.price) }}
+          </small>
         </h4>
 
         <div class="mt-5">
-          <button class="btn btn-outline-primary w-25 mx-2">
+          <button @click="addToCart(product)" class="btn btn-outline-primary w-25 mx-2">
             <i class="bi bi-cart-fill"></i> Thêm vào giỏ
           </button>
           <button class="btn btn-danger w-25 mx-2">Mua ngay</button>
@@ -71,217 +36,145 @@
         </div>
       </div>
     </div>
-    <!-- Start Thông số kỹ thuật -->
-    <div class="mt-3">
-      <h2>Thông số kỹ thuật</h2>
-      <div class="container mt-4">
-        <div class="accordion" id="specAccordion">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingConfig">
-              <button
-                class="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseConfig"
-                aria-expanded="true"
-                aria-controls="collapseConfig"
-              >
-                Cấu hình & Bộ nhớ
-              </button>
-            </h2>
-            <div
-              id="collapseConfig"
-              class="accordion-collapse collapse show"
-              aria-labelledby="headingConfig"
-              data-bs-parent="#specAccordion"
-            >
-              <div class="accordion-body">
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <th>Chip xử lý</th>
-                      <td>Snapdragon 695</td>
-                    </tr>
-                    <tr>
-                      <th>RAM</th>
-                      <td>8GB</td>
-                    </tr>
-                    <tr>
-                      <th>Bộ nhớ trong</th>
-                      <td>128GB</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingCamera">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseCamera"
-                aria-expanded="false"
-                aria-controls="collapseCamera"
-              >
-                Camera & Màn hình
-              </button>
-            </h2>
-            <div
-              id="collapseCamera"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingCamera"
-              data-bs-parent="#specAccordion"
-            >
-              <div class="accordion-body">
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <th>Camera sau</th>
-                      <td>50 MP + 2 MP</td>
-                    </tr>
-                    <tr>
-                      <th>Camera trước</th>
-                      <td>16 MP</td>
-                    </tr>
-                    <tr>
-                      <th>Màn hình</th>
-                      <td>6.5 inch, Full HD+</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingBattery">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseBattery"
-                aria-expanded="false"
-                aria-controls="collapseBattery"
-              >
-                Pin & Sạc
-              </button>
-            </h2>
-            <div
-              id="collapseBattery"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingBattery"
-              data-bs-parent="#specAccordion"
-            >
-              <div class="accordion-body">
-                <table class="table table-bordered">
-                  <tbody>
-                    <tr>
-                      <th>Dung lượng pin</th>
-                      <td>5000 mAh</td>
-                    </tr>
-                    <tr>
-                      <th>Công suất sạc</th>
-                      <td>18W</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Thông số kỹ thuật -->
-
-    <!-- Start Sản phẩm liên quan -->
-    <div class="container mt-4">
-      <div class="mt-4">
-        <h4>Sản phẩm liên quan</h4>
-        <div
-          id="relatedProductsCarousel"
-          class="carousel slide"
-          data-bs-ride="carousel"
-        >
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="d-flex justify-content-around">
-                <div class="product-card">
-                  <img
-                    src="http://localhost:5173/src/assets/img/ip15xanh.jpeg"
-                    class="img-fluid"
-                  />
-                  <p>Sản phẩm 1 - 150.000₫</p>
-                </div>
-                <div class="product-card">
-                  <img
-                    src="http://localhost:5173/src/assets/img/ip15xanh.jpeg"
-                    class="img-fluid"
-                  />
-                  <p>Sản phẩm 2 - 250.000₫</p>
-                </div>
-                <div class="product-card">
-                  <img
-                    src="http://localhost:5173/src/assets/img/ip15xanh.jpeg"
-                    class="img-fluid"
-                  />
-                  <p>Sản phẩm 3 - 350.000₫</p>
-                </div>
-                <div class="product-card">
-                  <img
-                    src="http://localhost:5173/src/assets/img/ip15xanh.jpeg"
-                    class="img-fluid"
-                  />
-                  <p>Sản phẩm 4 - 450.000₫</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#relatedProductsCarousel"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#relatedProductsCarousel"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
-  <!-- End Sản phẩm liên quan -->
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 
-<style scoped>
-.thumbnail-img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+const route = useRoute()
+const product = ref(null)
+const products = ref([])
+
+// Lấy sản phẩm theo ID từ route
+const fetchProduct = async () => {
+  try {
+    const res = await axios.get(`/api/v1/product/${route.params.id}`)
+    product.value = res.data.result
+  } catch (err) {
+    console.error('Lỗi khi lấy dữ liệu sản phẩm:', err)
+  }
 }
 
+// Lấy danh sách tất cả sản phẩm
+const fetchProducts = async () => {
+  try {
+    const res = await axios.get('/api/v1/product/Get')
+    console.log('Dữ liệu từ API:', res.data)
+    products.value = res.data.result.data
+  } catch (err) {
+    console.error('Lỗi khi lấy danh sách sản phẩm:', err)
+  }
+}
+
+// Định dạng giá tiền
+const formatPrice = (price) => {
+  if (!price && price !== 0) return ''
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price)
+}
+
+// Thêm sản phẩm vào giỏ hàng
+const addToCart = async (product) => {
+  try {
+    let cartId = localStorage.getItem('cartId')
+    const userIdRaw = localStorage.getItem('userId')
+    const userId = userIdRaw && userIdRaw !== 'undefined' && userIdRaw !== 'null'
+      ? Number(userIdRaw)
+      : null
+
+    if (!userId) {
+      alert('⚠️ Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng.')
+      return
+    }
+
+    console.log('🧑 userIdRaw:', userIdRaw)
+    console.log('🧾 cartId:', cartId)
+    console.log('✅ userId:', userId)
+
+    // Nếu không có cartId thì tạo giỏ hàng mới
+    if (!cartId) {
+      console.log('🛠 CartId không tồn tại, tiến hành tạo giỏ hàng mới...')
+      try {
+        const createCartPayload = { user: userId }
+        const newCartRes = await axios.post(`/api/v1/cart/`, createCartPayload)
+        const isCreated = newCartRes.data.result
+
+        if (isCreated) {
+          // Gọi lại để lấy thông tin giỏ hàng (bao gồm ID)
+          const cartDetailRes = await axios.get(`/api/v1/cart/${userId}`)
+          const cartData = cartDetailRes.data.result
+
+          if (!cartData || !cartData.id) {
+            throw new Error('Không lấy được thông tin giỏ hàng sau khi tạo.')
+          }
+
+          cartId = cartData.id
+          localStorage.setItem('cartId', String(cartId))
+          console.log('🆕 Giỏ hàng mới đã tạo và lấy lại:', cartId)
+        } else {
+          throw new Error('Tạo giỏ hàng thất bại.')
+        }
+        localStorage.setItem('cartId', String(cartId))
+        console.log('🆕 Giỏ hàng mới đã tạo:', cartId)
+      } catch (err) {
+        console.error('❌ Lỗi khi tạo giỏ hàng mới:', err.response?.data || err)
+        alert('Không thể tạo giỏ hàng. Vui lòng thử lại sau.')
+        return
+      }
+    }
+
+    // Gửi request thêm sản phẩm vào giỏ hàng
+    const cartDetailPayload = {
+      cart: Number(cartId),
+      product: Number(product.id),
+      quantity: 1,
+    }
+
+    const res = await axios.post(`/api/v1/cart-detail/`, cartDetailPayload)
+    alert('✅ Sản phẩm đã được thêm vào giỏ hàng!')
+    console.log('📦 Thêm sản phẩm thành công:', res.data)
+  } catch (error) {
+    console.error('❌ Lỗi khi thêm vào giỏ hàng:', error.response?.data || error)
+    alert(`❌ Thêm vào giỏ thất bại: ${error.response?.data?.message || 'Lỗi không xác định'}`)
+  }
+}
+
+onMounted(() => {
+  fetchProduct()
+  fetchProducts()
+})
+</script>
+
+<style scoped>
 .carousel-inner {
   display: flex;
   overflow: hidden;
 }
+
 .carousel-item {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex: 0 0 100%;
 }
-.product-card {
-  width: 200px;
-  text-align: center;
+
+.fixed-image-frame {
+  width: 400px;
+  height: 400px;
+  background-color: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.fixed-product-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 </style>
