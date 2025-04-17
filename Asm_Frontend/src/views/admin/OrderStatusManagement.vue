@@ -1,106 +1,25 @@
 <template>
-  <div
-    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-  >
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Trạng Thái Đơn Hàng</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-file-earmark-excel"></i> Xuất báo cáo
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-printer"></i> In báo cáo
-        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-excel"></i> Xuất báo cáo</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i> In báo cáo</button>
       </div>
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-primary dropdown-toggle"
-      >
-        <i class="bi bi-calendar3"></i> Tuần này
-      </button>
+      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"><i class="bi bi-calendar3"></i> Tuần này</button>
     </div>
   </div>
 
   <!-- Status Overview Cards -->
-  <div class="row mb-4">
-    <div class="col-md-4 col-lg-2 mb-3">
+  <div class="row mb-4 d-flex flex-wrap justify-content-center">
+    <div class="col-md-4 col-lg-2 mb-3" v-for="status in listOrderStatus" :key="status.id">
       <div class="card status-card h-100 border-0 shadow-sm">
         <div class="card-body text-center">
-          <div
-            class="status-icon bg-secondary bg-opacity-10 text-secondary mx-auto mb-2"
-          >
-            <i class="bi bi-hourglass-split"></i>
+          <div class="status-icon bg-opacity-10 mx-auto mb-2" :class="[getStatusClass(status.statusName), getStatusTextClass(status.statusName)]">
+            <i class="bi" :class="getStatusIcon(status.statusName)"></i>
           </div>
-          <h5 class="card-title">Chờ xác nhận</h5>
-          <h3 class="mt-1 mb-0">12</h3>
-          <p class="text-muted small">đơn hàng</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 col-lg-2 mb-3">
-      <div class="card status-card h-100 border-0 shadow-sm">
-        <div class="card-body text-center">
-          <div class="status-icon bg-info bg-opacity-10 text-info mx-auto mb-2">
-            <i class="bi bi-check-circle"></i>
-          </div>
-          <h5 class="card-title">Đã xác nhận</h5>
-          <h3 class="mt-1 mb-0">18</h3>
-          <p class="text-muted small">đơn hàng</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 col-lg-2 mb-3">
-      <div class="card status-card h-100 border-0 shadow-sm">
-        <div class="card-body text-center">
-          <div
-            class="status-icon bg-primary bg-opacity-10 text-primary mx-auto mb-2"
-          >
-            <i class="bi bi-box-seam"></i>
-          </div>
-          <h5 class="card-title">Đang chuẩn bị</h5>
-          <h3 class="mt-1 mb-0">24</h3>
-          <p class="text-muted small">đơn hàng</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 col-lg-2 mb-3">
-      <div class="card status-card h-100 border-0 shadow-sm">
-        <div class="card-body text-center">
-          <div
-            class="status-icon bg-warning bg-opacity-10 text-warning mx-auto mb-2"
-          >
-            <i class="bi bi-truck"></i>
-          </div>
-          <h5 class="card-title">Đang giao</h5>
-          <h3 class="mt-1 mb-0">36</h3>
-          <p class="text-muted small">đơn hàng</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 col-lg-2 mb-3">
-      <div class="card status-card h-100 border-0 shadow-sm">
-        <div class="card-body text-center">
-          <div
-            class="status-icon bg-success bg-opacity-10 text-success mx-auto mb-2"
-          >
-            <i class="bi bi-check2-all"></i>
-          </div>
-          <h5 class="card-title">Hoàn thành</h5>
-          <h3 class="mt-1 mb-0">128</h3>
-          <p class="text-muted small">đơn hàng</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 col-lg-2 mb-3">
-      <div class="card status-card h-100 border-0 shadow-sm">
-        <div class="card-body text-center">
-          <div
-            class="status-icon bg-danger bg-opacity-10 text-danger mx-auto mb-2"
-          >
-            <i class="bi bi-x-circle"></i>
-          </div>
-          <h5 class="card-title">Đã hủy</h5>
-          <h3 class="mt-1 mb-0">8</h3>
+          <h5 class="card-title">{{ status.statusName }}</h5>
+          <h3 class="mt-1 mb-0">{{ status.orders.length }}</h3>
           <p class="text-muted small">đơn hàng</p>
         </div>
       </div>
@@ -109,7 +28,7 @@
 
   <!-- Order Status Management -->
   <div class="row">
-    <div class="col-md-6 mb-4">
+    <div class="col-md-12 mb-4">
       <div class="card-header bg-white">
         <h5 class="mb-0">Trạng thái đơn hàng</h5>
       </div>
@@ -122,184 +41,36 @@
                 <th>Mã đơn</th>
                 <th>Khách hàng</th>
                 <th>Trạng thái</th>
-                <th>Cập nhật</th>
+                <th>Thời gian đặt</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>#ORD-0030</td>
-                <td>Nguyễn Văn X</td>
+              <tr v-for="order in listOrder" :key="order.id">
+                <td>{{ order.id }}</td>
+                <td>{{ order.fullName }}</td>
                 <td>
                   <div class="dropdown">
-                    <button
-                      class="btn btn-sm dropdown-toggle badge bg-secondary"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Chờ xác nhận
-                    </button>
+                    <button class="btn btn-sm dropdown-toggle badge bg-secondary" :class="getStatusClass(order.tempStatus)" type="button" data-bs-toggle="dropdown">{{ order.tempStatus }}</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')"
-                        >
-                          Chờ xác nhận
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')"
-                        >
-                          Đã xác nhận
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')"
-                        >
-                          Đang chuẩn bị
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang giao', 'bg-warning')"
-                        >
-                          Đang giao
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Hoàn thành', 'bg-success')"
-                        >
-                          Hoàn thành
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã hủy', 'bg-danger')"
-                        >
-                          Đã hủy
+                        <button class="dropdown-item" v-for="status in listOrderStatus" :key="status.id" @click="order.tempStatus = status.statusName">
+                          {{ status.statusName }}
                         </button>
                       </li>
                     </ul>
                   </div>
                 </td>
-                <td>30/03/2023</td>
+                <td>{{ new Date(order.createdAt).toLocaleString("vi-VN") }}</td>
                 <td>
-                  <div class="dropdown">
-                    <button
-                      class="btn btn-sm btn-outline-primary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Cập nhật
-                    </button>
+                  <div class="dropdown" data-bs-auto-close="outside">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Cập nhật</button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-check-circle"></i> Xác nhận</a
-                        >
+                        <button class="dropdown-item" @click="updateOrderStatus(order)"><i class="bi bi-check-circle"></i> Xác nhận</button>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-x-circle"></i> Hủy</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>#ORD-0029</td>
-                <td>Trần Thị Y</td>
-                <td>
-                  <div class="dropdown">
-                    <button
-                      class="btn btn-sm dropdown-toggle badge bg-info"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Đã xác nhận
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Chờ xác nhận', 'bg-secondary')"
-                        >
-                          Chờ xác nhận
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã xác nhận', 'bg-info')"
-                        >
-                          Đã xác nhận
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang chuẩn bị', 'bg-primary')"
-                        >
-                          Đang chuẩn bị
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đang giao', 'bg-warning')"
-                        >
-                          Đang giao
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Hoàn thành', 'bg-success')"
-                        >
-                          Hoàn thành
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          class="dropdown-item"
-                          onclick="changeStatus(this, 'Đã hủy', 'bg-danger')"
-                        >
-                          Đã hủy
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-                <td>29/03/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button
-                      class="btn btn-sm btn-outline-primary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      Cập nhật
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-box-seam"></i> Đang chuẩn bị</a
-                        >
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"
-                          ><i class="bi bi-x-circle"></i> Hủy</a
-                        >
+                        <a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Hủy</a>
                       </li>
                     </ul>
                   </div>
@@ -310,8 +81,41 @@
         </div>
       </div>
     </div>
-
-    <div class="col-md-6 mb-4">
+    <!-- pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div>
+        <span>Hiển thị 1-5 của 25 mục</span>
+        <select v-model="limit" @change="changePerPage" class="form-select form-select-sm d-inline-block ms-2" style="width: auto">
+          <option :value="val" v-for="val in limits" :key="val">{{ val }}</option>
+        </select>
+      </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <button @click="currentPage = 1" class="page-link">
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <li class="page-item">
+            <button @click="prevPage" :disabled="currentPage === 1" class="page-link">
+              <span aria-hidden="true">&#8826;</span>
+            </button>
+          </li>
+          <li class="page-item active">
+            <a class="page-link">{{ currentPage }} / {{ totalPage }}</a>
+          </li>
+          <li class="page-item">
+            <button @click="nextPage" :disabled="currentPage === totalPage" class="page-link">&#8827;</button>
+          </li>
+          <li class="page-item">
+            <button @click="currentPage = totalPage" class="page-link">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <!-- <div class="col-md-6 mb-4">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-header bg-white">
           <h5 class="mb-0">Lịch sử cập nhật trạng thái</h5>
@@ -381,11 +185,178 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import axios from "axios";
+import { computed, onBeforeMount, ref, watch } from "vue";
+
+// khai báo biến
+// methods
+const listOrderStatus = ref([]);
+const listOrder = ref([]);
+const listCustomer = ref([]);
+const limits = ref([5, 10, 15, 25]);
+const limit = ref(5);
+const currentPage = ref(1);
+const totalPage = ref(null);
+// get
+const getAllCustomer = async () => {
+  try {
+    const resp = await axios.get("/api/v1/user/List");
+    listCustomer.value = Array.from(resp.data.result).filter((user) => user.role === false);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrderStatus = async () => {
+  try {
+    const resp = await axios.get("/api/v1/order-status/List");
+    listOrderStatus.value = resp.data.result;
+    console.log("order status", listOrderStatus.value);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrder = async () => {
+  try {
+    const resp = await axios.get("/api/v1/orders/Get", {
+      params: {
+        size: limit.value,
+        page: currentPage.value,
+      },
+    });
+    listOrder.value = resp.data.result.data.map((item) => {
+      const user = listCustomer.value.find((customer) => customer.id == item.user);
+
+      return {
+        ...item,
+        fullName: user ? user.fullName : "",
+        tempStatus: item.orderStatus,
+      };
+    });
+    totalPage.value = resp.data.result.totalPages;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getStatusClass = (status) => {
+  switch (status) {
+    case "Chờ xác nhận":
+      return "bg-secondary";
+    case "Đang giao":
+      return "bg-warning";
+    case "Đã giao":
+      return "bg-success";
+    case "Đã hủy":
+      return "bg-danger";
+    case "Đã xác nhận":
+      return "bg-info";
+    default:
+      return "bg-light";
+  }
+};
+const getStatusIcon = (statusName) => {
+  switch (statusName) {
+    case "Chờ xác nhận":
+      return "bi-hourglass-split";
+    case "Đã xác nhận":
+      return "bi-check-circle";
+    case "Đang giao":
+      return "bi-truck";
+    case "Đã giao":
+      return "bi-check2-all";
+    case "Đã hủy":
+      return "bi-x-circle";
+    default:
+      return "bi-question-circle";
+  }
+};
+
+const getStatusTextClass = (statusName) => {
+  switch (statusName) {
+    case "Chờ xác nhận":
+      return "text-secondary";
+    case "Đã xác nhận":
+      return "text-info";
+    case "Đang chuẩn bị":
+      return "text-primary";
+    case "Đang giao":
+      return "text-warning";
+    case "Đã giao":
+    case "Hoàn thành":
+      return "text-success";
+    case "Đã hủy":
+      return "text-danger";
+    default:
+      return "text-muted";
+  }
+};
+
+// create
+
+// update
+const updateOrderStatus = async (order) => {
+  try {
+    const orderStatus = listOrderStatus.value.find((item) => item.statusName === order.tempStatus);
+    if (!orderStatus) throw new Error("Order status not found");
+    const updateOrder = {
+      totalAmount: order.totalAmount,
+      address: order.address,
+      orderStatus: orderStatus.id,
+      user: order.user,
+    };
+    console.log("updateOrder", updateOrder);
+    const resp = await axios.put("/api/v1/orders/" + order.id, updateOrder);
+    if (resp.data.result) {
+      alert("Cap nhat thanh cong!");
+      await getAllOrder();
+      await getAllOrderStatus();
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+// delete
+
+// pagination
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+const nextPage = () => {
+  if (currentPage.value < totalPage.value) {
+    currentPage.value++;
+    console.log(currentPage.value);
+  }
+};
+
+const changePerPage = () => {
+  const maxPage = totalPage.value; // Tính số trang hợp lệ mới
+  if (currentPage.value > maxPage) {
+    currentPage.value = maxPage;
+  }
+};
+// search
+
+// computed
+const orderStatisticByStatus = computed(() => {
+  const status = {};
+});
+// watch
+watch([currentPage, limit], () => {
+  getAllOrder();
+});
+// mounted
+onBeforeMount(async () => {
+  await getAllOrderStatus();
+  await getAllCustomer();
+  await getAllOrder();
+});
+</script>
 <style scoped>
 .status-icon {
   width: 32px;

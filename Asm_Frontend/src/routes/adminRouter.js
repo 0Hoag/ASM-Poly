@@ -12,6 +12,7 @@ import UserManagement from "../views/admin/UserManagement.vue";
 const adminRouter = [
   {
     path: "/admin",
+    meta: { requiresAuth: true, requiresAdmin: true },
     redirect: "/admin/dashboard",
     component: AdminLayout,
     children: [
@@ -41,8 +42,13 @@ const adminRouter = [
         component: OrderStatusManagement,
       },
       {
-        path: "orders/create",
+        path: "orders/form",
         name: "create-order",
+        component: CreateOrder,
+      },
+      {
+        path: "orders/form/:idOrder",
+        name: "edit-order",
         component: CreateOrder,
       },
 
@@ -52,9 +58,15 @@ const adminRouter = [
         component: ProductManagement,
       },
       {
-        path: "products/create",
+        path: "products/form",
         name: "create-product",
         component: CreateProduct,
+      },
+      {
+        path: "products/form/:idProduct",
+        name: "edit-product",
+        component: CreateProduct,
+        // props: true,
       },
       {
         path: "users",

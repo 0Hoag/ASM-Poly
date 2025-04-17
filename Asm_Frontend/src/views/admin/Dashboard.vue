@@ -1,23 +1,12 @@
 <template>
-  <div
-    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
-  >
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Tổng Quan Hệ Thống</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-file-earmark-excel"></i> Xuất báo cáo
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-printer"></i> In báo cáo
-        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-excel"></i> Xuất báo cáo</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i> In báo cáo</button>
       </div>
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-primary dropdown-toggle"
-      >
-        <i class="bi bi-calendar3"></i> Tuần này
-      </button>
+      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"><i class="bi bi-calendar3"></i> Tuần này</button>
     </div>
   </div>
 
@@ -32,11 +21,11 @@
             </div>
             <div>
               <h6 class="card-title mb-0">Tổng người dùng</h6>
-              <h2 class="mt-2 mb-0">1,258</h2>
-              <p class="text-success mb-0">
+              <h2 class="mt-2 mb-0">{{ listCustomer.length }}</h2>
+              <!-- <p class="text-success mb-0">
                 <i class="bi bi-arrow-up"></i> 12.5%
                 <small class="text-muted">so với tháng trước</small>
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
@@ -51,11 +40,11 @@
             </div>
             <div>
               <h6 class="card-title mb-0">Đơn hàng mới</h6>
-              <h2 class="mt-2 mb-0">358</h2>
-              <p class="text-success mb-0">
+              <h2 class="mt-2 mb-0">{{ listOrder.length }}</h2>
+              <!-- <p class="text-success mb-0">
                 <i class="bi bi-arrow-up"></i> 8.2%
                 <small class="text-muted">so với tháng trước</small>
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
@@ -70,11 +59,11 @@
             </div>
             <div>
               <h6 class="card-title mb-0">Doanh thu</h6>
-              <h2 class="mt-2 mb-0">125.5M</h2>
-              <p class="text-success mb-0">
+              <h2 class="mt-2 mb-0">{{ (totalRevenue / 1_000_000).toFixed(1) }} triệu</h2>
+              <!-- <p class="text-success mb-0">
                 <i class="bi bi-arrow-up"></i> 5.7%
                 <small class="text-muted">so với tháng trước</small>
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
@@ -89,11 +78,11 @@
             </div>
             <div>
               <h6 class="card-title mb-0">Sản phẩm</h6>
-              <h2 class="mt-2 mb-0">852</h2>
-              <p class="text-success mb-0">
+              <h2 class="mt-2 mb-0">{{ listProduct.length }}</h2>
+              <!-- <p class="text-success mb-0">
                 <i class="bi bi-arrow-up"></i> 3.2%
                 <small class="text-muted">so với tháng trước</small>
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
@@ -108,11 +97,7 @@
         <div class="card-header bg-white">
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Đơn hàng gần đây</h5>
-            <router-link
-              :to="{ name: 'order-management' }"
-              class="btn btn-sm btn-primary"
-              >Xem tất cả</router-link
-            >
+            <router-link :to="{ name: 'order-management' }" class="btn btn-sm btn-primary">Xem tất cả</router-link>
           </div>
         </div>
         <div class="card-body">
@@ -128,42 +113,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#ORD-0025</td>
-                  <td>Nguyễn Văn A</td>
-                  <td><span class="badge bg-success">Hoàn thành</span></td>
-                  <td>2,500,000 ₫</td>
-                  <td>25/03/2023</td>
-                </tr>
-                <tr>
-                  <td>#ORD-0024</td>
-                  <td>Trần Thị B</td>
+                <tr v-for="order in listOrder" :key="order.id">
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.fullName }}</td>
                   <td>
-                    <span class="badge bg-warning text-dark">Đang giao</span>
+                    <span class="badge" :class="getStatusClass(order.orderStatus)">{{ order.orderStatus }}</span>
                   </td>
-                  <td>1,800,000 ₫</td>
-                  <td>24/03/2023</td>
-                </tr>
-                <tr>
-                  <td>#ORD-0023</td>
-                  <td>Lê Văn C</td>
-                  <td><span class="badge bg-info">Đã xác nhận</span></td>
-                  <td>3,200,000 ₫</td>
-                  <td>23/03/2023</td>
-                </tr>
-                <tr>
-                  <td>#ORD-0022</td>
-                  <td>Phạm Thị D</td>
-                  <td><span class="badge bg-danger">Đã hủy</span></td>
-                  <td>950,000 ₫</td>
-                  <td>22/03/2023</td>
-                </tr>
-                <tr>
-                  <td>#ORD-0021</td>
-                  <td>Hoàng Văn E</td>
-                  <td><span class="badge bg-success">Hoàn thành</span></td>
-                  <td>4,500,000 ₫</td>
-                  <td>21/03/2023</td>
+                  <td>{{ order.totalAmount.toLocaleString("vi", { style: "currency", currency: "VND" }) }}</td>
+                  <td>{{ new Date(order.createdAt).toLocaleDateString("vi-VN") }}</td>
                 </tr>
               </tbody>
             </table>
@@ -178,87 +135,22 @@
         <div class="card-header bg-white">
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Sản phẩm bán chạy</h5>
-            <a href="product-management.html" class="btn btn-sm btn-primary"
-              >Xem tất cả</a
-            >
+            <router-link :to="{ name: 'product-management' }" class="btn btn-sm btn-primary">Xem tất cả</router-link>
           </div>
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item px-0 d-flex justify-content-between align-items-center"
-            >
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-center" v-for="product in listProduct.filter((product) => product.soldQuantity > 0)" :key="product.id">
               <div class="d-flex align-items-center">
-                <div
-                  class="bg-light rounded"
-                  style="width: 40px; height: 40px"
-                ></div>
+                <div class="bg-light rounded" style="width: 40px; height: 40px">
+                  <img :src="product.images[0].url" alt="img" width="40" height="40" />
+                </div>
                 <div class="ms-3">
-                  <h6 class="mb-0">Điện thoại XYZ Pro</h6>
-                  <small class="text-muted">Điện tử</small>
+                  <h6 class="mb-0">{{ product.productName }}</h6>
+                  <small class="text-muted">{{ product.category }}</small>
                 </div>
               </div>
-              <span class="badge bg-primary rounded-pill">125</span>
-            </li>
-            <li
-              class="list-group-item px-0 d-flex justify-content-between align-items-center"
-            >
-              <div class="d-flex align-items-center">
-                <div
-                  class="bg-light rounded"
-                  style="width: 40px; height: 40px"
-                ></div>
-                <div class="ms-3">
-                  <h6 class="mb-0">Laptop ABC Ultra</h6>
-                  <small class="text-muted">Điện tử</small>
-                </div>
-              </div>
-              <span class="badge bg-primary rounded-pill">98</span>
-            </li>
-            <li
-              class="list-group-item px-0 d-flex justify-content-between align-items-center"
-            >
-              <div class="d-flex align-items-center">
-                <div
-                  class="bg-light rounded"
-                  style="width: 40px; height: 40px"
-                ></div>
-                <div class="ms-3">
-                  <h6 class="mb-0">Tai nghe không dây</h6>
-                  <small class="text-muted">Phụ kiện</small>
-                </div>
-              </div>
-              <span class="badge bg-primary rounded-pill">87</span>
-            </li>
-            <li
-              class="list-group-item px-0 d-flex justify-content-between align-items-center"
-            >
-              <div class="d-flex align-items-center">
-                <div
-                  class="bg-light rounded"
-                  style="width: 40px; height: 40px"
-                ></div>
-                <div class="ms-3">
-                  <h6 class="mb-0">Đồng hồ thông minh</h6>
-                  <small class="text-muted">Thiết bị đeo</small>
-                </div>
-              </div>
-              <span class="badge bg-primary rounded-pill">65</span>
-            </li>
-            <li
-              class="list-group-item px-0 d-flex justify-content-between align-items-center"
-            >
-              <div class="d-flex align-items-center">
-                <div
-                  class="bg-light rounded"
-                  style="width: 40px; height: 40px"
-                ></div>
-                <div class="ms-3">
-                  <h6 class="mb-0">Máy ảnh mirrorless</h6>
-                  <small class="text-muted">Thiết bị điện tử</small>
-                </div>
-              </div>
-              <span class="badge bg-primary rounded-pill">42</span>
+              <span class="badge bg-primary rounded-pill">{{ product.soldQuantity }}</span>
             </li>
           </ul>
         </div>
@@ -267,6 +159,77 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import axios from "axios";
+import { computed, onBeforeMount, ref } from "vue";
+
+// init
+const listOrder = ref([]);
+const listCustomer = ref([]);
+const listProduct = ref([]);
+// methods
+const getAllCustomer = async () => {
+  try {
+    const resp = await axios.get("/api/v1/user/List");
+    listCustomer.value = Array.from(resp.data.result).filter((user) => user.role === false);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllOrder = async () => {
+  try {
+    const resp = await axios.get("/api/v1/orders/List");
+    listOrder.value = resp.data.result
+      .reverse()
+      .slice(0, 5)
+      .map((item) => {
+        const user = listCustomer.value.find((customer) => customer.id == item.user);
+
+        return {
+          ...item,
+          fullName: user ? user.fullName : "",
+        };
+      });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getAllProducts = async () => {
+  try {
+    const resp = await axios.get("/api/v1/product/List");
+    listProduct.value = resp.data.result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const getStatusClass = (status) => {
+  switch (status) {
+    case "Chờ xác nhận":
+      return "bg-secondary";
+    case "Đang giao":
+      return "bg-warning";
+    case "Đã giao":
+      return "bg-success";
+    case "Đã hủy":
+      return "bg-danger";
+    case "Đã xác nhận":
+      return "bg-info";
+    default:
+      return "bg-light";
+  }
+};
+// computed
+const totalRevenue = computed(() => {
+  return listOrder.value.reduce((total, order) => total + order.totalAmount, 0);
+});
+// mouted
+onBeforeMount(async () => {
+  await getAllCustomer();
+  await getAllOrder();
+  await getAllProducts();
+});
+</script>
 
 <style lang="scss" scoped></style>
