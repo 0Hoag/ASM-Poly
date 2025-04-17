@@ -18,8 +18,10 @@
         <h3>{{ product.productName }}</h3>
         <p class="text-muted">{{ product.description }}</p>
         <h4 class="text-danger">
-          {{ product.salePrice.toLocaleString() }}₫
-          <small class="text-decoration-line-through text-secondary ms-2"> {{ product.price.toLocaleString() }}₫ </small>
+          {{ formatPrice(product.salePrice) }}
+          <small class="text-decoration-line-through text-secondary ms-2">
+            {{ formatPrice(product.price) }}
+          </small>
         </h4>
 
         <div class="mt-5">
@@ -29,44 +31,40 @@
         </div>
       </div>
     </div>
-
-    <!-- Thông số kỹ thuật và sản phẩm liên quan -->
-    <!-- ... -->
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import axios from "axios";
 
 const route = useRoute();
-const router = useRouter();
 const product = ref(null);
 const products = ref([]);
 
-// Hàm lấy thông tin sản phẩm
+// Lấy sản phẩm theo ID từ route
 const fetchProduct = async () => {
   try {
-    const response = await axios.get(`/asm/api/v1/product/${route.params.id}`);
-    product.value = response.data.result;
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+    const res = await axios.get(`/asm/api/v1/product/${route.params.id}`);
+    product.value = res.data.result;
+  } catch (err) {
+    console.error("Lỗi khi lấy dữ liệu sản phẩm:", err);
   }
 };
 
-// Hàm lấy danh sách sản phẩm liên quan
+// Lấy danh sách tất cả sản phẩm
 const fetchProducts = async () => {
   try {
-    const response = await axios.get("/asm/api/v1/product/Get");
-    console.log("Dữ liệu từ API:", response.data);
-    products.value = response.data.result.data;
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+    const res = await axios.get("/asm/api/v1/product/Get");
+    console.log("Dữ liệu từ API:", res.data);
+    products.value = res.data.result.data;
+  } catch (err) {
+    console.error("Lỗi khi lấy danh sách sản phẩm:", err);
   }
 };
 
-// Hàm định dạng giá
+// Định dạng giá tiền
 const formatPrice = (price) => {
   if (!price && price !== 0) return "";
   return new Intl.NumberFormat("vi-VN", {
@@ -75,13 +73,11 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-// Hàm thêm sản phẩm vào giỏ hàng
+// Thêm sản phẩm vào giỏ hàng
 const addToCart = async (product) => {
   try {
     let cartId = localStorage.getItem("cartId");
-    console.log("cardid", cartId);
     const userIdRaw = localStorage.getItem("userId");
-
     const userId = userIdRaw && userIdRaw !== "undefined" && userIdRaw !== "null" ? Number(userIdRaw) : null;
 
     if (!userId) {
@@ -89,48 +85,58 @@ const addToCart = async (product) => {
       return;
     }
 
-    // Nếu chưa có cartId thì lấy hoặc tạo mới
+    console.log("🧑 userIdRaw:", userIdRaw);
+    console.log("🧾 cartId:", cartId);
+    console.log("✅ userId:", userId);
+
+    // Nếu không có cartId thì tạo giỏ hàng mới
     if (!cartId) {
+      console.log("🛠 CartId không tồn tại, tiến hành tạo giỏ hàng mới...");
       try {
-        const cartRes = await axios.get(`/asm/api/v1/cart/${userId}`);
-        const userCart = cartRes.data.result;
+        const createCartPayload = { user: userId };
+        const newCartRes = await axios.post(`/asm/api/v1/cart/`, createCartPayload);
+        const isCreated = newCartRes.data.result;
 
-        if (userCart && userCart.id) {
-          cartId = userCart.id;
-          localStorage.setItem("cartId", cartId);
-        } else {
-          const newCartRes = await axios.post(`/asm/api/v1/cart`, { userId });
-          const newCart = newCartRes.data.result;
+        if (isCreated) {
+          // Gọi lại để lấy thông tin giỏ hàng (bao gồm ID)
+          const cartDetailRes = await axios.get(`/asm/api/v1/cart/${userId}`);
+          const cartData = cartDetailRes.data.result;
 
-          if (!newCart || !newCart.id) {
-            throw new Error("Không thể tạo giỏ hàng.");
+          if (!cartData || !cartData.id) {
+            throw new Error("Không lấy được thông tin giỏ hàng sau khi tạo.");
           }
 
-          cartId = newCart.id;
-          localStorage.setItem("cartId", cartId);
+          cartId = cartData.id;
+          localStorage.setItem("cartId", String(cartId));
+          console.log("🆕 Giỏ hàng mới đã tạo và lấy lại:", cartId);
+        } else {
+          throw new Error("Tạo giỏ hàng thất bại.");
         }
+        localStorage.setItem("cartId", String(cartId));
+        console.log("🆕 Giỏ hàng mới đã tạo:", cartId);
       } catch (err) {
-        console.error("❌ Lỗi lấy/tạo giỏ hàng:", err.response?.data || err);
-        alert("Không thể lấy hoặc tạo giỏ hàng. Vui lòng thử lại sau.");
+        console.error("❌ Lỗi khi tạo giỏ hàng mới:", err.response?.data || err);
+        alert("Không thể tạo giỏ hàng. Vui lòng thử lại sau.");
         return;
       }
     }
 
-    const payload = {
+    // Gửi request thêm sản phẩm vào giỏ hàng
+    const cartDetailPayload = {
       cart: Number(cartId),
       product: Number(product.id),
       quantity: 1,
     };
 
-    const response = await axios.post(`/asm/api/v1/cart-detail/`, payload);
-    alert("✅ Thêm vào giỏ hàng thành công!");
+    const res = await axios.post(`/asm/api/v1/cart-detail/`, cartDetailPayload);
+    alert("✅ Sản phẩm đã được thêm vào giỏ hàng!");
+    console.log("📦 Thêm sản phẩm thành công:", res.data);
   } catch (error) {
     console.error("❌ Lỗi khi thêm vào giỏ hàng:", error.response?.data || error);
-    alert(`Thêm vào giỏ thất bại: ${error.response?.data?.message || "Lỗi không xác định"}`);
+    alert(`❌ Thêm vào giỏ thất bại: ${error.response?.data?.message || "Lỗi không xác định"}`);
   }
 };
 
-// Gọi các hàm khi component được mount
 onMounted(() => {
   fetchProduct();
   fetchProducts();
@@ -138,25 +144,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.thumbnail-img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
 .carousel-inner {
   display: flex;
   overflow: hidden;
 }
+
 .carousel-item {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex: 0 0 100%;
 }
-.product-card {
-  width: 200px;
-  text-align: center;
-}
+
 .fixed-image-frame {
   width: 400px;
   height: 400px;
